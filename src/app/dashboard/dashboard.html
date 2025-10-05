@@ -1,0 +1,21 @@
+<div class="dashboard-container bg-white min-h-screen">
+  <!-- Tab Navigation -->
+  <app-tab-navigation 
+    [selectedTab]="selectedTab" 
+    (tabChange)="onTabChange($event)">
+  </app-tab-navigation>
+  
+  <!-- Dynamic Content -->
+  <div class="content-area">
+    <ng-container [ngSwitch]="selectedTab">
+      <app-overview *ngSwitchCase="'overview'"></app-overview>
+      <app-orders *ngSwitchCase="'orders'"></app-orders>
+      <app-shipments *ngSwitchCase="'shipments'"></app-shipments>
+      <app-ndr *ngSwitchCase="'ndr'"></app-ndr>
+      <app-whatsapp *ngSwitchCase="'whatsapp'"></app-whatsapp>
+      <app-rto *ngSwitchCase="'rto'"></app-rto>
+      <app-courier *ngSwitchCase="'courier'"></app-courier>
+      <app-delays *ngSwitchCase="'delays'"></app-delays>
+    </ng-container>
+  </div>
+</div>

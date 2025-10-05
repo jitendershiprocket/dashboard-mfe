@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard MFE Test</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .web-component-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+    
+  <dashboard-mfe-root></dashboard-mfe-root>
+  
+  <!-- Load polyfills first -->
+  <script src="polyfills.js"></script>
+  <!-- Load the web component -->
+  <script type="module" src="main.js"></script>
+  
+  <script>
+    // Add debugging
+    console.log('📄 HTML loaded, waiting for web component...');
+    
+    // Listen for the component ready event
+    window.addEventListener('dashboard-mfe-ready', () => {
+      console.log('🎉 Dashboard MFE is ready!');
+    });
+    
+    // Check if custom elements are supported
+    if (!window.customElements) {
+      console.error('❌ Custom Elements not supported in this browser');
+    } else {
+      console.log('✅ Custom Elements supported');
+    }
+  </script>
+</body>
+</html>
