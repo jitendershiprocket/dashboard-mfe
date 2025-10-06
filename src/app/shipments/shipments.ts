@@ -5,6 +5,7 @@ import { HttpService } from '../services/http-service.service';
 import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent, FilterData, FilterValues, DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import * as Highcharts from 'highcharts';
+import moment from 'moment';
 
 // Simple utility function to get user data
 function getUser() {
@@ -39,8 +40,8 @@ export class ShipmentsComponent implements OnInit {
   title = 'Shipments Dashboard';
   
   // Date range properties
-  startDate: string;
-  endDate: string;
+  startDate: any = moment().subtract(30, 'days').format('YYYY-MMM-DD');
+  endDate: any = moment().subtract(1, 'days').format('YYYY-MMM-DD');
   startDateIndian: string;
   endDateIndian: string;
   previousStartDate: string;

@@ -8,6 +8,7 @@ import * as Highcharts from 'highcharts/highmaps';
 // import mapData from 'highcharts/modules/map';
 import { ToastrService } from '../services/toastr.service';
 import { AnalyticsService } from '../services/analytics.service';
+import moment from 'moment';
 
 // Simple utility function to get user data
 function getUser() {
@@ -32,6 +33,8 @@ const ANALYTICS_EVENTS = {
 })
 export class OverviewComponent {
   @ViewChild('carouselElement') carouselElement!: ElementRef;
+  startDate: any = moment().subtract(30, 'days').format('YYYY-MMM-DD');
+  endDate: any = moment().subtract(1, 'days').format('YYYY-MMM-DD');
   todaysData: any;
   shippingData: any;
   ndrData: any;
