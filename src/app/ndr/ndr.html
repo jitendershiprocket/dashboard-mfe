@@ -1,6 +1,557 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <div class="bg-white rounded-lg p-8 shadow-sm">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ title }}</h2>
-    <p class="text-gray-600">NDR management functionality will be implemented here.</p>
+<div class="dashOverview">
+  <app-dashboard-filters
+    [filterData]="filterData"
+    [dateRange]="{ start: startDate, end: endDate }"
+    (dateRangeChange)="onDateRangeChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (clearFilters)="clearFilter()">
+  </app-dashboard-filters>
+
+  <div class="mt-2 letterspacing020px">
+    <span class="text-brown-gray opacity-80">The NDR dashboard is showing you the realtime data of last 30 days till today based on shipment assigned date.</span>
+  </div>
+  
+  <div class="dashboard-grid-row">
+    <div class="dashboard-col-12">
+      <div class="pb-0 br-12 h-100p lblca p-lg bg-white dashboard-shadow relative">
+        <div class="row">
+          <div class="col-6 col-xs-6 col-md-8">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">NDR Summary</p>
+          </div>
+          <div class="col-6 col-xs-6 col-md-4">
+            <span class="float-end"><img src="assets/images/Real-time-data.svg" width="28" height="28"/></span>
+          </div>
+        </div>
+        <div class="row flex-sb-sm">
+          <div class="col-6 col-sm-2 col-xs-6 p-lg text-center">
+            <div class="dispFlex flex-column">
+              <div class="ndb_bx">
+                <h6>NDR Raised</h6>
+                <p>{{ numFormat(+allNdrData?.ndr_raised_count) }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-3 col-xs-6 p-lg text-center">
+            <div class="dispFlex flex-column">
+              <div class="ndb_bx">
+                <h6>NDR Raised Percentage</h6>
+                <p>
+                  {{
+                  allNdrData?.ndr_raised_count
+                  ? numFormat(
+                  +(
+                  (allNdrData?.ndr_raised_count /
+                  allNdrData?.shipment_count) *
+                  100
+                  ).toFixed(2)
+                  )
+                  : 0
+                  }}%
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-2 col-xs-6 p-lg text-center">
+            <div class="dispFlex flex-column">
+              <div class="ndb_bx">
+                <h6>Action Required</h6>
+                <p>{{ numFormat(+allNdrData?.ndr_action_required) }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-3 col-xs-6 p-lg text-center">
+            <div class="dispFlex flex-column">
+              <div class="ndb_bx">
+                <h6>Delivered</h6>
+                <p>{{ numFormat(+allNdrData?.ndr_delivered_count) }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-2 col-xs-6 p-lg text-center">
+            <div class="dispFlex flex-column">
+              <div class="ndb_bx">
+                <h6>Post NDR
+                  <span><img src="assets/images/text_info.svg" alt="" class="ms-2" width="12" height="12"/></span>
+                </h6>
+                <p>{{ numFormat(allNdrData?.ndr_rto_count) }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dashboard-grid-row">
+    <div class="dashboard-col-6 mb-4">
+      <div class="donutChart">
+        <div class="row">
+          <div class="col-6 col-xs-6 col-md-8">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">NDR Response Summary</p>
+          </div>
+          <div class="col-6 col-xs-6 col-md-4">
+            <p class="text-right sphere-black"><img src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+          </div>
+        </div>
+        <div class="row d-flex dashOverview mt-15px">
+          <div class="col-sm-12 form-group">
+            <div *ngIf="ndrResponseData" class="tableFixHead">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="th-v-center-small col-4 w-s-i">&nbsp;</th>
+                    <th class="th-v-center-small col-4 w-s-i">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody class="custom_scroll pbtd0 mx-h-195px">
+                  <tr>
+                    <td class="mb-lg col-sm-6 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrResponseData.seller_response)
+                          }}</span></label
+                        >
+                        <p class="mt-sm">Seller Response</p>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-6 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrResponseData.buyer_response)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Buyer Response</label>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="mb-lg col-sm-6 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrResponseData.seller_response_positive)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Seller Positive Response</label>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-6 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrResponseData.buyer_response_positive)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Buyer Positive Response</label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="mb-lg col-sm-6 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(
+                              +ndrResponseData.seller_response_positive_delivered
+                            )
+                          }}</span></label
+                        >
+                        <label class="mt-sm"
+                          >Seller Positive Response Delivered</label
+                        >
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-6 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center mb-lg">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(
+                              +ndrResponseData.buyer_response_positive_delivered
+                            )
+                          }}</span></label
+                        >
+                        <label class="mt-sm"
+                          >Buyer Positive Response Delivered</label
+                        >
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="!ndrResponseData" class="d-flex j-content-c">
+              <div colspan="11">
+                <div class="pt-lg mt-xl d-flex dispFlex f-d-c">
+                  <img
+                    src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+                    class="center-block w-100px"
+                  />
+                  <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-col-6 mb-4">
+      <div class="donutChart">
+        <div class="row">
+          <div class="col-xs-6 col-md-8">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">NDR Funnel</p>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <p class="text-right sphere-black"><img src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+          </div>
+        </div>
+        <div class="row d-flex dashOverview">
+          <div class="col-sm-12 form-group">
+            <div *ngIf="ndrFunnel" class="tableFixHead" style="height: 210px">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="th-v-center-small col-sm-4 w-s-i">
+                      <div class="funnel-th">1st NDR</div>
+                    </th>
+                    <th class="th-v-center-small col-sm-4 w-s-i">
+                      <div class="funnel-th">2nd NDR</div>
+                    </th>
+                    <th class="th-v-center-small col-sm-4 w-s-i">
+                      <div class="funnel-th">3rd NDR</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  ng-if="ndrResponseData?.length !== 0 && !ndrResponseDataLoader"
+                  class="custom_scroll pbtd0 mx-h-195px"
+                >
+                  <tr>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr1)
+                          }}</span></label
+                        >
+                        <p class="mt-sm">Total Shipments</p>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr2)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Total Shipments</label>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr3)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Total Shipments</label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr1_pending)
+                          }}</span></label
+                        >
+                        <p class="mt-sm">Pending Shipments</p>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr2_pending)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Pending Shipments</label>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr3_pending)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Pending Shipments</label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr1_delivered)
+                          }}</span></label
+                        >
+                        <p class="mt-sm">Delivered Shipments</p>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr2_delivered)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Delivered Shipments</label>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr3_delivered)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Delivered Shipments</label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr1_rto)
+                          }}</span></label
+                        >
+                        <p class="mt-sm">RTO</p>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr2_rto)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">RTO</label>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr3_rto)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">RTO</label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr1_ldd)
+                          }}</span></label
+                        >
+                        <p class="mt-sm">Lost/Damaged Destroyed</p>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr2_ldd)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Lost/Damaged Destroyed</label>
+                      </div>
+                    </td>
+                    <td class="mb-lg col-sm-4 sm-min-w-195 w-s-i">
+                      <div class="mb-lg flex-row d-flex align-v-center">
+                        <label class="ndrResData"
+                          ><span class="ndrResDataText">{{
+                            numFormat(+ndrFunnel.ndr3_ldd)
+                          }}</span></label
+                        >
+                        <label class="mt-sm">Lost/Damaged Destroyed</label>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="!ndrFunnel" class="d-flex j-content-c">
+              <div colspan="11">
+                <div class="pt-lg mt-xl d-flex f-d-c dispFlex">
+                  <img
+                    src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+                    class="center-block w-100px"
+                  />
+                  <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dashboard-grid-row">
+    <div class="dashboard-col-6 mb-4">
+      <div class="donutChart">
+        <div class="row">
+          <div class="col-xs-6 col-md-8">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">NDR Reason Split</p>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <p class="text-right sphere-black"><img src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+          </div>
+        </div>
+        <div *ngIf="showNdrSplitGraph" class="row" style="margin-top: -10px">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="ndr_split">
+          </highcharts-chart>
+        </div>
+        <div *ngIf="!showNdrSplitGraph" class="pt-lg mt-xl f-d-c dispFlex">
+          <img
+            src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+            class="center-block w-100px"
+          />
+          <h3 class="text-blue">
+            No NDR Raised for Selected Filters
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-col-6 mb-4">
+      <div class="donutChart">
+        <div class="row">
+          <div class="col-xs-6 col-md-8">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">NDR Status Split</p>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <p class="text-right sphere-black"><img src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+          </div>
+        </div>
+        <div *ngIf="showNdrStatusGraph" class="row" style="margin-top: -10px">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="ndr_status">
+          </highcharts-chart>
+        </div>
+        <div *ngIf="!showNdrStatusGraph" class="pt-lg mt-xl f-d-c dispFlex">
+          <img
+            src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+            class="center-block w-100px"
+          />
+          <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dashboard-grid-row">
+    <div class="dashboard-col-4 mb-4">
+      <div class="donutChart">
+        <div class="row">
+          <div class="col-xs-6 col-md-8">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">NDR to Delivery Attempt</p>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <p class="text-right sphere-black"><img src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+          </div>
+        </div>
+        <div *ngIf="ndrDeliveredAttempt?.length !== 0" class="row" style="margin-top: -10px">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="ndr_delivery_attempt">
+          </highcharts-chart>
+        </div>
+        <div *ngIf="!(ndrDeliveredAttempt?.length !== 0)" class="pt-lg mt-xl dispFlex f-d-c h-80">
+          <img
+            src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+            class="center-block w-100px"
+          />
+          <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-col-4 mb-4">
+      <div class="donutChart">
+        <div class="row">
+          <div class="col-xs-6 col-md-8">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Seller Response</p>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <p class="text-right sphere-black"><img src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+          </div>
+        </div>
+        <div
+          *ngIf="ndrDeliveredAttempt?.length !== 0"
+          class="row"
+          style="margin-top: -10px"
+        >
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="ndr_seller_response">
+          </highcharts-chart>
+        </div>
+        <div
+          *ngIf="!(ndrDeliveredAttempt?.length !== 0)"
+          class="pt-lg mt-xl f-d-c dispFlex h-80"
+        >
+          <img
+            src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+            class="center-block w-100px"
+          />
+          <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-col-4 mb-4">
+      <div class="donutChart">
+        <div class="row">
+          <div class="col-xs-6 col-md-8">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Buyer Response</p>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <p class="text-right sphere-black"><img src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+          </div>
+        </div>
+        <div
+          *ngIf="ndrSellerBuyerResponse?.length !== 0"
+          class="row"
+          style="margin-top: -10px"
+        >
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="ndr_buyer_response">
+          </highcharts-chart>
+        </div>
+        <div
+          *ngIf="!(ndrSellerBuyerResponse?.length !== 0)"
+          class="pt-lg mt-xl dispFlex f-d-c h-80"
+        >
+          <img
+            src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+            class="center-block w-100px"
+          />
+          <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

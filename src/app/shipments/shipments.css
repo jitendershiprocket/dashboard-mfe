@@ -1,0 +1,441 @@
+/* Shipments Component Styles */
+
+/* Toggle Switch Styles */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+  z-index: 1000;
+}
+
+input:checked + .slider {
+  background-color: #745be7;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Toggle Labels */
+.toggle-label {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(10px);
+}
+
+.toggle:before {
+  content: '#';
+  position: absolute;
+  top: 4px;
+  z-index: 1;
+  right: 10px;
+}
+
+.toggle:after {
+  content: '%';
+  position: absolute;
+  top: 4px;
+  left: 10px;
+  color: #fff;
+}
+
+/* Tooltip Styles */
+.default-tooltip-round {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  font-weight: bold;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid #656565;
+  border-radius: 50%;
+  vertical-align: middle;
+  cursor: pointer;
+  margin: 0px 0px 2px 2px;
+}
+
+/* Table Styles */
+.tableFixHead1 td {
+  padding: 20px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.courier-shipments-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.courier-shipments-table .courier-col {
+  width: 20%;
+  min-width: 120px;
+}
+
+.courier-shipments-table .count-col {
+  width: 11.4%;
+  min-width: 100px;
+  text-align: center;
+}
+
+.courier-shipments-table th,
+.courier-shipments-table td {
+  padding: 8px 12px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Capsule Marker Styles */
+.capsule-marker {
+  width: 18px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.circle-primary1 {
+  background-color: #745be7;
+}
+
+.capsule-marker-grey {
+  background: #e6e6e6;
+}
+
+.ship-ov-lbl-c {
+  margin-right: 15px;
+  font-size: 10px;
+  display: inline-block !important;
+  color: gray;
+}
+
+.ship-ov-lbl-p {
+  margin-right: 15px;
+  font-size: 10px;
+  color: gray;
+}
+
+/* Color Classes */
+.text-green {
+  color: #27c24c;
+}
+
+.text-red {
+  color: #f05050 !important;
+}
+
+.text-blue {
+  color: #007bff;
+}
+
+/* Shipment Display Mode */
+.show-percent td span span {
+  display: none;
+}
+
+.show-percent .shipment-percent {
+  display: inline;
+}
+
+.shipment-percent {
+  display: none;
+}
+
+.shipment-current {
+  font-weight: 700;
+}
+
+/* Height Utilities */
+.h-90 {
+  height: 90%;
+}
+
+.h-80 {
+  height: 80%;
+}
+
+/* Display Utilities */
+.d-inline-b {
+  display: inline-block;
+}
+
+/* Margin Utilities */
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+/* Font Weight Utilities */
+.font-bold {
+  font-weight: 700;
+}
+
+/* Dashboard Grid Layout */
+.dashboard-grid-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .dashboard-grid-row {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+.dashboard-col-4 {
+  grid-column: span 1 / span 1;
+}
+
+@media (min-width: 768px) {
+  .dashboard-col-4 {
+    grid-column: span 4 / span 4;
+  }
+}
+
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+
+/* Card Styles */
+.card-mb {
+  margin-bottom: 18px;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 575px) {
+  .dashboard-grid-row {
+    flex-direction: column;
+  }
+  
+  .dashboard-col-4 {
+    min-width: 100%;
+    max-width: 100%;
+  }
+  
+  .courier-shipments-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Filter Info */
+.filter-info {
+  position: absolute;
+  right: 0.7%;
+  top: 27%;
+}
+
+.cstm-wA {
+  width: 19%;
+}
+
+@media only screen and (max-width: 575px) {
+  .cstm-wA {
+    width: 100%;
+  }
+  
+  .filter-info {
+    right: -8%;
+    top: 26%;
+  }
+}
+
+/* Utility Classes */
+.w-full {
+  width: 100%;
+}
+
+.table-auto {
+  table-layout: auto;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.max-h-\[300px\] {
+  max-height: 300px;
+}
+
+.min-h-\[300px\] {
+  min-height: 300px;
+}
+
+.relative {
+  position: relative;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.border-b {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-base {
+  font-size: 1rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.text-gray-900 {
+  color: #111827;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+.text-blue-600 {
+  color: #2563eb;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-blue-500 {
+  background-color: #3b82f6;
+}
+
+.bg-gray-400 {
+  background-color: #9ca3af;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.w-3 {
+  width: 0.75rem;
+}
+
+.h-3 {
+  height: 0.75rem;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}

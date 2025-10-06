@@ -1,6 +1,308 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <div class="bg-white rounded-lg p-8 shadow-sm">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ title }}</h2>
-    <p class="text-gray-600">Shipments management functionality will be implemented here.</p>
+<div class="dashOverview">
+  <!-- Common Dashboard Filters -->
+  <app-dashboard-filters
+    [filterData]="filterData"
+    [dateRange]="{ start: startDate, end: endDate }"
+    (dateRangeChange)="onDateRangeChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (clearFilters)="clearFilter()">
+  </app-dashboard-filters>
+
+  <div class="">
+    <div class="col-span-1">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px] relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Courier wise Shipments</p>
+          </div>
+          <div class="col-span-1">
+            <div class="flex justify-end items-center gap-4">
+              <div class="text-sm">
+                <span class="inline-block mr-2">
+                  <span class="w-3 h-3 bg-blue-500 rounded-full inline-block mr-1"></span>
+                  {{ startDateIndian }} - {{ endDateIndian }}
+                </span>
+                <span class="inline-block">
+                  <span class="w-3 h-3 bg-gray-400 rounded-full inline-block mr-1"></span>
+                  {{ previousStartDate }} - {{ previousEndDate }}
+                </span>
+              </div>
+              <label class="toggle">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="shipmentDisplayMode"
+                  name="toggleSwitch"
+                />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="shipmentoverview" class="overflow-x-auto mt-4">
+          <table class="w-full table-auto courier-shipments-table">
+            <thead>
+              <tr>
+                <th class="courier-col">Courier</th>
+                <th class="count-col">Total Shipments</th>
+                <th class="count-col">Delivered
+                  <img src="assets/images/text_info.svg" width="12" height="12" alt="" class="mb-1" />
+                </th>
+                <th class="count-col">RTO
+                  <img src="assets/images/text_info.svg" width="12" height="12" alt="" class="mb-1" />
+                </th>
+                <th class="count-col">Lost/Destroyed Damaged
+                  <img src="assets/images/text_info.svg" width="12" height="12" alt="" class="mb-1" />
+                </th>
+                <th class="count-col">Pickup within SLA
+                  <img src="assets/images/text_info.svg" width="12" height="12" alt="" class="mb-1" />
+                </th>
+                <th class="count-col">Delivered within SLA
+                  <img src="assets/images/text_info.svg" width="12" height="12" alt="" class="mb-1" />
+                </th>
+                <th class="count-col">NDR Raised
+                  <img src="assets/images/text_info.svg" width="12" height="12" alt="" class="mb-1" />
+                </th>
+                <th class="count-col">NDR Delivered
+                  <img src="assets/images/text_info.svg" width="12" height="12" alt="" class="mb-1" />
+                </th>
+              </tr>
+            </thead>
+            <tbody [ngClass]="shipmentDisplayMode ? 'show-percent' : ''">
+              <tr *ngFor="let list of shipmentoverview; let key = index">
+                <td class="courier-col">
+                  <span>{{ list?.name }}</span>
+                </td>
+
+                <td class="count-col">
+                  <span>
+                    <span class="font-bold text-blue shipment-current d-inline-b">
+                      {{ list?.total ? convertIndianFormat(list?.total) : 0 }}
+                    </span>
+                    <em [ngClass]="calculateClass(list?.total, shipmentoverviewPrevious?.[key]?.total) ? 'text-green' : 'text-red'">
+                      <span class="d-inline-b" *ngIf="calculateClass(list?.total, shipmentoverviewPrevious?.[key]?.total)">&#11014;</span>
+                      <span class="d-inline-b" *ngIf="!calculateClass(list?.total, shipmentoverviewPrevious?.[key]?.total)">&#11015;</span>
+                      {{ !list?.total && !shipmentoverviewPrevious?.[key]?.total ? null : !list?.total ? -100 : !shipmentoverviewPrevious?.[key]?.total ? 100 : ((list?.total - shipmentoverviewPrevious?.[key]?.total) / shipmentoverviewPrevious?.[key]?.total) * 100 === null ? '' : convertToPositive(!list?.total && !shipmentoverviewPrevious?.[key]?.total ? null : !list?.total ? -100 : !shipmentoverviewPrevious?.[key]?.total ? 100 : ((list?.total - shipmentoverviewPrevious?.[key]?.total) / shipmentoverviewPrevious?.[key]?.total) * 100) }}%
+                    </em>
+                    <br />
+                    <span class="d-inline-b">{{ shipmentoverviewPrevious?.[key]?.total ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.total) : 0 }}</span>
+                  </span>
+                </td>
+
+                <td class="count-col">
+                  <span>
+                    <span class="font-bold text-blue shipment-current">
+                      {{ list?.delivered_count ? convertIndianFormat(list?.delivered_count) : 0 }}
+                    </span>
+                    <em class="font-bold text-blue shipment-current shipment-percent">
+                      {{ getPercentage(list?.delivered_count, list?.total) }}
+                    </em>
+
+                    <em *ngIf="shouldShowElement(list, shipmentoverviewPrevious, key) !== null" [ngClass]="calculateClass2(list, shipmentoverviewPrevious, key) ? 'text-green' : 'text-red'">
+                      <span class="d-inline-b" *ngIf="calculateClass2(list, shipmentoverviewPrevious, key)">&#11014;</span>
+                      <span class="d-inline-b" *ngIf="!calculateClass2(list, shipmentoverviewPrevious, key)">&#11015;</span>
+                      {{ shouldShowElement(list, shipmentoverviewPrevious, key) === null ? '' : !shouldShowElement(list, shipmentoverviewPrevious, key) ? 0 + '%' : convertToPositive(shouldShowElement(list, shipmentoverviewPrevious, key)) + '%' }}
+                    </em>
+                    <br />
+
+                    <em class="shipment-current shipment-percent">
+                      {{ getPercentage(shipmentoverviewPrevious?.[key]?.delivered_count, shipmentoverviewPrevious?.[key]?.total) }}
+                    </em>
+
+                    <span>{{ shipmentoverviewPrevious?.[key]?.delivered_count ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.delivered_count) : 0 }}</span>
+                  </span>
+                </td>
+
+                <td class="count-col">
+                  <span>
+                    <span class="font-bold text-blue shipment-current">
+                      {{ list?.RTO_count ? convertIndianFormat(list?.RTO_count) : 0 }}
+                    </span>
+                    <em class="font-bold text-blue shipment-current shipment-percent">
+                      {{ getPercentage(list?.RTO_count, list?.total) }}
+                    </em>
+                    <br />
+                    <span>{{ shipmentoverviewPrevious?.[key]?.RTO_count ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.RTO_count) : 0 }}</span>
+                  </span>
+                </td>
+
+                <td class="count-col">
+                  <span>
+                    <span class="font-bold text-blue shipment-current">
+                      {{ list?.lost_count ? convertIndianFormat(list?.lost_count) : 0 }}
+                    </span>
+                    <em class="font-bold text-blue shipment-current shipment-percent">
+                      {{ getPercentage(list?.lost_count, list?.total) }}
+                    </em>
+                    <br />
+                    <span>{{ shipmentoverviewPrevious?.[key]?.lost_count ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.lost_count) : 0 }}</span>
+                  </span>
+                </td>
+
+                <td class="count-col">
+                  <span>
+                    <span class="font-bold text-blue shipment-current">
+                      {{ list?.pickup_within_24_hours ? convertIndianFormat(list?.pickup_within_24_hours) : 0 }}
+                    </span>
+                    <em class="font-bold text-blue shipment-current shipment-percent">
+                      {{ getPercentage(list?.pickup_within_24_hours, list?.total) }}
+                    </em>
+                    <br />
+                    <span>{{ shipmentoverviewPrevious?.[key]?.pickup_within_24_hours ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.pickup_within_24_hours) : 0 }}</span>
+                  </span>
+                </td>
+
+                <td class="count-col">
+                  <span>
+                    <span class="font-bold text-blue shipment-current">
+                      {{ list?.delivered_within_sla_count ? convertIndianFormat(list?.delivered_within_sla_count) : 0 }}
+                    </span>
+                    <em class="font-bold text-blue shipment-current shipment-percent">
+                      {{ getPercentage(list?.delivered_within_sla_count, list?.delivered_count) }}
+                    </em>
+                    <br />
+                    <span>{{ shipmentoverviewPrevious?.[key]?.delivered_within_sla_count ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.delivered_within_sla_count) : 0 }}</span>
+                  </span>
+                </td>
+
+                <td class="count-col">
+                  <span>
+                    <span class="font-bold text-blue shipment-current">
+                      {{ list?.ndr_count ? convertIndianFormat(list?.ndr_count) : 0 }}
+                    </span>
+                    <em class="font-bold text-blue shipment-current shipment-percent">
+                      {{ getPercentage(list?.ndr_count, list?.total, 2) }}
+                    </em>
+                    <br />
+                    <span>{{ shipmentoverviewPrevious?.[key]?.ndr_count ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.ndr_count) : 0 }}</span>
+                  </span>
+                </td>
+
+                <td class="count-col">
+                  <span>
+                    <span class="font-bold text-blue shipment-current">
+                      {{ list?.ndr_delivered_count ? convertIndianFormat(list?.ndr_delivered_count) : 0 }}
+                    </span>
+                    <em class="font-bold text-blue shipment-current shipment-percent">
+                      {{ getPercentage(list?.ndr_delivered_count, list?.ndr_count) }}
+                    </em>
+                    <br />
+                    <span>{{ shipmentoverviewPrevious?.[key]?.ndr_delivered_count ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.ndr_delivered_count) : 0 }}</span>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!shipmentoverview" class="flex flex-col items-center justify-center h-48 text-gray-500">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="mx-auto w-24" />
+          <h3 class="text-blue-600 font-sf-pro-text mt-4">Data not found for the selected filters.</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="">
+    <div class="col-span-1">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px] relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Zone Wise Shipments</p>
+          </div>
+        </div>
+
+        <div *ngIf="shipmentCourierZoneCount && shipmentCourierZoneCount.length > 0" class="mt-4">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="courierZoneCountGraphs">
+          </highcharts-chart>
+        </div>
+        <div *ngIf="!shipmentCourierZoneCount || shipmentCourierZoneCount.length === 0" class="flex flex-col items-center justify-center h-48 text-gray-500">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="mx-auto w-24" />
+          <h3 class="text-blue-600 font-sf-pro-text mt-4">Data not found for the selected filters.</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid-row">
+    <div class="dashboard-col-4 mb-4">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px] relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Shipment's Channel</p>
+          </div>
+        </div>
+
+        <div *ngIf="getshipmentchannellist && getshipmentchannellist.length > 0" class="mt-4">
+          <div class="max-h-[300px] overflow-y-auto">
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <th class="text-left p-2 border-b">Channels</th>
+                  <th class="text-center p-2 border-b">Orders</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let channellist of getshipmentchannellist">
+                  <td class="p-2 border-b">
+                    {{ channellist.channel_name === 'Web' ? 'Manual Orders' : channellist.channel_name === 'Bulk' ? 'Bulk Orders' : channellist.channel_name }}
+                  </td>
+                  <td class="text-center p-2 border-b">
+                    {{ convertIndianFormat(channellist.count) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div *ngIf="!getshipmentchannellist || getshipmentchannellist.length === 0" class="flex flex-col items-center justify-center h-48 text-gray-500">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="mx-auto w-24" />
+          <h3 class="text-blue-600 font-sf-pro-text mt-4">Data not found for the selected filters.</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-col-4 mb-4">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px] relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Weight Profile (in Kgs)</p>
+          </div>
+        </div>
+
+        <div *ngIf="isweightProfileDataNotEmpty()" class="mt-4">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="weightProfileGraph">
+          </highcharts-chart>
+        </div>
+        <div *ngIf="!isweightProfileDataNotEmpty()" class="flex flex-col items-center justify-center h-48 text-gray-500">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="mx-auto w-24" />
+          <h3 class="text-blue-600 font-sf-pro-text mt-4">Data not found for the selected filters</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-col-4">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px] relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Shipment's Zone</p>
+          </div>
+        </div>
+
+        <div *ngIf="shipmentZoneData && shipmentZoneData.length > 0" class="mt-4">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="shipmentZoneGraph">
+          </highcharts-chart>
+        </div>
+        <div *ngIf="!shipmentZoneData || shipmentZoneData.length === 0" class="flex flex-col items-center justify-center h-48 text-gray-500">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="mx-auto w-24" />
+          <h3 class="text-blue-600 font-sf-pro-text mt-4">Data not found for the selected filters.</h3>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
