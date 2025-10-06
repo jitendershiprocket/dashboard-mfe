@@ -1,6 +1,209 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <div class="bg-white rounded-lg p-8 shadow-sm">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ title }}</h2>
-    <p class="text-gray-600">WhatsApp communication functionality will be implemented here.</p>
+<div class="dashOverview">
+  <app-dashboard-filters 
+    [showDatePicker]="true"
+    [showZoneFilter]="false"
+    [showCourierFilter]="false"
+    [showPaymentFilter]="false"
+    [showShipmentFilter]="false"
+    [showClearButton]="false"
+    (dateRangeChange)="onDateRangeChange($event)">
+  </app-dashboard-filters>
+  
+  <div class="mt-2 letterspacing020px">
+    <span class="text-brown-gray opacity-80">The WhatsApp Comms dashboard is showing you the realtime data of last 30
+      days till today based on shipment assigned date.</span>
+  </div>
+  
+  <div class="dashboard-grid-row">
+    <div class="dashboard-col-3">
+      <div class="align-v-center bg-white radius-10 box">
+        <span class="float-end mt-right-top">
+          <img src="assets/images/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
+        </span>
+        <div class="d-flex">
+          <div class="icon-container">
+            <div class="radius-4 bg bg-order">
+              <img src="https://sr-cdn-1.shiprocket.in/img/order_total.svg" class="img-responsive" alt="" />
+            </div>
+          </div>
+          <div class="whatsApp-container">
+            <h3>{{ orderCount?.orderscount || 0 }}</h3>
+            <p>
+              Total Orders
+              <span class="default-tooltip-round" title="Count of all orders where tracking update was sent on buyers WhatsApp">
+                <span>i</span>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="dashboard-col-3">
+      <div class="align-v-center bg-white radius-10 box">
+        <span class="float-end mt-right-top">
+          <img src="assets/images/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
+        </span>
+        <div class="d-flex">
+          <div class="icon-container">
+            <div class="radius-4 bg bg-w">
+              <img src="https://sr-cdn-1.shiprocket.in/img/whatsapp.svg" class="img-responsive" alt="WhatsApp Logo" />
+            </div>
+          </div>
+          <div class="whatsApp-container">
+            <h3>
+              {{
+              whatsappData !== null ? whatsappData?.countData?.total_messages : 0
+              }}
+            </h3>
+            <p>Total Message Sent</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-col-3">
+      <div class="align-v-center bg-white radius-10 box">
+        <span class="float-end mt-right-top">
+          <img src="assets/images/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
+        </span>
+        <div class="d-flex">
+          <div class="icon-container">
+            <div class="radius-4 bg bg-check">
+              <img src="https://sr-cdn-1.shiprocket.in/img/blue_tick.png" class="img-responsive" alt="Message Read" />
+            </div>
+          </div>
+          <div class="whatsApp-container">
+            <h3>
+              {{
+              whatsappData !== null
+              ? whatsappData?.countData?.message_read_rate_percentage
+              : 0
+              }}
+              %
+            </h3>
+            <p>Message read rate</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="dashboard-col-3">
+      <div class="align-v-center bg-white radius-10 box">
+        <span class="float-end mt-right-top">
+          <img src="assets/images/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
+        </span>
+        <div class="d-flex">
+          <div class="icon-container">
+            <div class="radius-4 bg bg-query">
+              <img src="https://sr-cdn-1.shiprocket.in/img/query_resolved.svg" class="img-responsive"
+                alt="Query Resolved" />
+            </div>
+          </div>
+          <div class="whatsApp-container">
+            <h3>
+              {{
+              whatsappData !== null
+              ? whatsappData?.countData.queries_resolved
+              : 0
+              }}
+              %
+            </h3>
+            <p>
+              Queries resolved
+              <span class="default-tooltip-round" title="The percentage of resolved buyer queries is determined by analyzing the total read rate and evaluating the possible reduction in the number of order status queries">
+                <span>i</span>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dashboard-grid-row d-flex">
+    <div class="dashboard-col-6 mb-4">
+      <div class="donutChart">
+        <div class="dashboard-grid-row">
+          <div class="dashboard-col-8">
+            <p class="dashTileHeading">Top most 5 read status</p>
+          </div>
+          <div class="dashboard-col-4">
+            <p class="text-right sphere-black">
+              <img src="assets/images/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
+            </p>
+          </div>
+          <div class="dashboard-col-12">
+            <div class="border1"></div>
+          </div>
+        </div>
+        <div *ngIf="whatsappData?.eventData">
+          <div class="dashboard-grid-row msg-header-row">
+            <div class="dashboard-col-3 msg-header">Status</div>
+            <div class="dashboard-col-2 msg-header">Sent</div>
+            <div class="dashboard-col-2 msg-header">Delivered</div>
+            <div class="dashboard-col-2 msg-header">Read</div>
+            <div class="dashboard-col-3 msg-header">Read rate</div>
+          </div>
+          <div class="dashboard-grid-row msg_sent" *ngFor="let event of whatsappData?.eventData">
+            <div class="dashboard-col-3 d-flex align-items-center">
+              <img class="mr-10px" src="https://sr-cdn-1.shiprocket.in/img/{{ event.icon }}.svg"
+                alt="{{ event.event_id }}" />
+              {{ event.event_id }}
+            </div>
+            <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+              <span class="msg_count">{{ event.total_messages }}</span>
+            </div>
+            <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+              <span class="msg_count">{{ event.delivered }}</span>
+            </div>
+            <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+              <span class="msg_count">{{ event.message_read }}</span>
+            </div>
+            <div class="dashboard-col-3 d-flex align-items-center">
+              <div class="outer" style="flex:1; margin-right:8px;">
+                <div class="inner" [ngStyle]="{ width: event.percen > 0 ? event.percen + '%' : '0' }"></div>
+              </div>
+              <span style="font-size:13px; color:#222; min-width:40px; text-align:right;">{{ event.percen }}%</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!whatsappData?.eventData" class="pt-lg mt-xl d-flex f-d-c dispFlex">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+          <h3 class="text-blue">No Data Available</h3>
+        </div>
+      </div>
+    </div>
+    
+    <div class="dashboard-col-6">
+      <div class="donutChart">
+        <div class="dashboard-grid-row">
+          <div class="dashboard-col-8">
+            <p class="dashTileHeading">Messages sent over time</p>
+          </div>
+          <div class="dashboard-col-4">
+            <p class="text-right sphere-black">
+              <img src="assets/images/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
+            </p>
+          </div>
+          <div class="dashboard-col-12">
+            <div class="border1"></div>
+          </div>
+        </div>
+        <div *ngIf="whatsappData?.countData?.chart" class="dashboard-grid-row">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="message_sent_graph"
+          >
+          </highcharts-chart>
+        </div>
+        <div *ngIf="!whatsappData?.countData" class="pt-lg mt-xl dispFlex f-d-c">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+          <h3 class="text-blue">
+            Data not found for the selected filters.
+          </h3>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
