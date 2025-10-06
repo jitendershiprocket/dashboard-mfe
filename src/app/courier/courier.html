@@ -1,6 +1,906 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <div class="bg-white rounded-lg p-8 shadow-sm">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ title }}</h2>
-    <p class="text-gray-600">Courier management functionality will be implemented here.</p>
+<div class="dashOverview">
+  <app-dashboard-filters 
+    [showDatePicker]="true"
+    [showZoneFilter]="true"
+    [showPaymentFilter]="true"
+    [showCourierFilter]="false"
+    [showShipmentFilter]="false"
+    [showClearButton]="true"
+    (dateRangeChange)="onDateRangeChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (clearFilters)="clearFilter()">
+  </app-dashboard-filters>
+  
+  <div class="mt-2 letterspacing020px">
+    <span class="text-brown-gray opacity-80">All data in the Dashboard is displayed based on the Shipment assignment
+      date.</span>
+  </div>
+  
+  <div class="dashboard-grid-row fontFamily">
+    <div class="dashboard-col-12">
+      <div
+        #courierWrapper
+        class="table-responsive d-flex mt-50-media-600 dashboard-grid-row flex-nowrap"
+        id="courier-wrapper"
+        *ngIf="courierResponse && courierResponse.length > 0"
+      >
+        
+        <div class="dashboard-col-2 courier-label-wrap">
+          <div style="height: 125px"></div>
+          <div class="courier-row-th text-left cdb-mb-11">Courier</div>
+          <div class="courier-row-th text-left cdb-mb-11">Mode</div>
+          <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0 dbc-has-ul">
+            <span>Shipment count</span>
+            <ul class="pl-lg">
+              <li>COD Orders</li>
+              <li>Prepaid Orders</li>
+            </ul>
+          </div>
+          <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
+            <span>Delivered</span>
+            <ul class="pl-lg">
+              <li>1st Attempt Delivery</li>
+              <li>NDR Delivered</li>
+            </ul>
+          </div>
+          <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
+            <span class="courier-row-title">NDR Raised</span>
+            <span class="courier-row-title">RTO</span>
+            <span class="courier-row-title">Lost/Damaged</span>
+          </div>
+
+          <h3>Pickup Performance <span class="ms-1">
+            <img src="assets/images/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
+          </span></h3>
+
+          <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
+            <span>Shipment Picked</span>
+            <ul class="pl-lg">
+              <li>Pickup within 24hrs</li>
+              <li>Pickup within 48hs</li>
+              <li>Pickup in 48 + hrs</li>
+            </ul>
+          </div>
+          <h3>
+            SLA Performance
+            <img src="assets/images/text_info.svg" width="12" height="12" alt="Info" class="ms-2" title="Percentage shown here is calculated on the basis of total delivered shipments" />
+          </h3>
+
+          <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
+            <span>Delivered within SLA</span>
+            <ul class="pl-lg">
+              <li>
+                Zone A
+                <div
+                  class="default-tooltip-round"
+                  title="{{ slaTransportSanitizedHtml?.zone_a }}"
+                >
+                  i
+                </div>
+              </li>
+              <li>
+                Zone B
+                <div
+                  class="default-tooltip-round"
+                  title="{{ slaTransportSanitizedHtml?.zone_b }}"
+                >
+                  i
+                </div>
+              </li>
+              <li>
+                Zone C
+                <div
+                  class="default-tooltip-round"
+                  title="{{ slaTransportSanitizedHtml?.zone_c }}"
+                >
+                  i
+                </div>
+              </li>
+              <li>
+                Zone D
+                <div
+                  class="default-tooltip-round"
+                  title="{{ slaTransportSanitizedHtml?.zone_d }}"
+                >
+                  i
+                </div>
+              </li>
+              <li>
+                Zone E
+                <div
+                  class="default-tooltip-round"
+                  title="{{ slaTransportSanitizedHtml?.zone_e }}"
+                >
+                  i
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <h3>
+            Average Delivery Time
+            <div
+              class="default-tooltip-round"
+              title="Zone-Wise Average Delivery Time of Delivered shipments"
+            >
+              i
+            </div>
+          </h3>
+
+          <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
+            <ul class="pl-lg">
+              <li class="courier-row-title">Zone A</li>
+              <li class="courier-row-title">Zone B</li>
+              <li class="courier-row-title">Zone C</li>
+              <li class="courier-row-title">Zone D</li>
+              <li class="courier-row-title">Zone E</li>
+            </ul>
+          </div>
+          <h3>ODA Status</h3>
+
+          <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
+            <span class="courier-row-title"
+              >ODA Pincode Count
+              <div
+                class="default-tooltip-round"
+                title="Pincode Count is independent of filters selected above"
+              >
+                i
+              </div></span
+            >
+
+            <span class="courier-row-title">ODA Shipment Count</span>
+          </div>
+        </div>
+        <div
+          class="dashboard-col-9 courier-data-wrap d-inline-b"
+          id="courier-data-wrap"
+          #courierDataWrap
+        >
+          <div class="dashboard-grid-row w-100per d-inline-b">
+            <div
+              class="courier-data w-25per"
+              *ngFor="let data of courierResponse; let index = index"
+              #scrollContainer
+            >
+              <div *ngIf="couriers">
+                <select
+                  #selectElement
+                  [(ngModel)]="courierName[index]"
+                  class="nameFieldInput form-control form-select"
+                  (change)="
+                    changeCourier(courierName[index], index, 'change', $event)
+                  "
+                >
+                  <option
+                    *ngFor="let item of couriers"
+                    [value]="item?.courier_id"
+                  >
+                    {{ item?.courier }}({{item?.total_shipments}})
+                  </option>
+                </select>
+              </div>
+
+              <div class="db-courier-img inputAddOn j-content-c" style="height: 92px">
+                <img *ngIf="imgDataArray[index]" [src]="imgDataArray[index]" style="max-width: -webkit-fill-available;"/>
+              </div>
+              <div class="data-badge text-bold cdb-mb-11">
+                {{ data?.courier_name ? data?.courier_name : '-' | titlecase}}
+              </div>
+              <div class="data-badge cdb-mb-11 capitalize">
+                {{ data?.courier_mode | titlecase }}
+              </div>
+
+              <div class="data-badge cdb-mb-11">
+                {{
+                  data?.shipment_report?.total || data?.shipment_report?.total === 0
+                    ? convertIndianFormat(data?.shipment_report?.total)
+                    : '-'
+                }}
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.cod?.count &&
+                    (!data?.shipment_report?.cod?.percentage ||
+                      data?.shipment_report?.cod?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.cod?.count &&
+                    data?.shipment_report?.cod?.percentage &&
+                    data?.shipment_report?.cod?.percentage !== '0%'
+                  "
+                >
+                  {{
+                    data?.shipment_report?.cod?.count ||
+                    data?.shipment_report?.cod?.count === 0
+                      ? convertIndianFormat(data?.shipment_report?.cod?.count)
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.cod?.percentage
+                        ? data?.shipment_report?.cod?.percentage
+                        : '-'
+                    }})</span
+                  >
+                </span>
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.prepaid?.count &&
+                    (!data?.shipment_report?.prepaid?.percentage ||
+                      data?.shipment_report?.prepaid?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.prepaid?.count &&
+                    (data?.shipment_report?.prepaid?.percentage ||
+                      data?.shipment_report?.prepaid?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.shipment_report?.prepaid?.count ||
+                    data?.shipment_report?.prepaid?.count === 0
+                      ? convertIndianFormat(data?.shipment_report?.prepaid?.count)
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.prepaid?.percentage
+                        ? data?.shipment_report?.prepaid?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.total_delivered?.count &&
+                    (!data?.shipment_report?.total_delivered?.percentage ||
+                      data?.shipment_report?.total_delivered?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.total_delivered?.count &&
+                    (data?.shipment_report?.total_delivered?.percentage ||
+                      data?.shipment_report?.total_delivered?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.shipment_report?.total_delivered?.count ||
+                    data?.shipment_report?.total_delivered?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.total_delivered?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.total_delivered?.percentage
+                        ? data?.shipment_report?.total_delivered?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.first_attempt_delivered?.count &&
+                    (!data?.shipment_report?.first_attempt_delivered?.percentage ||
+                      data?.shipment_report?.first_attempt_delivered
+                        ?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data.shipment_report?.first_attempt_delivered?.count &&
+                    (data.shipment_report?.first_attempt_delivered?.percentage ||
+                      data.shipment_report?.first_attempt_delivered
+                        ?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.shipment_report?.first_attempt_delivered?.count ||
+                    data?.shipment_report?.first_attempt_delivered?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.first_attempt_delivered?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.first_attempt_delivered?.percentage
+                        ? data?.shipment_report?.first_attempt_delivered
+                            ?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.ndr_delivered?.count &&
+                    (!data?.shipment_report?.ndr_delivered?.percentage ||
+                      data?.shipment_report?.ndr_delivered?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.ndr_delivered?.count &&
+                    (data?.shipment_report?.ndr_delivered?.percentage ||
+                      data?.shipment_report?.ndr_delivered?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.shipment_report?.ndr_delivered?.count ||
+                    data?.shipment_report?.ndr_delivered?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.ndr_delivered?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.ndr_delivered?.percentage
+                        ? data?.shipment_report?.ndr_delivered?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.total_ndr_raised?.count &&
+                    (!data?.shipment_report?.total_ndr_raised?.percentage ||
+                      data?.shipment_report?.total_ndr_raised?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.total_ndr_raised?.count &&
+                    (data?.shipment_report?.total_ndr_raised?.percentage ||
+                      data?.shipment_report?.total_ndr_raised?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.shipment_report?.total_ndr_raised?.count ||
+                    data?.shipment_report?.total_ndr_raised?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.total_ndr_raised?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.total_ndr_raised?.percentage
+                        ? data?.shipment_report?.total_ndr_raised?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.total_rto?.count &&
+                    (!data?.shipment_report?.total_rto?.percentage ||
+                      data?.shipment_report?.total_rto?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.total_rto?.count &&
+                    (data?.shipment_report?.total_rto?.percentage ||
+                      data?.shipment_report?.total_rto?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.shipment_report?.total_rto?.count ||
+                    data?.shipment_report?.total_rto?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.total_rto?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.total_rto?.percentage
+                        ? data?.shipment_report?.total_rto?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.lost_damaged?.count &&
+                    (!data?.shipment_report?.lost_damaged?.percentage ||
+                      data?.shipment_report?.lost_damaged?.percentage === '0%')
+                  "
+                  >-</span
+                >
+                <span
+                  *ngIf="
+                    data?.shipment_report?.lost_damaged?.count &&
+                    (data?.shipment_report?.lost_damaged?.percentage ||
+                      data?.shipment_report?.lost_damaged?.percentage !== '0%')
+                  "
+                >
+                  {{
+                    data?.shipment_report?.lost_damaged?.count ||
+                    convertIndianFormat(
+                      data?.shipment_report?.lost_damaged?.count
+                    ) === '0'
+                      ? data?.shipment_report?.lost_damaged?.count
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.lost_damaged?.percentage
+                        ? data?.shipment_report?.lost_damaged?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <!-- spacing for header -->
+              <h3>&nbsp;</h3>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.total_picked?.count &&
+                    (!data?.shipment_report?.total_picked?.percentage ||
+                      data?.shipment_report?.total_picked?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.total_picked?.count &&
+                    (data?.shipment_report?.total_picked?.percentage ||
+                      data?.shipment_report?.total_picked?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.shipment_report?.total_picked?.count ||
+                    data?.shipment_report?.total_picked?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.total_picked?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.total_picked?.percentage
+                        ? data?.shipment_report?.total_picked?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.pickup_in_24hr?.count &&
+                    (!data?.shipment_report?.pickup_in_24hr?.percentage ||
+                      data?.shipment_report?.pickup_in_24hr?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.pickup_in_24hr?.count &&
+                    (data?.shipment_report?.pickup_in_24hr?.percentage ||
+                      data?.shipment_report?.pickup_in_24hr?.percentage !== '0%')
+                  "
+                >
+                  {{
+                    data?.shipment_report?.pickup_in_24hr?.count ||
+                    data?.shipment_report?.pickup_in_24hr?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.pickup_in_24hr?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.pickup_in_24hr?.percentage
+                        ? data?.shipment_report?.pickup_in_24hr?.percentage
+                        : '-'
+                    }})</span
+                  >
+                </span>
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.pickup_in_48hr?.count &&
+                    (!data?.shipment_report?.pickup_in_48hr?.percentage ||
+                      data?.shipment_report?.pickup_in_48hr?.percentage === '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.pickup_in_48hr?.count &&
+                    (data?.shipment_report?.pickup_in_48hr?.percentage ||
+                      data?.shipment_report?.pickup_in_48hr?.percentage !== '0%')
+                  "
+                >
+                  {{
+                    data?.shipment_report?.pickup_in_48hr?.count ||
+                    data?.shipment_report?.pickup_in_48hr?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.pickup_in_48hr?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.pickup_in_48hr?.percentage
+                        ? data?.shipment_report?.pickup_in_48hr?.percentage
+                        : '-'
+                    }})</span
+                  >
+                </span>
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.shipment_report?.pickup_in_48hr_plus?.count &&
+                    (!data?.shipment_report?.pickup_in_48hr_plus?.percentage ||
+                      data?.shipment_report?.pickup_in_48hr_plus?.percentage ===
+                        '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.pickup_in_48hr_plus?.count &&
+                    (data?.shipment_report?.pickup_in_48hr_plus?.percentage ||
+                      data?.shipment_report?.pickup_in_48hr_plus?.percentage !==
+                        '0%')
+                  "
+                  >{{
+                    data?.shipment_report?.pickup_in_48hr_plus?.count ||
+                    data?.shipment_report?.pickup_in_48hr_plus?.count === 0
+                      ? convertIndianFormat(
+                          data?.shipment_report?.pickup_in_48hr_plus?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.shipment_report?.pickup_in_48hr_plus?.percentage
+                        ? data?.shipment_report?.pickup_in_48hr_plus?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <!-- spacing for header -->
+              <h3>&nbsp;</h3>
+              <div class="data-badge cdb-mb-11">
+                <span
+                  *ngIf="
+                    !data?.sla_performance?.delivered_within_sla?.count &&
+                    (!data?.sla_performance?.delivered_within_sla?.percentage ||
+                      data?.sla_performance?.delivered_within_sla?.percentage ===
+                        '0%')
+                  "
+                  >-</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.sla_performance?.delivered_within_sla?.count &&
+                    (data?.sla_performance?.delivered_within_sla?.percentage ||
+                      data?.sla_performance?.delivered_within_sla?.percentage !==
+                        '0%')
+                  "
+                  >{{
+                    data?.sla_performance?.delivered_within_sla?.count ||
+                    data?.sla_performance?.delivered_within_sla?.count === 0
+                      ? convertIndianFormat(
+                          data?.sla_performance?.delivered_within_sla?.count
+                        )
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.sla_performance?.delivered_within_sla?.percentage
+                        ? data?.sla_performance?.delivered_within_sla?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+
+              <div class="data-badge cdb-mb-11">
+                <span *ngIf="!data?.shipment_report?.zone_wise?.z_a">-</span>
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_a &&
+                    !data?.sla_performance?.z_a?.count
+                  "
+                  >0</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_a &&
+                    data?.sla_performance?.z_a?.count &&
+                    (data?.sla_performance?.z_a?.percentage ||
+                      data?.sla_performance?.z_a?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.sla_performance?.z_a?.count ||
+                    data?.sla_performance?.z_a?.count === 0
+                      ? convertIndianFormat(data?.sla_performance?.z_a?.count)
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.sla_performance?.z_a?.percentage
+                        ? data?.sla_performance?.z_a?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span *ngIf="!data?.shipment_report?.zone_wise?.z_b">-</span>
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_b &&
+                    !data?.sla_performance?.z_b?.count
+                  "
+                  >0</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_b &&
+                    data?.sla_performance?.z_b?.count &&
+                    (data?.sla_performance?.z_b?.percentage ||
+                      data?.sla_performance?.z_b?.percentage !== '0%')
+                  "
+                >
+                  {{
+                    data?.sla_performance?.z_b?.count ||
+                    data?.sla_performance?.z_b?.count === 0
+                      ? convertIndianFormat(data?.sla_performance?.z_b?.count)
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.sla_performance?.z_b?.percentage
+                        ? data?.sla_performance?.z_b?.percentage
+                        : '-'
+                    }})</span
+                  >
+                </span>
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span *ngIf="!data?.shipment_report?.zone_wise?.z_c">-</span>
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_c &&
+                    !data?.sla_performance?.z_c?.count
+                  "
+                  >0</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_c &&
+                    data?.sla_performance?.z_c?.count &&
+                    (data?.sla_performance?.z_c?.percentage ||
+                      data?.sla_performance?.z_c?.percentage !== '0%')
+                  "
+                  >{{
+                    data?.sla_performance?.z_c?.count ||
+                    data?.sla_performance?.z_c?.count === 0
+                      ? convertIndianFormat(data?.sla_performance?.z_c?.count)
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.sla_performance?.z_c?.percentage
+                        ? data?.sla_performance?.z_c?.percentage
+                        : '-'
+                    }})</span
+                  ></span
+                >
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span *ngIf="!data?.shipment_report?.zone_wise?.z_d">-</span>
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_d &&
+                    !data?.sla_performance?.z_d.count
+                  "
+                  >0</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_d &&
+                    data?.sla_performance?.z_d?.count &&
+                    (data?.sla_performance?.z_d?.percentage ||
+                      data?.sla_performance?.z_d?.percentage !== '0%')
+                  "
+                >
+                  {{
+                    data?.sla_performance?.z_d?.count ||
+                    data?.sla_performance?.z_d?.count === 0
+                      ? convertIndianFormat(data?.sla_performance?.z_d?.count)
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.sla_performance?.z_d?.percentage
+                        ? data?.sla_performance?.z_d?.percentage
+                        : '-'
+                    }})</span
+                  >
+                </span>
+              </div>
+              <div class="data-badge cdb-mb-11">
+                <span *ngIf="!data?.shipment_report?.zone_wise?.z_e">-</span>
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_e &&
+                    !data?.sla_performance?.z_e?.count
+                  "
+                  >0</span
+                >
+
+                <span
+                  *ngIf="
+                    data?.shipment_report?.zone_wise?.z_e &&
+                    data?.sla_performance?.z_e?.count &&
+                    (data?.sla_performance?.z_e?.percentage ||
+                      data?.sla_performance?.z_e?.percentage !== '0%')
+                  "
+                >
+                  {{
+                    data?.sla_performance?.z_e?.count ||
+                    data?.sla_performance?.z_e?.count === 0
+                      ? convertIndianFormat(data?.sla_performance?.z_e?.count)
+                      : '-'
+                  }}
+                  <span class="text-primary1"
+                    >({{
+                      data?.sla_performance?.z_e?.percentage
+                        ? data?.sla_performance?.z_e?.percentage
+                        : '-'
+                    }})</span
+                  >
+                </span>
+              </div>
+
+              <h3>&nbsp;</h3>
+              <div class="data-badge cdb-mb-11">
+                {{
+                  data?.shipment_report?.zone_wise?.z_a ? data?.avg_tat?.z_a : '-'
+                }}
+              </div>
+
+              <div class="data-badge cdb-mb-11">
+                {{
+                  data?.shipment_report?.zone_wise?.z_b ? data?.avg_tat?.z_b : '-'
+                }}
+              </div>
+              <div class="data-badge cdb-mb-11">
+                {{
+                  data?.shipment_report?.zone_wise?.z_c ? data?.avg_tat?.z_c : '-'
+                }}
+              </div>
+              <div class="data-badge cdb-mb-11">
+                {{
+                  data?.shipment_report?.zone_wise?.z_d ? data?.avg_tat?.z_d : '-'
+                }}
+              </div>
+              <div class="data-badge cdb-mb-11">
+                {{
+                  data?.shipment_report?.zone_wise?.z_e ? data?.avg_tat?.z_e : '-'
+                }}
+              </div>
+
+              <!-- spacing for header -->
+              <h3>&nbsp;</h3>
+              <div class="data-badge cdb-mb-11">
+                {{
+                  data?.oda_pincode || data?.oda_pincode === 0
+                    ? convertIndianFormat(data?.oda_pincode)
+                    : '-'
+                }}
+              </div>
+              <div class="data-badge cdb-mb-11">
+                {{
+                  data?.oda_stat?.total_shipments ||
+                  data?.oda_stat?.total_shipments === 0
+                    ? convertIndianFormat(data?.oda_stat?.total_shipments)
+                    : '-'
+                }}
+              </div>
+            </div>
+            <div class="dashboard-col-3 courier-data" *ngIf="hideAddCourier">
+              <select
+                #selectElementE
+                [(ngModel)]="courierName[courierResponse?.length]"
+                (change)="
+                  changeCourier(
+                    courierName[courierResponse?.length],
+                    courierResponse?.length,
+                    'add',
+                    $event
+                  )
+                "
+                class="form-control br-12"
+              >
+                <option value="choose">Choose Courier</option>
+                <option *ngFor="let item of couriers" [value]="item?.courier_id">
+                  {{ item?.courier }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div
+        class="text-center cursor-p ml-5 addIcon"
+          *ngIf="
+            couriers?.length >= 4 &&
+            courierName?.length < couriers?.length &&
+            !hideAddCourier
+          "
+          (click)="addCourier()"
+        >
+          +
+        </div>
+      </div>
+      <div
+        *ngIf="!courierResponse || courierResponse.length === 0"
+        class="dispFlex"
+      >
+        <div colspan="11">
+          <div
+            class="pt-lg mt-xl f-d-c dispFlex"
+          >
+            <img
+              src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+              class="center-block w-100px"
+            />
+            <h3 class="text-blue" style="text-align: center;">
+              No Shipments for selected filter. <br />Please Change your filter.
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

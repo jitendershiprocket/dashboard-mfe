@@ -1,0 +1,314 @@
+/* RTO Dashboard Component Styles */
+.dashOverview {
+  font-family: var(--font-sf-pro-text);
+}
+
+.dashboard-grid-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .dashboard-grid-row {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+.dashboard-col-2 { grid-column: span 2 / span 2; }
+.dashboard-col-3 { grid-column: span 3 / span 3; }
+.dashboard-col-4 { grid-column: span 4 / span 4; }
+.dashboard-col-6 { grid-column: span 6 / span 6; }
+.dashboard-col-8 { grid-column: span 8 / span 8; }
+.dashboard-col-12 { grid-column: span 12 / span 12; }
+
+/* RTO Banner styles */
+.rto-banner-dashboard {
+  background: url('https://app.shiprocket.in/app/img/register-img/banner.jpg') center;
+  background-size: cover;
+  color: #fff;
+  padding: 10px;
+  border-radius: 7px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.cod-order {
+  background: linear-gradient(90deg, #8971E4, #DCB18A);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.address-risk {
+  background: linear-gradient(90deg, #8971E4, #DCB18A);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.powered-by {
+  background-color: #5dc010;
+  padding: 20px;
+  padding-top: 5px;
+  clip-path: polygon(50% 100%, 0 63%, 0 0%, 100% 0%, 100% 63%);
+  margin-top: -10px;
+}
+
+/* RTO Overview boxes */
+.flex-column {
+  flex-direction: column;
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ndb_bx {
+  background-color: #f6f6f6;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.ndb_bx h6 {
+  color: rgba(0, 0, 0, 0.8);
+  padding: 10px 15px;
+  width: 190px;
+  margin: 0;
+  border-bottom: 1px solid #d3d3d3;
+  background-color: #fff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-size: 12px !important;
+}
+
+.ndb_bx p {
+  color: #191919;
+  margin: 0px;
+  padding: 15px;
+  font-size: 22px;
+  font-weight: bold;
+  height: 65px;
+}
+
+.padding-custom-5 {
+  padding: 15px !important;
+}
+
+.flex-sb-sm {
+  justify-content: space-between;
+}
+
+/* Donut chart styles */
+.donutChart {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  min-height: 300px;
+}
+
+.dashTileHeading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.dashTileHeadingSub {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.sphere-black {
+  color: #1f2937;
+}
+
+.text-blue {
+  color: #3b82f6;
+}
+
+.text-brown-gray {
+  color: #6b7280;
+}
+
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.letterspacing020px {
+  letter-spacing: 0.02em;
+}
+
+.letterspacing032px {
+  letter-spacing: 0.032em;
+}
+
+.letterspacing005rem {
+  letter-spacing: 0.05rem;
+}
+
+/* Utility classes */
+.d-flex {
+  display: flex;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.br-12 {
+  border-radius: 12px;
+}
+
+.h-100p {
+  height: 100%;
+}
+
+.lblca {
+  padding: 1.5rem;
+}
+
+.p-lg {
+  padding: 1.5rem;
+}
+
+.dashboard-shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.relative {
+  position: relative;
+}
+
+.pb-0 {
+  padding-bottom: 0;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+/* Table styles */
+.tableFixHead {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.tableFixHeadChild {
+  overflow-x: auto;
+}
+
+.th-v-center-small {
+  vertical-align: middle;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.col-4 {
+  width: 33.333333%;
+}
+
+.smallTable {
+  font-size: 0.875rem;
+  padding: 0.5rem;
+}
+
+.w-s-i {
+  width: auto;
+}
+
+/* No data styles */
+.center-block {
+  display: block;
+  margin: 0 auto;
+}
+
+.w-100px {
+  width: 100px;
+}
+
+.pt-lg {
+  padding-top: 1.5rem;
+}
+
+.mt-xl {
+  margin-top: 2rem;
+}
+
+.f-d-c {
+  flex-direction: column;
+}
+
+.dispFlex {
+  display: flex;
+}
+
+.j-content-c {
+  justify-content: center;
+}
+
+.h-80 {
+  height: 80%;
+}
+
+.a-c {
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .dashboard-grid-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-col-2,
+  .dashboard-col-3,
+  .dashboard-col-4,
+  .dashboard-col-6,
+  .dashboard-col-8,
+  .dashboard-col-12 {
+    grid-column: span 1 / span 1;
+  }
+  
+  .rto-banner-dashboard {
+    display: none !important;
+  }
+  
+  .ndb_bx {
+    width: 100%;
+  }
+  
+  .ndb_bx h6 {
+    width: 100%;
+    padding: 12px 0;
+  }
+  
+  .ndb_bx p {
+    padding: 12px 0;
+    height: 45px;
+  }
+  
+  .card-mb {
+    margin-bottom: 18px;
+  }
+}
