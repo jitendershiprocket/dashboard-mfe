@@ -1,6 +1,404 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <div class="bg-white rounded-lg p-8 shadow-sm">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ title }}</h2>
-    <p class="text-gray-600">Orders management functionality will be implemented here.</p>
+<div class="dashOverview">
+  <!-- Common Dashboard Filters -->
+  <app-dashboard-filters
+    [filterData]="filterData"
+    [dateRange]="{ start: startDate, end: endDate }"
+    (dateRangeChange)="onDateRangeChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (clearFilters)="clearFilter()">
+  </app-dashboard-filters>
+
+  <div class="grid grid-cols-1 gap-6 mt-6">
+    <div class="col-span-1">
+      <div class="rounded-xl h-full relative p-4 pb-0 bg-white shadow-lg">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Orders Summary</p>
+          </div>
+          <div class="col-span-1">
+            <p class="text-right text-black">
+              <img src="assets/images/Real-time-data.svg" width="28" height="28" />
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="isOrderData" class="overflow-x-auto">
+          <table class="w-full table-auto">
+            <thead>
+              <tr>
+                <th class="date-col">Date</th>
+                <th class="count-col">Total Orders</th>
+                <th class="count-col">Pickup Unscheduled</th>
+                <th class="count-col">Pickup Scheduled</th>
+                <th class="count-col">In-Transit</th>
+                <th class="count-col">Delivered</th>
+                <th class="count-col">Undelivered</th>
+                <th class="count-col">RTO</th>
+                <th class="count-col">Lost/Damaged</th>
+                <th class="count-col">Cancelled</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700 max-h-[516px] overflow-y-auto">
+              <tr *ngFor="let data of orders">
+                <td class="date-col">{{ data.date_ }}</td>
+                <td class="count-col">
+                  <span *ngIf="data.total > 0">{{ convertIndianFormat(data.total) }}</span>
+                  <span *ngIf="data?.total <= 0">0</span>
+                </td>
+                <td class="count-col">
+                  <span class="clr-inherit" *ngIf="data.pickup_unscheduled > 0">{{
+                    convertIndianFormat(data.pickup_unscheduled)
+                  }}</span>
+                  <span *ngIf="data.pickup_unscheduled <= 0">0</span>
+                </td>
+                <td class="count-col">
+                  <span class="clr-inherit" *ngIf="data.pickup_scheduled > 0">{{
+                    convertIndianFormat(data.pickup_scheduled)
+                  }}</span>
+                  <span *ngIf="data.pickup_scheduled <= 0">0</span>
+                </td>
+                <td class="count-col">
+                  <span class="clr-inherit" *ngIf="data.in_transit > 0">{{
+                    convertIndianFormat(data.in_transit)
+                  }}</span>
+                  <span *ngIf="data.in_transit <= 0">0</span>
+                </td>
+                <td class="count-col">
+                  {{ convertIndianFormat(data.delivered) }}
+                </td>
+                <td class="count-col">
+                  {{ convertIndianFormat(data?.undelivered || 0) }}
+                </td>
+                <td class="count-col">
+                  <span class="clr-inherit" *ngIf="data.rto > 0">{{
+                    convertIndianFormat(data.rto)
+                  }}</span>
+                  <span *ngIf="data?.rto <= 0">0</span>
+                </td>
+                <td class="count-col">
+                  <span class="clr-inherit" *ngIf="data.lost_damaged > 0">{{
+                    convertIndianFormat(data.lost_damaged)
+                  }}</span>
+                  <span *ngIf="data.lost_damaged <= 0">0</span>
+                </td>
+                <td class="count-col">
+                  <span class="clr-inherit" *ngIf="data.cancelled > 0">{{
+                    convertIndianFormat(data.cancelled)
+                  }}</span>
+                  <span *ngIf="data.cancelled <= 0">0</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-between items-center mt-4 py-2">
+            <button 
+              class="px-4 py-2 bg-gray-100 border border-gray-300 rounded text-sm font-sf-pro-text transition-colors hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              [disabled]="paginationData?.links?.previous == null" 
+              (click)="previousBtn()">
+              « Previous
+            </button>
+            <button 
+              class="px-4 py-2 bg-gray-100 border border-gray-300 rounded text-sm font-sf-pro-text transition-colors hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              [disabled]="paginationData?.links?.next == null" 
+              (click)="nextBtn()">
+              Next »
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!isOrderData" class="flex flex-col items-center justify-center mb-12">
+          <img
+            src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+            class="mx-auto w-24"
+          />
+          <h3 class="text-blue-600 font-sf-pro-text mt-4">
+            Orders' data not found for the selected filters.
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid-row">
+    <!-- Prepaid vs COD Orders -->
+    <div class="dashboard-col-4 mb-4">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px] relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Prepaid vs. COD Orders</p>
+          </div>
+          <div class="col-span-1">
+            <p class="text-right text-black">
+              <img src="assets/images/Real-time-data.svg" width="28" height="28" />
+            </p>
+          </div>
+        </div>
+        <div *ngIf="!noPayments" class="grid grid-cols-1 -mt-2.5">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="PrepaidvsCOD"
+          >
+          </highcharts-chart>
+        </div>
+        <div *ngIf="noPayments" class="flex flex-col items-center justify-center h-48 text-gray-500">
+          <img
+            src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+            class="mx-auto w-24"
+          />
+          <h3 class="text-blue-600 font-sf-pro-text mt-4">
+            Orders' data not found for the selected filters.
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Quality score -->
+    <div class="dashboard-col-3 mb-4">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px] relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Address Quality score</p>
+          </div>
+          <div class="col-span-1">
+            <p class="text-right text-black">
+              <img src="assets/images/Real-time-data.svg" width="28" height="28" />
+            </p>
+          </div>
+        </div>
+        <div *ngIf="!noAddressData" class="grid grid-cols-1 -mt-2.5">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="addressQualityChart"
+          >
+          </highcharts-chart>
+        </div>
+        <div *ngIf="noAddressData" class="flex flex-col items-center justify-center h-48 text-gray-500">
+          <img
+            src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+            class="mx-auto w-24"
+          />
+          <h3 class="text-blue-600 font-sf-pro-text mt-4">
+            Address quality data not found for the selected filters.
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Most Popular Orders Location -->
+    <div class="dashboard-col-5">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px] relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Most Popular Orders Location</p>
+          </div>
+          <div class="col-span-1">
+            <p class="text-sm font-sf-pro-text text-gray-600">Last 30 days</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 h-[90%]">
+          <div class="col-span-1">
+            <div *ngIf="locationsData && locationsData.length > 0" class="max-h-[300px] overflow-y-auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="th-v-center-small smallTable w-s-i">
+                      States
+                    </th>
+                    <th class="th-v-center-small text-center smallTable w-s-i">
+                      Order Count
+                    </th>
+                    <th class="th-v-center-small text-center smallTable w-s-i">
+                      Revenue
+                    </th>
+                    <th class="th-v-center-small text-center smallTable w-s-i">
+                      Revenue %
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of locationsData">
+                    <td class="smallTable w-s-i">
+                      {{ toTitleCase(data.state) }}
+                    </td>
+                    <td class="text-center smallTable">
+                      <span class="clr-inherit" *ngIf="data.order_count > 0">{{
+                        convertIndianFormat(data.order_count)
+                      }}</span>
+                      <span *ngIf="data?.order_count <= 0">0</span>
+                    </td>
+                    <td class="text-center smallTable">
+                      <span class="clr-inherit" *ngIf="data.revenue > 0"
+                        >₹{{ convertIndianFormat(data.revenue) }}</span
+                      >
+                      <span *ngIf="data.revenue <= 0">0</span>
+                    </td>
+                    <td class="text-center smallTable">
+                      <span class="clr-inherit">{{ data.revenue_percentage }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="!locationsData || locationsData.length === 0" class="flex flex-col items-center justify-center h-48 text-gray-500">
+              <img
+                src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+                class="mx-auto w-24"
+              />
+              <h3 class="text-blue-600 font-sf-pro-text mt-4">
+                Orders' data not found for the selected filters.
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid-row">
+    <div class="dashboard-col-6 mb-4">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px]">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Top 10 Customers</p>
+          </div>
+          <div class="col-span-1">
+            <select
+              name="topCustomer"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              (change)="switchDate($event)"
+            >
+              <option value="7_days">7 days</option>
+              <option value="15_days">15 days</option>
+              <option value="30_days" selected>30 days</option>
+              <option value="3_months">3 Months</option>
+              <option value="6_months">6 Months</option>
+              <option value="1_year">1 Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 h-[90%]">
+          <div class="col-span-1">
+            <div *ngIf="topCustomersData && topCustomersData.length > 0" class="max-h-[300px] overflow-y-auto">  
+              <table>
+                <thead>
+                  <tr>
+                    <th class="th-v-center-small smallTable w-s-i">
+                      Customer Name
+                    </th>
+                    <th class="th-v-center-small text-center smallTable w-s-i">
+                      Order Count
+                    </th>
+                    <th class="th-v-center-small text-center smallTable w-s-i">
+                      Revenue
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let customer of topCustomersData">
+                    <td class="smallTable w-s-i">
+                      {{ customer.customer_name }}
+                    </td>
+                    <td class="text-center smallTable">
+                      <span class="clr-inherit" *ngIf="customer.order_total > 0">{{
+                        convertIndianFormat(customer.order_total)
+                      }}</span>
+                    </td>
+                    <td class="text-center smallTable">
+                      <span class="clr-inherit" *ngIf="customer.rvalue > 0"
+                        >₹{{ convertIndianFormat(customer.rvalue) }}</span
+                      >
+                      <span *ngIf="customer.rvalue <= 0">0</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="!topCustomersData || topCustomersData.length === 0" class="flex flex-col items-center justify-center h-48 text-gray-500">
+              <img
+                src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+                class="mx-auto w-24"
+              />
+              <h3 class="text-blue-600 font-sf-pro-text mt-4">
+                Customers' data not found for the selected filters.
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-col-6">
+      <div class="bg-white rounded-xl p-4 shadow-lg min-h-[300px]">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-1">
+            <p class="text-base font-sf-pro-text font-semibold text-gray-900">Top 10 Products</p>
+          </div>
+          <div class="col-span-1">
+            <select
+              name="topProducts"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              (change)="switchDateProducts($event)"
+            >
+              <option value="7_days">7 days</option>
+              <option value="15_days">15 days</option>
+              <option value="30_days" selected>30 days</option>
+              <option value="3_months">3 Months</option>
+              <option value="6_months">6 Months</option>
+              <option value="1_year">1 Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 h-[90%]">
+          <div class="col-span-1">
+            <div *ngIf="topProductsData && topProductsData.length > 0" class="max-h-[300px] overflow-y-auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="th-v-center-small smallTable w-s-i">
+                      Product Name
+                    </th>
+                    <th class="th-v-center-small text-center smallTable w-s-i">
+                      Unit Sold
+                    </th>
+                    <th class="th-v-center-small text-center smallTable w-s-i">
+                      Revenue
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of topProductsData">
+                    <td class="smallTable w-s-i">
+                      {{ product.product_name_1 }}
+                    </td>
+                    <td class="text-center smallTable">
+                      <span class="clr-inherit" *ngIf="product.total > 0">{{
+                        convertIndianFormat(product.total)
+                      }}</span>
+                    </td>
+                    <td class="text-center smallTable">
+                      <span class="clr-inherit" *ngIf="product.rvalue > 0"
+                        >₹{{ convertIndianFormat(product.rvalue) }}</span
+                      >
+                      <span *ngIf="product.rvalue <= 0">0</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="!topProductsData || topProductsData.length === 0" class="flex flex-col items-center justify-center h-48 text-gray-500">
+              <img
+                src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+                class="mx-auto w-24"
+              />
+              <h3 class="text-blue-600 font-sf-pro-text mt-4">
+                Products' data not found for the selected filters.
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

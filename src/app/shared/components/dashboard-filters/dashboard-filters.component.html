@@ -1,0 +1,93 @@
+<div class="dashboard-filters">
+  <div class="flex flex-wrap gap-4 mt-6 inputAddOn">
+    
+    <!-- Date Picker -->
+    <div class="flex-shrink-0 min-w-[200px] max-w-[250px]" *ngIf="showDatePicker">
+      <div class="relative">
+        <div class="w-full">
+          <!-- Date picker will be implemented -->
+          <div class="form-control date-picker-placeholder">
+            <span class="date-range-text">
+              {{ dateRange.start && dateRange.end ? 
+                (dateRange.start + ' to ' + dateRange.end) : 
+                'Select Date Range' }}
+            </span>
+          </div>
+        </div>
+        <div class="filter-info">
+          <img width="12" height="12" src="assets/images/text_info.svg" alt="" class="mw-450px" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone Filter -->
+    <div class="flex-shrink-0 min-w-[120px] max-w-[150px]" *ngIf="showZoneFilter">
+      <select
+        class="form-select custom-select-css w-full"
+        (change)="onZoneChange($event)"
+      >
+        <option value="">Zone</option>
+        <option *ngFor="let zone of filterData?.zone" [value]="zone.value">
+          {{ zone.display_value }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Courier Filter -->
+    <div class="flex-shrink-0 min-w-[120px] max-w-[150px]" *ngIf="showCourierFilter">
+      <select
+        class="form-select custom-select-css w-full"
+        (change)="onCourierChange($event)"
+      >
+        <option value="">Courier</option>
+        <option *ngFor="let courier of filterData?.courier" [value]="courier.value">
+          {{ courier.display_value }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Payment Mode Filter -->
+    <div class="flex-shrink-0 min-w-[140px] max-w-[170px]" *ngIf="showPaymentFilter">
+      <select
+        class="form-select custom-select-css w-full"
+        (change)="onPaymentChange($event)"
+      >
+        <option value="">Payment Mode</option>
+        <option *ngFor="let payment of filterData?.courier_type" [value]="payment.value">
+          {{ payment.display_value }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Shipment Mode Filter -->
+    <div class="flex-shrink-0 min-w-[140px] max-w-[170px]" *ngIf="showShipmentFilter">
+      <select
+        class="form-select custom-select-css w-full"
+        (change)="onShipmentChange($event)"
+      >
+        <option value="">Shipment Mode</option>
+        <option *ngFor="let shipment of filterData?.courier_mode" [value]="shipment.value">
+          {{ shipment.display_value }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Clear Filters Button -->
+    <div class="flex-shrink-0 min-w-[120px] max-w-[150px]" *ngIf="showClearButton && hasActiveFilters">
+      <button
+        (click)="clearAllFilters()"
+        class="btn w-full form-control-border-1 br-25 headertr clearButtonContainer"
+      >
+        <span class="mr-2">Filter</span>
+        <span>Clear</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Info Text -->
+  <div class="mt-2 letterspacing020px" *ngIf="showDatePicker">
+    <span class="text-brown-gray opacity-80">
+      All data in the Dashboard is displayed based on the Shipment assignment date.
+    </span>
+  </div>
+</div>
