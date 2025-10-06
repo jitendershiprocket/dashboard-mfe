@@ -1,118 +1,933 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <!-- Promotional Banner -->
-  <div class="mb-8 bg-gradient-to-r from-green-100 to-purple-100 rounded-lg p-6 flex items-center justify-between">
-    <div class="flex items-center space-x-4">
-      <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-green-500 rounded-lg flex items-center justify-center">
-        <span class="text-white font-bold text-xl">S</span>
-      </div>
+<div class="dashOverview">
+    <!-- <div class="row mt22">
       <div>
-        <h3 class="text-lg font-semibold text-gray-800">Shiprocket Checkout</h3>
-        <p class="text-gray-600">Increase Conversion By 60% With An Easy, Fast & Secure Checkout.</p>
+        <div
+          *ngIf="kycNewStrip"
+          class="br-12 font-14 dashboard-kyc-msg dashboard-kyc-msg-b-color"
+        >
+          <span
+            (click)="newWebVersionKyc()"
+            class="text-center tuh display-web color-red"
+            >From April 01, 2021, it will be mandatory to complete your KYC
+            verification before shipping any order with us. To complete your KYC,
+            Please click here.</span
+          >
+          <span class="color-red text-center display-web font-14"
+            >*KYC is mandatory for all new users and pickup addresses.</span
+          >
+        </div>
+      </div>
+      <div *ngIf="!kycNewStrip">
+        <div
+          class="dashboard-kyc-msg bg-dangerr tuh"
+          (click)="newWebVersionKyc()"
+          *ngIf="
+            kycByPass !== 0 &&
+            kyc_status !== 2 &&
+            kyc_status !== 5 &&
+            kyc_status !== 6 &&
+            kyc_status !== 7 &&
+            is_seller
+          "
+        >
+          Click here to complete your KYC and get non-disrupted shipping and COD
+          remittances
+        </div>
+      </div>
+      <div class="row mt-22 flex-grow-1 d-flex" *ngIf="bannerdata?.length === 1">
+        <div class="col-md-12">
+          <a
+            href="{{ bannerdata[0].landing_page }}"
+            target="_blank"
+            class="inline-block w-100"
+            (click)="onBannerClick()"
+          >
+            <img
+              src="{{ bannerdata[0].banner_image }}"
+              alt="{{ bannerdata[0].alt ? bannerdata[0].alt : 'SR Fulfillment' }}"
+              class="inline-block w-100 br-12 bannerImg"
+            />
+          </a>
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="bannerdata && bannerdata?.length > 1">
+        <div
+          #carouselElement
+          id="carouselIndicators"
+          class="carousel slide banner-cntnr"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div
+              *ngFor="
+                let bannerItem of bannerdata;
+                let i = index;
+                first as isFirst
+              "
+              [ngClass]="isFirst ? 'carousel-item active' : 'carousel-item'"
+            >
+              <img
+                class="d-block w-100 cursor-p"
+                src="{{ bannerItem.banner_image }}"
+                alt="{{ 'banner' + i }}"
+                (click)="openBannerLandingPage(bannerItem)"
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev j-content-s align-v-start opacity-1 dashboradCarousel"
+            type="button"
+            data-bs-target="#carouselIndicators"
+            data-bs-slide="prev"
+          >
+            <img
+              src="assets/images/chevron-left-solid.svg"
+              alt="Previous"
+              width="12px"
+              class="carouselPrevButImg"
+            />
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next align-v-start opacity-1 j-content-e dashboradCarousel"
+            type="button"
+            data-bs-target="#carouselIndicators"
+            data-bs-slide="next"
+          >
+            <img
+              src="assets/images/chevron-right-solid.svg"
+              alt="Next"
+              width="12px"
+              class="carouselNextButImg"
+            />
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div> -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
+      <div class="md:col-span-4 mb-4">
+        <div class="dashTilebg dataCardContainer br-12 h-100p lblca">
+          <span class="float-end sphere-black my-3 me-3">
+            <img  src="assets/images/Real-time-data.svg" width="28" height="28"/>
+          </span>
+          <div class="dispFlex ms-2 mt-48px">
+            <div class="md:col-span-4 dispFlex">
+              <img  src="assets/images/international/dashboard/order-dash.svg" alt="Todays Data"
+                width="70px" />
+            </div>
+            <div class="md:col-span-8 dispFlex dashTileData">
+              <p class="font-14 font-sf-pro-text">Today's Orders</p>
+              <p class="dashTileMainData">
+                {{
+                pinotData?.today_orders?.[1]?.total > 0
+                ? convertIndianFormat(pinotData.today_orders[1].total)
+                : '0'
+                }}
+              </p>
+    
+              <p class="dashTileSubData mb0">
+                Yesterday<br>
+                {{
+                pinotData?.today_orders?.[0]?.total > 0
+                ? convertIndianFormat(pinotData.today_orders[0].total)
+                : '0'
+                }}
+              </p>
+    
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="md:col-span-8">
+        <div class="
+              dashTilebg dataCardContainer
+              br-12
+              h-100p
+              lblca
+              dashShipmentTile
+              inputAddOn
+              j-content-c
+              p-15
+              f-d-c
+            ">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <p class="font-14 font-sf-pro-text font-semibold">Shipments Details</p>
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black"><img class="mt-25px"  src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+            </div>
+          </div>
+          <div class="grid grid-cols-6 gap-2">
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div class="dashShipTileDataVal">
+                  {{ pinotData?.shipment_details?.[0]?.total_shipments ? numFormat(pinotData.shipment_details[0].total_shipments) : 0 }}
+                </div>
+    
+                <div class="dashShipTileDataTitle">Total Shipments</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div class="dashShipTileDataVal">
+                  {{ pinotData?.shipment_details?.[0]?.pickup_pending ? numFormat(pinotData.shipment_details[0].pickup_pending) : 0 }}
+                </div>
+    
+                <div class="dashShipTileDataTitle">Pickup Pending</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div class="dashShipTileDataVal">
+                  {{ pinotData?.shipment_details?.[0]?.in_transit ? numFormat(pinotData.shipment_details[0].in_transit) : 0 }}
+                </div>
+    
+                <div class="dashShipTileDataTitle">In-Transit</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div class="dashShipTileDataVal">
+                  {{ pinotData?.shipment_details?.[0]?.delivered ? numFormat(pinotData.shipment_details[0].delivered) : 0 }}
+                </div>
+    
+                <div class="dashShipTileDataTitle">Delivered</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div class="dashShipTileDataVal">
+                  {{ shippingData?.undelivered?numFormat(+shippingData?.undelivered):0 }}
+                </div>
+    
+                <div class="dashShipTileDataTitle">NDR Pending</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div class="dashShipTileDataVal">
+                  {{ pinotData?.shipment_details?.[0]?.rto ? numFormat(pinotData.shipment_details[0].rto) : 0 }}
+                </div>
+    
+                <div class="dashShipTileDataTitle">RTO</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="flex items-center space-x-4">
-      <div class="flex items-center space-x-2">
-        <div class="w-8 h-8 bg-gray-200 rounded"></div>
-        <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
-        <div class="w-8 h-8 bg-blue-200 rounded"></div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
+      <div class="md:col-span-4 mb-4">
+        <div class="h-100p br-12 lblca dashTilebgGreen dataCardContainer">
+          <span class="float-end sphere-black my-3 me-3">
+            <img  src="assets/images/Real-time-data.svg" width="28" height="28"/>
+          </span>
+          <div class="dispFlex ms-2 mt-48px">
+            <div class="md:col-span-4 dispFlex">
+              <img
+src="assets/images/international/dashboard/order-dash.svg"
+                alt="Todays Data"
+                width="70px"
+              />
+            </div>
+            <div class="md:col-span-8 dispFlex dashTileData">
+              <p class="font-14 font-sf-pro-text">Today's Revenue</p>
+              <p
+                class="dashTileMainData"
+              >
+                &#8377;{{
+                  pinotData?.today_revenue?.[1]?.total_shipment_revenue > 0
+                    ? convertIndianFormat(pinotData.today_revenue[1].total_shipment_revenue)
+                    : '0'
+                }}
+              </p>
+             
+              <p
+                class="dashTileSubData mb0"
+              >
+                Yesterday <br>&#8377;{{
+                  pinotData?.today_revenue?.[0]?.total_shipment_revenue > 0
+                    ? convertIndianFormat(pinotData.today_revenue[0].total_shipment_revenue)
+                    : '0'
+                }}
+              </p>
+              
+            </div>
+          </div>
+        </div>
       </div>
-      <button class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-        Get Started
-      </button>
-      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-      </svg>
+      <div class="md:col-span-8">
+        <div
+          class="
+            br-12
+            h-100p
+            lblca
+            headertr
+            dashTilebgWhite
+            dashShipmentTile
+            inputAddOn
+            j-content-c
+            p-15
+            f-d-c
+          "
+        >
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <p class="font-14 font-sf-pro-text font-semibold">NDR Details</p>
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black"><img class="mt-25px"  src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-2">
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div
+                  class="dashShipTileDataVal"
+                >
+                  {{ ndrData?.records?numFormat(+ndrData?.records):0 }}
+                </div>
+               
+                <div class="dashShipTileDataTitle">Total NDR</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div
+                  class="dashShipTileDataVal"
+                >
+                  {{ ndrData?.seller?numFormat(+ndrData?.seller):0 }}
+                </div>
+               
+                <div class="dashShipTileDataTitle">Your Reattempt Request</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div
+                  class="dashShipTileDataVal"
+                >
+                  {{ ndrData?.buyer?numFormat(+ndrData?.buyer):0 }}
+                </div>
+               
+                <div class="dashShipTileDataTitle">Buyer Reattempt Request</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div
+                  class="dashShipTileDataVal"
+                >
+                  {{ ndrData?.delivered?numFormat(+ndrData?.delivered):0 }}
+                </div>
+               
+                <div class="dashShipTileDataTitle">NDR Delivered</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
+      <div class="md:col-span-4 mb-4">
+        <div class="dashTilebg dataCardContainer br-12 h-100p lblca">
+          <span class="float-end sphere-black my-3 me-3">Last 30 days</span>
+          <div class="dispFlex ms-2 mt-53px">
+            <div class="md:col-span-4 dispFlex">
+              <img  src="assets/images/international/dashboard/order-dash.svg" alt="Todays Data"
+                width="70px" />
+            </div>
+            <div class="md:col-span-8 dispFlex dashTileData">
+              <p class="font-14 font-sf-pro-text">Average Shipping Cost</p>
+              <p class="dashTileMainData">
+                &#8377;{{
+                avgshipCost?.avg_shipping_cost > 0
+                ? convertIndianFormat(avgshipCost?.avg_shipping_cost)
+                : '0'
+                }}
+              </p>
+        
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="md:col-span-8">
+        <div
+          class="
+            br-12
+            h-100p
+            lblca
+            headertr
+            dashTilebgWhite
+            dashShipmentTile
+            inputAddOn
+            j-content-c
+            p-15
+            f-d-c
+          "
+        >
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <p class="font-14 font-sf-pro-text font-semibold">COD Status</p>
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black"><img  src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-2">
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div
+                  class="dashShipTileDataVal"
+                >
+                  &#8377;{{ statuses?.total_cod?numFormat(+statuses?.total_cod):0 }}
+                </div>
+               
+                <div class="dashShipTileDataTitle">
+                  Total COD <br />
+                  (Last 30 Days)
+                </div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div
+                  class="dashShipTileDataVal"
+                >
+                  &#8377;{{ codStatuses?.cod_payble?.cod_payble?numFormat(+codStatuses?.cod_payble?.cod_payble):0 }}
+                </div>
+               
+                <div class="dashShipTileDataTitle">COD Available</div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div
+                  class="dashShipTileDataVal"
+                
+                >
+                  &#8377;{{ statuses?.pendig_data?numFormat(+statuses?.pendig_data):0 }}
+                </div>
+              
+                <div class="dashShipTileDataTitle">
+                  COD Pending <br />
+                  (Greater than 8 days)
+                </div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="inputAddOn align-v-center j-content-c f-d-c">
+                <div
+                  class="dashShipTileDataVal"
+                 
+                >
+                  &#8377;{{
+                    numFormat(+codStatuses?.cod_payble?.last_cod_remitted)
+                  }}
+                </div>
+               
+                <div class="dashShipTileDataTitle">Last COD Remitted</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
+      <div class="md:col-span-4 mb-4">
+        <div class="donutChart p-r">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <span class="font-14 font-sf-pro-text font-semibold">Couriers Split</span><img  width="12"
+                height="12" src="assets/images/text_info.svg" alt="" class="ms-2"  />
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black">Last 30 days</p>
+            </div>
+          </div>
+          <div *ngIf="pinotData?.courier_split?.length > 0" class="row donutChartContainer">
+            <highcharts-chart 
+          [Highcharts]="Highcharts"
+          [options]="donutChart"
+          >
+         </highcharts-chart>
+          </div>
+          <div
+            *ngIf="!(pinotData?.courier_split?.length > 0)"
+            class="pt-lg mt-xl dispFlex h-80 noDataContainer"
+          >
+            <img
+              src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+              style="width: 100px"
+              class="center-block"
+            />
+            <h3 class="text-blue">Data not found for the selected filter.</h3>
+          </div>
+        </div>
+      </div>
+      <div class="md:col-span-4 mb-4">
+        <div class="donutChart p-r ">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <span class="font-14 font-sf-pro-text font-semibold">Overall Shipment Status</span><img                  width="12" height="12" src="assets/images/text_info.svg" alt="" class="ms-2"
+                 />
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black"><img  src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+            </div>
+          </div>
+          <div *ngIf="isPinotshipingDataDataNotEmpty()" class="row donutChartContainer">
+            <!-- <div [chart]="shipmentDonutChart"></div> -->
+               <highcharts-chart 
+          [Highcharts]="Highcharts"
+          [options]="shipmentDonutChart"
+          >
+         </highcharts-chart>
+          </div>
+          <div *ngIf="!(isPinotshipingDataDataNotEmpty())" class="pt-lg mt-xl dispFlex h-80 noDataContainer">
+            <img
+              src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+              style="width: 100px"
+              class="center-block"
+            />
+            <h3 class="text-blue">No Shipment in last 30 days</h3>
+          </div>
+        </div>
+      </div>
+      <div class="md:col-span-4 mb-4">
+        <div class="donutChart p-r">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <span class="font-14 font-sf-pro-text font-semibold">Delivery Performance</span><img                 width="12" height="12" src="assets/images/text_info.svg" alt="" class="ms-2"
+                />
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black"><img  src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+            </div>
+          </div>
+          <div *ngIf="isdeliveryDonutDataNotEmpty()" class="row donutChartContainer">
+            <!-- <div [chart]="deliveryDonutChart"></div> -->
+               <highcharts-chart 
+          [Highcharts]="Highcharts"
+          [options]="deliveryDonutChart"
+          >
+         </highcharts-chart>
+          </div>
+          <div
+            *ngIf="!(isdeliveryDonutDataNotEmpty())"
+            class="pt-lg mt-xl dispFlex h-80 noDataContainer"
+          >
+            <img
+              src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+              style="width: 100px"
+              class="center-block"
+            />
+            <h3 class="text-blue">No Shipment Delivered in last 30 days.</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
+      <div class="md:col-span-4 mb-4">
+        <div class="donutChart">
+          <div *ngIf="mapData?.length > 0" class="grid grid-cols-2 gap-4">
+            <div class="col-span-1 flex items-center">
+              <select name="type" class="form-select switchDashBoardNew" (change)="switchDashboard($event)" id="dashChange"
+                [(ngModel)]="mapFilterData">
+                <option value="Order" selected>Orders</option>
+                <option value="RTO">RTO</option>
+              </select>
+              <img  width="12" height="12" src="assets/images/text_info.svg"
+                alt="" class="ms-2 mt-3"
+                 />
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black">Last 30 days</p>
+            </div>
+          </div>
+          <div *ngIf="mapData?.length > 0" id="container">
+          <highcharts-chart
+    [Highcharts]="Highcharts"
+    [constructorType]="chartConstructor"
+    [options]="chartOptions"
+   
+    style="width: 100%; height: 100%; display: block;"
+  ></highcharts-chart>
+          </div>
+          
+          <div
+            *ngIf="!(mapData?.length > 0)"
+            class="pt-lg mt-xl dispFlex h-80 noDataContainer"
+          >
+            <img
+              src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+              style="width: 100px"
+              class="center-block"
+            />
+            <h3 class="text-blue">Data not found.</h3>
+          </div>
+        </div>
+      </div>
+      <div class="md:col-span-4 mb-4">
+        <div class="donutChart ">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <span class="font-14 font-sf-pro-text font-semibold">Shipments - Zone Distribution</span>
+              <img  width="12" height="12" src="assets/images/text_info.svg"
+              alt="" class="ms-2"
+               />
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black">Last 30 days</p>
+            </div>
+          </div>
+          <div class="row">
+            <ul class="zone_wise">
+              <li>
+                <div class="d-flex">
+                  <span class="sphere sphere-grey"></span>
+                  <span
+                    class="pl-lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    tooltip-class="customClass"
+                    title="Pickup and Delivery pin codes are in the same city"
+                    >Zone A</span
+                  >
+                </div>
+                <div *ngIf="pinotData?.zone_wise_shipments?.length > 0" class="text-right">
+                  <span>
+                    {{ convertIndianFormat(pinotData?.zone_wise_shipments?.[0]?.total) }}
+                    <span *ngIf="pinotData?.zone_wise_shipments?.[0]?.percent > 0">
+                      ({{ pinotData?.zone_wise_shipments?.[0]?.percent }}%)
+                    </span></span
+                  >
+                </div>
+              </li>
+              <li>
+                <div class="d-flex">
+                  <span class="sphere sphere-green"></span>
+                  <span
+                    class="pl-lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    tooltip-class="customClass"
+                    title="Pickup and Delivery pin codes are in the same state/region"
+                    >Zone B</span
+                  >
+                </div>
+                <div *ngIf="pinotData?.zone_wise_shipments?.length > 0" class="text-right">
+                  <span>
+                    {{ convertIndianFormat(pinotData?.zone_wise_shipments?.[1]?.total) }}
+                    <span *ngIf="pinotData?.zone_wise_shipments?.[1]?.percent > 0"
+                      >({{ pinotData?.zone_wise_shipments?.[1]?.percent }}%)</span
+                    ></span
+                  >
+                </div>
+              </li>
+              <li>
+                <div class="d-flex">
+                  <span class="sphere sphere-red"></span>
+                  <span
+                    class="pl-lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    tooltip-class="customClass"
+                    title="Pickup and Delivery pin codes are in metro cities"
+                    >Zone C</span
+                  >
+                </div>
+                <div *ngIf="pinotData?.zone_wise_shipments?.length > 0" class="text-right">
+                  <span>
+                    {{ convertIndianFormat(pinotData?.zone_wise_shipments?.[2]?.total) }}
+                    <span *ngIf="pinotData?.zone_wise_shipments?.[2]?.percent > 0"
+                      >({{ pinotData?.zone_wise_shipments?.[2]?.percent }}%)</span
+                    ></span
+                  >
+                </div>
+              </li>
+              <li>
+                <div class="d-flex">
+                  <span class="sphere"></span>
+                  <span
+                    class="pl-lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    tooltip-class="customClass"
+                    title="Pickup and delivery pin codes are in India. Excluding pin code of North East region and J&K region"
+                    >Zone D</span
+                  >
+                </div>
+                <div *ngIf="pinotData?.zone_wise_shipments?.length > 0" class="col-sm-6 text-right">
+                  <span>
+                    {{ convertIndianFormat(pinotData?.zone_wise_shipments?.[3]?.total) }}
+                    <span *ngIf="pinotData?.zone_wise_shipments?.[3]?.percent > 0"
+                      >({{ pinotData?.zone_wise_shipments?.[3]?.percent }}%)</span
+                    >
+                  </span>
+                </div>
+              </li>
+              <li>
+                <div class="d-flex">
+                  <span class="sphere sphere-yellow"></span>
+                  <span
+                    class="pl-lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    tooltip-class="customClass"
+                    title="Pickup and delivery pin codes are in the North East region or in J&K"
+                    >Zone E</span
+                  >
+                </div>
+                <div *ngIf="pinotData?.zone_wise_shipments?.length > 0" class="text-right">
+                  <span>
+                    {{ convertIndianFormat(pinotData?.zone_wise_shipments?.[4]?.total) }}
+                    <span *ngIf="pinotData?.zone_wise_shipments?.[4]?.percent > 0"
+                      >({{ pinotData?.zone_wise_shipments?.[4]?.percent }}%)</span
+                    >
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="md:col-span-4">
+        <div class="donutChart">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <span class="font-14 font-sf-pro-text font-semibold">Revenue</span>
+              <img  width="12" height="12" src="assets/images/text_info.svg"
+              alt="" class="ms-2"
+              />
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black">Last 30 days</p>
+            </div>
+          </div>
+          <div class="row">
+            <ul class="zone_wise revenue">
+              <li>
+                <div class="d-flex">
+                  <span>Last 90 Days</span>
+                </div>
+                <div class="text-right">
+                  <span>
+                    <i class="fa fa-inr"></i>₹{{
+                      convertIndianFormat(
+                        revenues?.total_revenue > 0 ? revenues.total_revenue : 0
+                      )
+                    }}</span
+                  >
+                </div>
+              </li>
+              <li>
+                <div class="d-flex">
+                  <span>This Week</span>
+                </div>
+                <div class="text-right">
+                  <span>
+                    <i class="fa fa-inr"></i>₹{{
+                      convertIndianFormat(
+                        revenues?.weekly_revenue > 0
+                          ? revenues.weekly_revenue
+                          : '0'
+                      )
+                    }}</span
+                  >
+                </div>
+              </li>
+              <li>
+                <div class="d-flex">
+                  <span>This Month</span>
+                </div>
+                <div class="text-right">
+                  <span>
+                    <i class="fa fa-inr"></i>₹{{
+                      convertIndianFormat(
+                        revenues?.monthly_revenue > 0
+                          ? revenues.monthly_revenue
+                          : '0'
+                      )
+                    }}</span
+                  >
+                </div>
+              </li>
+              <li>
+                <div class="d-flex">
+                  <span>This Quarter</span>
+                </div>
+                <div class="text-right">
+                  <span>
+                    <i class="fa fa-inr"></i>₹{{
+                      convertIndianFormat(
+                        revenues?.quarterly_revenue > 0
+                          ? revenues.quarterly_revenue
+                          : '0'
+                      )
+                    }}</span
+                  >
+                </div>
+              </li>
+              <!-- <li>
+                    <div class="d-flex">
+                       <span>This Year</span>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                       <span> <i class="fa fa-inr"></i>{{ convertIndianFormat(revenues.yearly_revenue > 0 ? revenues.yearly_revenue : '0')}}</span>
+                    </div> 
+                 </li> -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-6 mt-6">
+      <div class="col-span-1">
+        <div class="br-12 h-100p lblca p-15 pb-0 bg-white dashboard-shadow">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <p class="font-14 font-sf-pro-text font-semibold">Shipment Overview by Courier</p>
+            </div>
+            <div class="col-span-1">
+              <p class="text-right sphere-black"><img  src="assets/images/Real-time-data.svg" width="28" height="28"/></p>
+            </div>
+          </div>
+  
+          <div *ngIf="pinotDistributionData?.length > 0" class="table-responsive">
+            <table class="table table-res order_location min-width">
+              <thead>
+                <tr class="headertr">
+                  <th class="th-v-center col-3 sm-min-w-195">Courier Name</th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                    Pickup Unscheduled
+                  </th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                    Pickup Scheduled
+                  </th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                    In-Transit
+                  </th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                    Delivered
+                  </th>
+                  <!-- <th class="th-v-center col-1 text-center sm-min-w-98">
+                    NDR Raised
+                  </th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                    NDR Delivered
+                  </th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                    NDR Pending
+                  </th> -->
+                  <th class="th-v-center col-1 text-center sm-min-w-98">RTO</th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">Delivered within TAT</th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">1st attempt within TAT</th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                    Lost/Damaged
+                    <img  width="12" height="12" src="assets/images/text_info.svg"
+                    alt="" class="ms-2"
+                    />
+  
+                  </th>
+                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                    Total Shipment
+                    <img  width="12" height="12" src="assets/images/text_info.svg"
+                    alt="" class="ms-2"
+                    />
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="custom_scroll max-h-300">
+                <tr *ngFor="let data of pinotDistributionData">
+                  <td class="col-3 sm-min-w-195">
+                    {{ data.s_courier }}
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98">
+                    <span class="clr-inherit"  *ngIf="data.pickup_unscheduled > 0">{{
+                      convertIndianFormat(data.pickup_unscheduled)
+                    }}</span>
+                    <span *ngIf="data.pickup_unscheduled <= 0">0</span>
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98">
+                    <span class="clr-inherit"  *ngIf="data?.pickup_scheduled > 0">{{
+                      convertIndianFormat(data?.pickup_scheduled)
+                    }}</span>
+                    <span *ngIf="data?.pickup_scheduled <= 0">0</span>
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98">
+                    <span
+                      class="clr-inherit"
+                      *ngIf="data?.in_transit > 0"
+                      >{{ convertIndianFormat(data?.in_transit) }}</span
+                    >
+                    <span *ngIf="data?.in_transit <= 0">0</span>
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98">
+                    <span class="clr-inherit" *ngIf="data?.delivered > 0">{{
+                      convertIndianFormat(data?.delivered)
+                    }}</span>
+                    <span *ngIf="data?.delivered <= 0">0</span>
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">
+                    <span class="clr-inherit" *ngIf="data?.delivered_within_tat > 0">{{
+                      convertIndianFormat(data?.delivered_within_tat)
+                    }}</span>
+                    <span *ngIf="!data?.delivered_within_tat ||  data?.delivered_within_tat <= 0">0</span>
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">
+                    <span class="clr-inherit" *ngIf="data?.first_attempt_within_tat > 0">{{
+                      convertIndianFormat(data?.first_attempt_within_tat)
+                    }}</span>
+                    <span *ngIf="!data?.first_attempt_within_tat || data?.first_attempt_within_tat <= 0">0</span>
+                  </td>
+                  <!-- <td class="col-1 text-center sm-min-w-98">
+                    {{ convertIndianFormat(data.ndr_raised) }}
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98">
+                    {{ convertIndianFormat(data.ndr_delivered) }}
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98">
+                    <span class="clr-inherit" *ngIf="data.ndr > 0">{{
+                      convertIndianFormat(data.ndr)
+                    }}</span>
+                    <span *ngIf="data.ndr <= 0">0</span>
+                  </td> -->
+                  <td class="col-1 text-center sm-min-w-98">
+                    <span class="clr-inherit" *ngIf="data.rto > 0">{{
+                      convertIndianFormat(data.rto)
+                    }}</span>
+                    <span *ngIf="data.rto <= 0">0</span>
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98">
+                    <span class="clr-inherit" *ngIf="data.lost > 0">{{
+                      convertIndianFormat(data.lost)
+                    }}</span>
+                    <span *ngIf="data?.lost <= 0">0</span>
+                  </td>
+                  <td class="col-1 text-center sm-min-w-98">
+                    <span class="clr-inherit" *ngIf="data.total_shipments">{{
+                      convertIndianFormat(data.total_shipments)
+                    }}</span>
+                    <span *ngIf="data.total_shipments <= 0">0</span>
+                  </td>
+                </tr>
+              
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="!(pinotDistributionData?.length > 0)" class="errorContainer">
+            <img
+              src="https://sr-cdn-1.shiprocket.in/img/noData.png"
+              style="width: 100px"
+              class="center-block"
+            />
+            <h3 class="text-blue">Data not found for the selected filter.</h3>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <!-- Main Content Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Left Column - Today's Metrics -->
-    <div class="lg:col-span-1 space-y-6">
-      <!-- Today's Orders Card -->
-      <div class="bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl p-6 shadow-sm">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-800">Today's Orders</h3>
-            </div>
-          </div>
-          <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="text-3xl font-bold text-gray-900 mb-2">{{ todaysOrders.value }}</div>
-        <div class="text-sm text-gray-600">Yesterday {{ todaysOrders.yesterday }}</div>
-      </div>
-
-      <!-- Today's Revenue Card -->
-      <div class="bg-gradient-to-br from-green-100 to-green-200 rounded-xl p-6 shadow-sm">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-800">Today's Revenue</h3>
-            </div>
-          </div>
-          <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="text-3xl font-bold text-gray-900 mb-2">{{ todaysRevenue.value }}</div>
-        <div class="text-sm text-gray-600">Yesterday {{ todaysRevenue.yesterday }}</div>
-      </div>
-    </div>
-
-    <!-- Right Column - Shipments and NDR Details -->
-    <div class="lg:col-span-2 space-y-6">
-      <!-- Shipments Details -->
-      <div class="bg-purple-100 rounded-xl p-6 shadow-sm">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold text-gray-800">Shipments Details</h3>
-          <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div *ngFor="let item of shipmentsDetails" class="bg-white rounded-lg p-4 shadow-sm">
-            <div class="text-2xl font-bold text-gray-900 mb-1">{{ item.value }}</div>
-            <div class="text-sm text-gray-600">{{ item.label }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- NDR Details -->
-      <div class="bg-white rounded-xl p-6 shadow-sm">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold text-gray-800">NDR Details</h3>
-          <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div *ngFor="let item of ndrDetails" class="bg-gray-50 rounded-lg p-4">
-            <div class="text-2xl font-bold text-gray-900 mb-1">{{ item.value }}</div>
-            <div class="text-sm text-gray-600">{{ item.label }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  

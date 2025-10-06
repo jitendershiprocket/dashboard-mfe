@@ -1,0 +1,105 @@
+/* SF Pro Font Family Configuration */
+@font-face {
+  font-family: 'SF Pro Display';
+  src: local('SF Pro Display'),
+       local('SFProDisplay-Regular'),
+       local('SF Pro Display Regular');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: local('SF Pro Display Medium'),
+       local('SFProDisplay-Medium'),
+       local('SF Pro Display Medium');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: local('SF Pro Display Semibold'),
+       local('SFProDisplay-Semibold'),
+       local('SF Pro Display Semibold');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: local('SF Pro Display Bold'),
+       local('SFProDisplay-Bold'),
+       local('SF Pro Display Bold');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Text';
+  src: local('SF Pro Text'),
+       local('SFProText-Regular'),
+       local('SF Pro Text Regular');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Text';
+  src: local('SF Pro Text Medium'),
+       local('SFProText-Medium'),
+       local('SF Pro Text Medium');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Text';
+  src: local('SF Pro Text Semibold'),
+       local('SFProText-Semibold'),
+       local('SF Pro Text Semibold');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* SF Pro Font Family Variables */
+:root {
+  --font-sf-pro-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-sf-pro-text: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Global Font Application */
+body {
+  font-family: var(--font-sf-pro-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utility Classes for SF Pro Fonts */
+.font-sf-pro-display {
+  font-family: var(--font-sf-pro-display);
+}
+
+.font-sf-pro-text {
+  font-family: var(--font-sf-pro-text);
+}
+
+/* Font Weight Utilities */
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
