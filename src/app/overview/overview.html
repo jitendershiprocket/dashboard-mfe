@@ -117,23 +117,23 @@
                 width="70px" />
             </div>
             <div class="md:col-span-8 dispFlex dashTileData">
-              <p class="font-14 font-sf-pro-text">Today's Orders</p>
-              <p class="dashTileMainData">
-                {{
-                pinotData?.today_orders?.[1]?.total > 0
-                ? convertIndianFormat(pinotData.today_orders[1].total)
-                : '0'
-                }}
-              </p>
-    
-              <p class="dashTileSubData mb0">
-                Yesterday<br>
-                {{
-                pinotData?.today_orders?.[0]?.total > 0
-                ? convertIndianFormat(pinotData.today_orders[0].total)
-                : '0'
-                }}
-              </p>
+            <p class="font-14 font-sf-pro-text">Today's Orders</p>
+            <p class="dashTileMainData">
+              {{
+              pinotData?.today_orders?.[1]?.total > 0
+              ? convertIndianFormat(pinotData.today_orders[1].total)
+              : '0'
+              }}
+            </p>
+  
+            <p class="dashTileSubData mb0">
+              Yesterday<br>
+              {{
+              pinotData?.today_orders?.[0]?.total > 0
+              ? convertIndianFormat(pinotData.today_orders[0].total)
+              : '0'
+              }}
+            </p>
     
             </div>
           </div>
@@ -233,26 +233,26 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               />
             </div>
             <div class="md:col-span-8 dispFlex dashTileData">
-              <p class="font-14 font-sf-pro-text">Today's Revenue</p>
-              <p
-                class="dashTileMainData"
-              >
-                &#8377;{{
-                  pinotData?.today_revenue?.[1]?.total_shipment_revenue > 0
-                    ? convertIndianFormat(pinotData.today_revenue[1].total_shipment_revenue)
-                    : '0'
-                }}
-              </p>
-             
-              <p
-                class="dashTileSubData mb0"
-              >
-                Yesterday <br>&#8377;{{
-                  pinotData?.today_revenue?.[0]?.total_shipment_revenue > 0
-                    ? convertIndianFormat(pinotData.today_revenue[0].total_shipment_revenue)
-                    : '0'
-                }}
-              </p>
+            <p class="font-14 font-sf-pro-text">Today's Revenue</p>
+            <p
+              class="dashTileMainData"
+            >
+              &#8377;{{
+                pinotData?.today_revenue?.[1]?.total_shipment_revenue > 0
+                  ? convertIndianFormat(pinotData.today_revenue[1].total_shipment_revenue)
+                  : '0'
+              }}
+            </p>
+           
+            <p
+              class="dashTileSubData mb0"
+            >
+              Yesterday <br>&#8377;{{
+                pinotData?.today_revenue?.[0]?.total_shipment_revenue > 0
+                  ? convertIndianFormat(pinotData.today_revenue[0].total_shipment_revenue)
+                  : '0'
+              }}
+            </p>
               
             </div>
           </div>
@@ -448,11 +448,11 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
             </div>
           </div>
           <div *ngIf="pinotData?.courier_split?.length > 0" class="row donutChartContainer">
-            <highcharts-chart 
-          [Highcharts]="Highcharts"
-          [options]="donutChart"
-          >
-         </highcharts-chart>
+            <canvas baseChart
+              [type]="doughnutChartType"
+              [data]="courierChartData"
+              [options]="courierChartOptions">
+            </canvas>
           </div>
           <div
             *ngIf="!(pinotData?.courier_split?.length > 0)"
@@ -479,12 +479,11 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
             </div>
           </div>
           <div *ngIf="isPinotshipingDataDataNotEmpty()" class="row donutChartContainer">
-            <!-- <div [chart]="shipmentDonutChart"></div> -->
-               <highcharts-chart 
-          [Highcharts]="Highcharts"
-          [options]="shipmentDonutChart"
-          >
-         </highcharts-chart>
+            <canvas baseChart
+              [type]="doughnutChartType"
+              [data]="shipmentChartData"
+              [options]="shipmentChartOptions">
+            </canvas>
           </div>
           <div *ngIf="!(isPinotshipingDataDataNotEmpty())" class="pt-lg mt-xl dispFlex h-80 noDataContainer">
             <img
@@ -508,12 +507,11 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
             </div>
           </div>
           <div *ngIf="isdeliveryDonutDataNotEmpty()" class="row donutChartContainer">
-            <!-- <div [chart]="deliveryDonutChart"></div> -->
-               <highcharts-chart 
-          [Highcharts]="Highcharts"
-          [options]="deliveryDonutChart"
-          >
-         </highcharts-chart>
+            <canvas baseChart
+              [type]="doughnutChartType"
+              [data]="deliveryChartData"
+              [options]="deliveryChartOptions">
+            </canvas>
           </div>
           <div
             *ngIf="!(isdeliveryDonutDataNotEmpty())"
@@ -532,7 +530,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
         <div class="donutChart">
-          <div *ngIf="mapData?.length > 0" class="grid grid-cols-2 gap-4">
+          <div *ngIf="isMapDataAvailable()" class="grid grid-cols-2 gap-4">
             <div class="col-span-1 flex items-center">
               <select name="type" class="form-select switchDashBoardNew" (change)="switchDashboard($event)" id="dashChange"
                 [(ngModel)]="mapFilterData">
@@ -547,18 +545,16 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               <p class="text-right sphere-black">Last 30 days</p>
             </div>
           </div>
-          <div *ngIf="mapData?.length > 0" id="container">
-          <highcharts-chart
-    [Highcharts]="Highcharts"
-    [constructorType]="chartConstructor"
-    [options]="chartOptions"
-   
-    style="width: 100%; height: 100%; display: block;"
-  ></highcharts-chart>
+          <div *ngIf="isMapDataAvailable()" class="map-container" style="width: 100%; height: 400px; display: flex; align-items: center; justify-content: center;">
+            <img 
+              src="https://sr-cdn-1.shiprocket.in/img/dash-map.png" 
+              alt="India Map" 
+              style="max-width: 100%; max-height: 100%; object-fit: contain;"
+            />
           </div>
           
           <div
-            *ngIf="!(mapData?.length > 0)"
+            *ngIf="!isMapDataAvailable()"
             class="pt-lg mt-xl dispFlex h-80 noDataContainer"
           >
             <img
