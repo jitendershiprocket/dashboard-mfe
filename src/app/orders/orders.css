@@ -1,19 +1,7 @@
 /* Orders Component Styles */
-.sm-min-w-195 {
-  padding: 20px 8px;
-}
 
-.sm-min-w-98 {
-  padding: 20px 8px;
-}
 
-.h-80 {
-  height: 80%;
-}
 
-.margin-top-minus-10 {
-  margin-top: -10px;
-}
 
 .custom_scroll td {
   color: grey;
@@ -25,19 +13,8 @@
   cursor: not-allowed;
 }
 
-.setMatSelectFilterDropDownnnn {
-  min-width: 100% !important;
-}
 
-.filter-info {
-  position: absolute;
-  right: 0.7%;
-  top: 27%;
-}
 
-.cstm-wA {
-  width: 19%;
-}
 
 @media only screen and (max-width: 575px) {
   .dashOverview .w-A {
@@ -59,14 +36,8 @@
     width: 100%;
   }
   
-  .cstm-wA {
-    width: 100%;
-  }
 }
 
-.chrt-mb {
-  margin-bottom: 22px;
-}
 
 .date-col {
   width: 12%;
@@ -94,38 +65,15 @@
 }
 
 /* Dashboard tile heading styles */
-.dashTileHeading {
-  font-size: 16px;
-  font-family: var(--font-sf-pro-display);
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.9);
-}
 
-.dashTileHeadingSub {
-  font-size: 14px;
-  font-family: var(--font-sf-pro-text);
-  color: rgba(0, 0, 0, 0.6);
-}
 
 /* Chart container styles */
-.donutChart {
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  height: 100%;
-  min-height: 300px; /* Ensure consistent height */
-}
 
 .donutChart.p-r {
   position: relative;
 }
 
 /* Table styles */
-.tableFixHead {
-  max-height: 300px;
-  overflow-y: auto;
-}
 
 .smallTable {
   font-size: 13px;
@@ -169,13 +117,6 @@
 }
 
 /* Pagination styles */
-.pageinationContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 15px;
-  padding: 10px 0;
-}
 
 .previousBtn,
 .nextBtn {
@@ -201,14 +142,6 @@
 }
 
 /* No data container */
-.noDataContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  color: #6c757d;
-}
 
 .text-blue {
   color: #007bff;
@@ -218,14 +151,6 @@
 }
 
 /* Form styles */
-.form-select {
-  padding: 8px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  font-family: var(--font-sf-pro-text);
-  font-size: 14px;
-  background-color: white;
-}
 
 .form-select:focus {
   outline: none;
@@ -234,50 +159,17 @@
 }
 
 /* Button styles */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  font-family: var(--font-sf-pro-text);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
 
-.clearButtonContainer {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-}
 
 .clearButtonContainer:hover {
   background-color: #5a6268;
 }
 
 /* Utility classes */
-.br-12 {
-  border-radius: 12px;
-}
 
-.br-25 {
-  border-radius: 25px;
-}
 
-.h-100p {
-  height: 100%;
-}
 
-.lblca {
-  position: relative;
-}
 
-.p-15 {
-  padding: 15px;
-}
 
 .pb-0 {
   padding-bottom: 0;
@@ -287,9 +179,6 @@
   background-color: white;
 }
 
-.dashboard-shadow {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
 .mt-6 {
   margin-top: 24px;
@@ -308,78 +197,35 @@
   margin-bottom: 0;
 }
 
-.mb-50px {
-  margin-bottom: 50px;
-}
 
 .text-right {
   text-align: right;
 }
 
-.sphere-black {
-  color: #000;
-}
 
-.d-flex {
-  display: flex;
-}
 
-.position-relative {
-  position: relative;
-}
 
-.w-100 {
-  width: 100%;
-}
 
-.w-100px {
-  width: 100px;
-}
 
 .w-full {
   width: 100%;
 }
 
-.center-block {
-  display: block;
-  margin: 0 auto;
-}
 
-.f-d-c {
-  flex-direction: column;
-}
 
-.dispFlex {
-  display: flex;
-}
 
-.letterspacing020px {
-  letter-spacing: 0.2px;
-}
 
-.text-brown-gray {
-  color: #6c757d;
-}
 
-.opacity-80 {
-  opacity: 0.8;
-}
 
 .clr-inherit {
   color: inherit;
 }
 
-.inputAddOn {
-  position: relative;
-}
 
 .overflow-x-auto {
   overflow-x: auto;
 }
 
-.mr-2 {
-  margin-right: 8px;
-}
 
 /* Grid utility classes */
 .grid {
@@ -394,9 +240,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.grid-cols-6 {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
 
 /* Ensure proper grid layout for dashboard sections */
 .dashOverview .grid {

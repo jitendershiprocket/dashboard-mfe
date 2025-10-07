@@ -52,11 +52,6 @@ input:checked + .slider:before {
 }
 
 /* Toggle Labels */
-.toggle-label {
-  position: absolute;
-  bottom: 0;
-  transform: translateX(10px);
-}
 
 .toggle:before {
   content: '#';
@@ -75,22 +70,6 @@ input:checked + .slider:before {
 }
 
 /* Tooltip Styles */
-.default-tooltip-round {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 11px;
-  font-weight: bold;
-  width: 15px;
-  height: 15px;
-  line-height: 15px;
-  display: inline-block;
-  text-align: center;
-  border: 1px solid #656565;
-  border-radius: 50%;
-  vertical-align: middle;
-  cursor: pointer;
-  margin: 0px 0px 2px 2px;
-}
 
 /* Table Styles */
 .tableFixHead1 td {
@@ -122,34 +101,10 @@ input:checked + .slider:before {
 }
 
 /* Capsule Marker Styles */
-.capsule-marker {
-  width: 18px;
-  height: 10px;
-  display: inline-block;
-  margin-right: 5px;
-  vertical-align: middle;
-}
 
-.circle-primary1 {
-  background-color: #745be7;
-}
 
-.capsule-marker-grey {
-  background: #e6e6e6;
-}
 
-.ship-ov-lbl-c {
-  margin-right: 15px;
-  font-size: 10px;
-  display: inline-block !important;
-  color: gray;
-}
 
-.ship-ov-lbl-p {
-  margin-right: 15px;
-  font-size: 10px;
-  color: gray;
-}
 
 /* Color Classes */
 .text-green {
@@ -182,13 +137,7 @@ input:checked + .slider:before {
 }
 
 /* Height Utilities */
-.h-90 {
-  height: 90%;
-}
 
-.h-80 {
-  height: 80%;
-}
 
 /* Display Utilities */
 .d-inline-b {
@@ -242,9 +191,6 @@ input:checked + .slider:before {
 }
 
 /* Card Styles */
-.card-mb {
-  margin-bottom: 18px;
-}
 
 /* Responsive Styles */
 @media only screen and (max-width: 575px) {
@@ -265,25 +211,10 @@ input:checked + .slider:before {
 }
 
 /* Filter Info */
-.filter-info {
-  position: absolute;
-  right: 0.7%;
-  top: 27%;
-}
 
-.cstm-wA {
-  width: 19%;
-}
 
 @media only screen and (max-width: 575px) {
-  .cstm-wA {
-    width: 100%;
-  }
   
-  .filter-info {
-    right: -8%;
-    top: 26%;
-  }
 }
 
 /* Utility Classes */
@@ -387,9 +318,6 @@ input:checked + .slider:before {
   color: #6b7280;
 }
 
-.text-gray-600 {
-  color: #4b5563;
-}
 
 .text-blue-600 {
   color: #2563eb;

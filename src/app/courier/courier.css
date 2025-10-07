@@ -200,9 +200,6 @@ span.f-arrow-left {
   text-transform: capitalize;
 }
 
-.bg-white {
-  background-color: #ffffff;
-}
 
 .br-12 {
   border-radius: 12px;
@@ -390,11 +387,6 @@ span.f-arrow-left {
     max-width: 230px;
   }
   
-  .add-courier {
-    position: absolute;
-    top: 5px;
-    right: 30px;
-  }
 }
 
 @media only screen and (max-width: 575px) {
