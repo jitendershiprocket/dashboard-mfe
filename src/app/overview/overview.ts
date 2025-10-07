@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -10,7 +10,8 @@ import { ChartConfiguration, ChartData } from 'chart.js';
   standalone: true,
   imports: [CommonModule, FormsModule, BaseChartDirective],
   templateUrl: './overview.html',
-  styleUrl: './overview.css'
+  styleUrl: './overview.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OverviewComponent implements OnInit {
   @ViewChild('carouselElement') carouselElement!: ElementRef;
@@ -57,7 +58,7 @@ export class OverviewComponent implements OnInit {
   companyID: any;
   deliveryDonutData: any;
   
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.createMapChart([], '', '');
@@ -123,6 +124,7 @@ export class OverviewComponent implements OnInit {
           this.bannerdata = res.top_banner;
         }
         this.initializeCarouselEvents();
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching banner', err);
@@ -147,6 +149,7 @@ export class OverviewComponent implements OnInit {
             this.createDonutChart(res.data.courier_split);
           }
         }, 100);
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching pinot data', err);
@@ -158,6 +161,7 @@ export class OverviewComponent implements OnInit {
     this.http.getPinot('dashboard/revenue-data').subscribe(
       (res: any) => {
         // Handle revenue data if needed
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching revenue data', err);
@@ -169,6 +173,7 @@ export class OverviewComponent implements OnInit {
     this.http.getPinot('dashboard/shipment-courier-wise').subscribe(
       (res: any) => {
         this.pinotDistributionData = res.data.shipment_overview_by_courier;
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching distribution data', err);
@@ -180,6 +185,7 @@ export class OverviewComponent implements OnInit {
     this.http.getPinot('dashboard/statewise-data').subscribe(
       (res: any) => {
         this.mapCalculation(type, res);
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching state data', err);
@@ -191,6 +197,7 @@ export class OverviewComponent implements OnInit {
     this.http.srDashboardGet('getavgshippingcost').subscribe(
       (res: any) => {
         this.avgshipCost = res.data[0];
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching avg ship cost', err);
@@ -202,6 +209,7 @@ export class OverviewComponent implements OnInit {
     this.http.srDashboardGet('getrevenuedata').subscribe(
       (res: any) => {
         this.revenues = res.data[0];
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching revenue data', err);
@@ -213,6 +221,7 @@ export class OverviewComponent implements OnInit {
     this.http.get('account/details/remittance_summary').subscribe(
       (res: any) => {
         this.codStatuses = res;
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching cod statuses', err);
@@ -222,6 +231,7 @@ export class OverviewComponent implements OnInit {
     this.http.srDashboardGet('getcoddata').subscribe(
       (res: any) => {
         this.statuses = res.data;
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching statuses', err);
@@ -234,6 +244,7 @@ export class OverviewComponent implements OnInit {
       (res: any) => {
         this.shippingData = res.data.shipping_data;
         this.ndrData = res.data.ndr_data;
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching shipping overview', err);
@@ -246,6 +257,7 @@ export class OverviewComponent implements OnInit {
       (res: any) => {
         this.deliveryDonutData = res.data;
         this.createDeliveryPerformanceDonutChart(res.data);
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching delivery performance', err);

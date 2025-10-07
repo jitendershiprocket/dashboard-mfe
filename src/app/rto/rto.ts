@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -15,6 +15,7 @@ import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, Doug
   imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './rto.html',
   styleUrl: './rto.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RtoComponent implements OnInit {
@@ -60,7 +61,8 @@ export class RtoComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -188,9 +190,11 @@ export class RtoComponent implements OnInit {
         this.rto_stats = res.data.rto_summary;
         this.rto_tab_raw_data = res.data.rto_status_datewise;
         this.rtoTabRtoCountLineChart();
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err?.error?.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -298,9 +302,11 @@ export class RtoComponent implements OnInit {
       (res) => {
         this.rto_tab_reasons = res.data.info;
         this.rtoTabRtoReasonsPieChart(this.rto_tab_reasons);
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -366,9 +372,11 @@ export class RtoComponent implements OnInit {
     this.http.srDashboardGet('2.0/rto/top/pincodes', data).subscribe(
       (res) => {
         this.rto_tab_pincodes = res.data.pincodes;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -386,9 +394,11 @@ export class RtoComponent implements OnInit {
     this.http.srDashboardGet('2.0/rto/top/cities', data).subscribe(
       (res) => {
         this.rto_tab_top_cities = res.data.cities;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -406,9 +416,11 @@ export class RtoComponent implements OnInit {
     this.http.srDashboardGet('2.0/rto/top/couriers', data).subscribe(
       (res) => {
         this.rto_tab_top_courier = res.data.couriers;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -426,9 +438,11 @@ export class RtoComponent implements OnInit {
     this.http.srDashboardGet('2.0/rto/top/customers', data).subscribe(
       (res) => {
         this.rto_tab_top_customers = res.data.customers;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }

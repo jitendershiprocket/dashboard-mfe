@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -15,6 +15,7 @@ import { Chart, ChartConfiguration, ChartData, BarElement, CategoryScale, Linear
   imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './whatsapp.html',
   styleUrl: './whatsapp.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class WhatsappComponent implements OnInit {
@@ -31,7 +32,8 @@ export class WhatsappComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -56,10 +58,12 @@ export class WhatsappComponent implements OnInit {
     this.http.get('vas/getOrdersCountWhatsapp', data).subscribe(
       (res) => {
         this.orderCount = res.data;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.orderCount = false;
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -77,10 +81,12 @@ export class WhatsappComponent implements OnInit {
         if (this.whatsappData) {
           this.uniqVisitor(this.whatsappData.countData.chart);
         }
+        this.cdr.markForCheck();
       },
       (err) => {
         this.whatsappData = false;
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }

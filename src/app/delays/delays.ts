@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -13,6 +13,7 @@ import moment from 'moment';
   imports: [CommonModule, FormsModule, DashboardFiltersComponent],
   templateUrl: './delays.html',
   styleUrl: './delays.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DelaysComponent implements OnInit {
@@ -59,7 +60,8 @@ export class DelaysComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -101,9 +103,11 @@ export class DelaysComponent implements OnInit {
     this.http.srDashboardGet('2.0/delay/stats', data).subscribe(
       (res: any) => {
         this.status = res.data;
+        this.cdr.markForCheck();
       },
       (err: any) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -136,9 +140,11 @@ export class DelaysComponent implements OnInit {
       (res: any) => {
         this.pickupPendency = res.data;
         this.pickupPendencyHasData = this.checkDataExist(this.pickupPendency);
+        this.cdr.markForCheck();
       },
       (err: any) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -169,9 +175,11 @@ export class DelaysComponent implements OnInit {
         }
         this.ndrReattempt = data;
         this.ndrReattemptHasData = this.checkDataExist(this.ndrReattempt);
+        this.cdr.markForCheck();
       },
       (err: any) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -202,9 +210,11 @@ export class DelaysComponent implements OnInit {
           zone_e: `<b>SLA for Zone E <br> Air - <span>${this.inTransit?.z_e?.expected_sla?.air} Days</span> <br> Surface - <span>${this.inTransit?.z_e?.expected_sla?.surface} Days</span></b>`,
         };
         this.inTransitHasData = this.checkDataExist(this.inTransitArray);
+        this.cdr.markForCheck();
       },
       (err: any) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -235,9 +245,11 @@ export class DelaysComponent implements OnInit {
           zone_e: `<b>RTO SLA for Zone E <br> Air - <span>${this.rto?.z_e?.expected_sla?.air} Days</span> <br> Surface - <span>${this.rto?.z_e?.expected_sla?.surface} Days</span></b>`,
         };
         this.rtoHasData = this.checkDataExist(this.rto);
+        this.cdr.markForCheck();
       },
       (err: any) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -261,9 +273,11 @@ export class DelaysComponent implements OnInit {
         this.radArray = data;
         this.rad = res.data;
         this.radHasData = this.checkDataExist(this.rad);
+        this.cdr.markForCheck();
       },
       (err: any) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }

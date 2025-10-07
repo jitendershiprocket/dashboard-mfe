@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, ViewChildren, QueryList, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ViewChildren, QueryList, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -13,6 +13,7 @@ import moment from 'moment';
   imports: [CommonModule, FormsModule, DashboardFiltersComponent],
   templateUrl: './courier.html',
   styleUrl: './courier.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class CourierComponent implements OnInit {
@@ -82,7 +83,8 @@ export class CourierComponent implements OnInit {
 
   constructor(
     private http: HttpService, 
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -180,9 +182,11 @@ export class CourierComponent implements OnInit {
         this.courierSelected = courierNameArrayy;
         this.courierResponse = res.data;
         this.getImage();
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -200,17 +204,21 @@ export class CourierComponent implements OnInit {
         this.zones = res.data.zone;
         this.payment_methods = res.data.courier_type;
         this.courier_modes = res.data.courier_mode;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
     this.http.srDashboardGet('2.0/courier/filterlist', data).subscribe(
       (res) => {
         this.couriers = res.data;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -267,9 +275,11 @@ export class CourierComponent implements OnInit {
           }
 
           this.getImage();
+          this.cdr.markForCheck();
         },
         (err) => {
           this.toastr.error(err.error.message);
+          this.cdr.markForCheck();
         }
       );
     }

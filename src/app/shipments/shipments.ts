@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -35,6 +35,7 @@ interface IDateRange {
   imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './shipments.html',
   styleUrls: ['./shipments.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ShipmentsComponent implements OnInit {
@@ -83,7 +84,8 @@ export class ShipmentsComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {
     // Initialize date range
     const dateRange = getDateRange();
@@ -187,9 +189,11 @@ export class ShipmentsComponent implements OnInit {
             this.courierZoneCountGraph(this.shipmentCourierZoneCount);
           }, 100);
         }
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error?.message || 'Error fetching courier zone count data');
+        this.cdr.markForCheck();
       }
     );
   }
@@ -270,9 +274,11 @@ export class ShipmentsComponent implements OnInit {
     this.http.srDashboardGet('2.0/getshipmentchannel', data).subscribe(
       (res) => {
         this.getshipmentchannellist = res.data;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error?.message || 'Error fetching shipment channel data');
+        this.cdr.markForCheck();
       }
     );
   }
@@ -295,11 +301,14 @@ export class ShipmentsComponent implements OnInit {
         } else {
           setTimeout(() => {
             this.creategGetWeightProfile(res.data);
+            this.cdr.markForCheck();
           }, 100);
         }
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error?.message || 'Error fetching weight profile data');
+        this.cdr.markForCheck();
       }
     );
   }
@@ -359,11 +368,14 @@ export class ShipmentsComponent implements OnInit {
         if (this.shipmentZoneData?.length) {
           setTimeout(() => {
             this.createShipmentZoneProfile(res.data);
+            this.cdr.markForCheck();
           }, 100);
         }
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err?.error?.message || 'Error fetching shipment zone data');
+        this.cdr.markForCheck();
       }
     );
   }
@@ -434,9 +446,11 @@ export class ShipmentsComponent implements OnInit {
           }
           this.getPreviousShipment(courierArray.toString(), url);
         }
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err?.error?.message || 'Error fetching shipment count data');
+        this.cdr.markForCheck();
       }
     );
   }
@@ -454,9 +468,11 @@ export class ShipmentsComponent implements OnInit {
     this.http.srDashboardGet(url, data).subscribe(
       (res) => {
         this.shipmentoverviewPrevious = res.data;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err?.error?.message || 'Error fetching previous shipment data');
+        this.cdr.markForCheck();
       }
     );
   }

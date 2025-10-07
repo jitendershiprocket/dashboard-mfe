@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -35,6 +35,7 @@ interface IDateRange {
   imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './orders.html',
   styleUrls: ['./orders.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OrdersComponent implements OnInit {
@@ -81,7 +82,8 @@ export class OrdersComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {
     // Initialize date range
     const dateRange = getDateRange();
@@ -193,10 +195,12 @@ export class OrdersComponent implements OnInit {
         }
 
         this.createPaymentModeChart(res?.data?.prepaid_vs_cod);
+        this.cdr.markForCheck();
       },
       (err) => {
         this.isOrderData = false;
         this.toastr.error(err.error?.message || 'Error fetching orders data');
+        this.cdr.markForCheck();
       }
     );
   }
@@ -217,11 +221,13 @@ export class OrdersComponent implements OnInit {
     this.http.srDashboardGet('orders', data).subscribe(
       (res) => {
         this.createAddressQualityChart(res?.data?.address_data);
+        this.cdr.markForCheck();
       },
       (err) => {
         this.noPayments = true;
         this.noAddressData = true;
         this.toastr.error(err.error?.message || 'Error fetching statistics data');
+        this.cdr.markForCheck();
       }
     );
   }
@@ -234,9 +240,11 @@ export class OrdersComponent implements OnInit {
     this.http.srDashboardGet('gettopcustomer', data).subscribe(
       (res) => {
         this.topCustomersData = res?.data || [];
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error?.message || 'Error fetching top customers data');
+        this.cdr.markForCheck();
       }
     );
   }
@@ -249,9 +257,11 @@ export class OrdersComponent implements OnInit {
     this.http.srDashboardGet('gettopproducts', data).subscribe(
       (res) => {
         this.topProductsData = res?.data || [];
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error?.message || 'Error fetching top products data');
+        this.cdr.markForCheck();
       }
     );
   }

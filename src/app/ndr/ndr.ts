@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -16,6 +16,7 @@ import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, Doug
   imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './ndr.html',
   styleUrl: './ndr.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class NdrComponent implements OnInit {
@@ -80,7 +81,8 @@ export class NdrComponent implements OnInit {
   constructor(
     private http: HttpService,
     private toastr: ToastrService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -236,9 +238,11 @@ export class NdrComponent implements OnInit {
         this.makeNDRStatusChart();
 
         this.ndrReasonData = res.data.reason_wise_split;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -256,9 +260,11 @@ export class NdrComponent implements OnInit {
     this.http.srDashboardGet('2.0/ndr/action-required', data).subscribe(
       (res: any) => {
         this.allNdrData.ndr_action_required = res.data.ndr_action_required;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -278,9 +284,11 @@ export class NdrComponent implements OnInit {
         this.ndrResponseData = res.data.matrix;
         this.ndrSellerBuyerResponse = res.data.grouped;
         this.makeSellerBuyerResponseChart();
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -298,9 +306,11 @@ export class NdrComponent implements OnInit {
     this.http.srDashboardGet('2.0/ndr/shipments', data).subscribe(
       (res: any) => {
         this.allNdrData.shipment_count = res.data.shipment_count;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -318,9 +328,11 @@ export class NdrComponent implements OnInit {
     this.http.srDashboardGet('2.0/getndrfunnel', data).subscribe(
       (res: any) => {
         this.ndrFunnel = res.data;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -342,9 +354,11 @@ export class NdrComponent implements OnInit {
         this.ndrResponseSellerPositive = res.data.seller.positive;
         this.ndrResponseBuyer = res.data.buyer.overall;
         this.ndrResponseBuyerPositive = res.data.buyer.positive;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -362,9 +376,11 @@ export class NdrComponent implements OnInit {
     this.http.srDashboardGet('2.0/ndrSuccess', data).subscribe(
       (res: any) => {
         this.ndrSuccessData = res.data;
+        this.cdr.markForCheck();
       },
       (err) => {
         this.toastr.error(err.error.message);
+        this.cdr.markForCheck();
       }
     );
   }

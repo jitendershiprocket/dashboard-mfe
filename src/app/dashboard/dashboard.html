@@ -7,15 +7,16 @@
   
   <!-- Dynamic Content -->
   <div class="content-area">
-    <ng-container [ngSwitch]="selectedTab">
-      <app-overview *ngSwitchCase="'overview'"></app-overview>
-      <app-orders *ngSwitchCase="'orders'"></app-orders>
-      <app-shipments *ngSwitchCase="'shipments'"></app-shipments>
-      <app-ndr *ngSwitchCase="'ndr'"></app-ndr>
-      <app-whatsapp *ngSwitchCase="'whatsapp'"></app-whatsapp>
-      <app-rto *ngSwitchCase="'rto'"></app-rto>
-      <app-courier *ngSwitchCase="'courier'"></app-courier>
-      <app-delays *ngSwitchCase="'delays'"></app-delays>
-    </ng-container>
+    @switch (selectedTab) {
+      @case ('overview') { <app-overview></app-overview> }
+      @case ('orders') { <app-orders></app-orders> }
+      @case ('shipments') { <app-shipments></app-shipments> }
+      @case ('ndr') { <app-ndr></app-ndr> }
+      @case ('whatsapp') { <app-whatsapp></app-whatsapp> }
+      @case ('rto') { <app-rto></app-rto> }
+      @case ('courier') { <app-courier></app-courier> }
+      @case ('delays') { <app-delays></app-delays> }
+      @default { <app-overview></app-overview> }
+    }
   </div>
 </div>

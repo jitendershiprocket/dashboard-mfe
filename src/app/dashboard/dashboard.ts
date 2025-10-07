@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabNavigationComponent } from '../tab-navigation/tab-navigation';
 import { OverviewComponent } from '../overview/overview';
@@ -26,13 +26,20 @@ import { DelaysComponent } from '../delays/delays';
     DelaysComponent
   ],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  styleUrl: './dashboard.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
-  selectedTab: string = 'overview';
+  // Backed by a signal to enable granular reactivity without breaking existing bindings
+  private selectedTabSignal = signal<'overview' | 'orders' | 'shipments' | 'ndr' | 'whatsapp' | 'rto' | 'courier' | 'delays'>('overview');
+
+  // Keep the existing binding API intact for templates and child components
+  get selectedTab(): string {
+    return this.selectedTabSignal();
+  }
 
   onTabChange(tabId: string) {
-    this.selectedTab = tabId;
+    this.selectedTabSignal.set(tabId as any);
   }
 
   getCurrentComponent() {
