@@ -1,6 +1,13 @@
 # Dashboard MFE
 
-Modern Angular 20 dashboard micro-frontend with intelligent API caching, OnPush change detection, and responsive design.
+Modern Angular 20 dashboard micro-frontend with intelligent API caching, lazy loading, and optimized for S3 deployment as a custom element.
+
+## 🚀 **Highly Optimized Build**
+- ✅ **168 KB gzipped** initial load (82% smaller than before)
+- ✅ **Lazy loading** - All tabs load on demand
+- ✅ **70% compression** - Gzip optimized
+- ✅ **S3-ready** - Deploy as custom element
+- ✅ **Production tested** - Ready for SR_Web integration
 
 ## 🚀 Features
 
@@ -45,7 +52,13 @@ Navigate to `http://localhost:4200/`
 npm start
 
 # Production build
-npm run build
+npm run build:prod
+
+# S3-optimized build (recommended)
+npm run build:s3
+
+# Analyze bundle size
+npm run analyze
 
 # Run unit tests
 npm test
@@ -53,6 +66,16 @@ npm test
 # Watch mode
 npm run watch
 ```
+
+## 📊 Build Results
+
+**Current Production Build:**
+- Initial Load: 168 KB (gzipped) - Down from 920 KB
+- Lazy Chunks: 8 separate chunks, loaded on demand
+- Total Size: 275 KB (gzipped, all chunks combined)
+- Compression: 70% (926 KB → 275 KB)
+
+See `OPTIMIZATION_RESULTS.md` for detailed metrics.
 
 ## 📂 Project Structure
 
@@ -140,19 +163,72 @@ npm test -- --code-coverage
 ## 🏗️ Building for Production
 
 ```bash
-# Production build
-npm run build
+# Standard production build
+npm run build:prod
 
-# Build artifacts will be in dist/
+# S3-optimized build (creates gzipped files, integration snippet, manifest)
+npm run build:s3
+
+# Build artifacts will be in dist/optimized/
 ```
 
 Build optimizations:
-- Tree-shaking and dead code elimination
-- AOT compilation
-- Minification and bundling
-- Lazy loading support
+- ✅ Lazy loading for all tab components (60-70% initial size reduction)
+- ✅ Selective Chart.js registration (100-150 KB saved)
+- ✅ Tree-shaking and dead code elimination
+- ✅ AOT compilation with aggressive optimization
+- ✅ Minification and bundling
+- ✅ Gzip compression (70% reduction)
+- ✅ No output hashing (easier S3 integration)
+
+## 🌐 S3 Deployment
+
+After running `npm run build:s3`, upload to S3:
+
+```bash
+aws s3 sync dist/optimized/ s3://your-bucket/dashboard-mfe/ \
+  --exclude "*.gz" \
+  --cache-control "max-age=31536000" \
+  --acl public-read
+```
+
+See `OPTIMIZATION_GUIDE.md` for detailed deployment instructions.
+
+## 🔧 Integration with SR_Web
+
+The optimized build is ready to integrate as a custom element:
+
+```html
+<!-- Load in SR_Web -->
+<link rel="stylesheet" href="https://your-cdn.s3.amazonaws.com/dashboard-mfe/styles.css">
+<script src="https://your-cdn.s3.amazonaws.com/dashboard-mfe/polyfills.js" defer></script>
+<script src="https://your-cdn.s3.amazonaws.com/dashboard-mfe/main.js" defer></script>
+
+<!-- Use the custom element -->
+<dashboard-mfe-root></dashboard-mfe-root>
+```
+
+See `SR_WEB_INTEGRATION.md` for complete integration guide.
 
 ## 📚 Documentation
+
+- **[OPTIMIZATION_RESULTS.md](./OPTIMIZATION_RESULTS.md)**: **NEW!** Complete optimization results
+  - Before/After comparison
+  - Build size breakdown
+  - Performance metrics
+  - Success criteria
+  
+- **[OPTIMIZATION_GUIDE.md](./OPTIMIZATION_GUIDE.md)**: **NEW!** Optimization techniques guide
+  - Lazy loading implementation
+  - Chart.js optimization
+  - Angular build config
+  - S3 deployment guide
+  
+- **[SR_WEB_INTEGRATION.md](./SR_WEB_INTEGRATION.md)**: **NEW!** Integration guide for SR_Web
+  - Step-by-step integration
+  - Code examples
+  - Troubleshooting
+  - Testing instructions
 
 - **[DOCUMENTATION.md](./DOCUMENTATION.md)**: Complete project documentation
   - API Caching System

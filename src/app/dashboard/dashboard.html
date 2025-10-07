@@ -1,24 +1,13 @@
 <div class="dashboard-container bg-white min-h-screen">
- 
-
   <!-- Tab Navigation -->
   <app-tab-navigation 
     [selectedTab]="selectedTab" 
     (tabChange)="onTabChange($event)">
   </app-tab-navigation>
   
-  <!-- Dynamic Content -->
+  <!-- Dynamic Content - Lazy Loaded Components -->
   <div class="content-area">
-    @switch (selectedTab) {
-      @case ('overview') { <app-overview></app-overview> }
-      @case ('orders') { <app-orders></app-orders> }
-      @case ('shipments') { <app-shipments></app-shipments> }
-      @case ('ndr') { <app-ndr></app-ndr> }
-      @case ('whatsapp') { <app-whatsapp></app-whatsapp> }
-      @case ('rto') { <app-rto></app-rto> }
-      @case ('courier') { <app-courier></app-courier> }
-      @case ('delays') { <app-delays></app-delays> }
-      @default { <app-overview></app-overview> }
-    }
+    <!-- Container for dynamically loaded components -->
+    <ng-container #dynamicComponentContainer></ng-container>
   </div>
 </div>
