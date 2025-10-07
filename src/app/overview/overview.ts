@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, signal, computed } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, signal, computed, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -150,8 +150,8 @@ export class OverviewComponent implements OnInit {
         this._pinotData.set(res.data);
         console.log('Pinot data loaded:', res.data);
         
-        // Use setTimeout to ensure DOM is ready
-        setTimeout(() => {
+        // Ensure DOM is ready for charts
+        afterNextRender(() => {
           if (res.data?.shipment_details && res.data?.shipment_details.length > 0) {
             console.log('Creating shipment chart...');
             this.createShipmentStatusDonutChart(res.data.shipment_details?.[0]);
@@ -160,7 +160,7 @@ export class OverviewComponent implements OnInit {
             console.log('Creating courier chart...');
             this.createDonutChart(res.data.courier_split);
           }
-        }, 100);
+        });
         this.cdr.markForCheck();
       },
       (err: any) => {

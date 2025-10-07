@@ -35,14 +35,15 @@ export class NdrComponent implements OnInit {
   public doughnutType: 'doughnut' = 'doughnut' as const;
   public barType: 'bar' = 'bar' as const;
   
-  ndrSplit: any;
+  // Signals for heavy state with getters for template compatibility
+  private _ndrSplit = signal<any[]>([]);
   showNdrSplitGraph: any;
-  ndrDeliveredAttempt: any;
-  ndrStatusData: any;
-  ndrReasonData: any;
-  ndrResponseData: any;
-  ndrSellerBuyerResponse: any;
-  ndrFunnel: any;
+  private _ndrDeliveredAttempt = signal<any>({});
+  private _ndrStatusData = signal<any>({});
+  private _ndrReasonData = signal<any[]>([]);
+  private _ndrResponseData = signal<any>(null);
+  private _ndrSellerBuyerResponse = signal<any>({});
+  private _ndrFunnel = signal<any>(null);
   ndr_split_data: ChartData<'doughnut'> = { labels: [], datasets: [] };
   ndr_split_options: ChartConfiguration<'doughnut'>['options'] = {};
   showNdrStatusGraph: any;
@@ -63,8 +64,17 @@ export class NdrComponent implements OnInit {
   ndr_seller_response_options: ChartConfiguration['options'] = {};
   ndr_buyer_response_data: ChartData = { labels: [], datasets: [] };
   ndr_buyer_response_options: ChartConfiguration['options'] = {};
-  ndrSuccessData: any;
+  private _ndrSuccessData = signal<any>(null);
   showHideCourier = false;
+  // Compatibility getters
+  get ndrSplit() { return this._ndrSplit(); }
+  get ndrDeliveredAttempt() { return this._ndrDeliveredAttempt(); }
+  get ndrStatusData() { return this._ndrStatusData(); }
+  get ndrReasonData() { return this._ndrReasonData(); }
+  get ndrResponseData() { return this._ndrResponseData(); }
+  get ndrSellerBuyerResponse() { return this._ndrSellerBuyerResponse(); }
+  get ndrFunnel() { return this._ndrFunnel(); }
+  get ndrSuccessData() { return this._ndrSuccessData(); }
 
   filterData: FilterData = {
     zone: [],
@@ -222,22 +232,22 @@ export class NdrComponent implements OnInit {
         this.allNdrData.ndr_delivered_count = res.data.overall.ndr_delivered_count;
         this.allNdrData.ndr_rto_count = res.data.overall.ndr_rto_count;
 
-        this.ndrSplit = res.data.reason_chart;
-        if (this.ndrSplit.length) {
+        this._ndrSplit.set(res.data.reason_chart);
+        if (this._ndrSplit().length) {
           this.showNdrSplitGraph = true;
-          this.createndrReasonSplitChart(this.ndrSplit);
+          this.createndrReasonSplitChart(this._ndrSplit());
         } else {
           this.showNdrSplitGraph = false;
         }
 
-        this.ndrDeliveredAttempt = res.data.delivery_attempt;
+        this._ndrDeliveredAttempt.set(res.data.delivery_attempt);
         this.makeNDRDeliveryAttemptChart();
 
-        this.ndrStatusData = res.data.status_chart;
+        this._ndrStatusData.set(res.data.status_chart);
         this.showNdrStatusGraph = true;
         this.makeNDRStatusChart();
 
-        this.ndrReasonData = res.data.reason_wise_split;
+        this._ndrReasonData.set(res.data.reason_wise_split);
         this.cdr.markForCheck();
       },
       (err) => {
@@ -281,8 +291,8 @@ export class NdrComponent implements OnInit {
     
     this.http.srDashboardGet('2.0/ndr/all-response', data).subscribe(
       (res: any) => {
-        this.ndrResponseData = res.data.matrix;
-        this.ndrSellerBuyerResponse = res.data.grouped;
+        this._ndrResponseData.set(res.data.matrix);
+        this._ndrSellerBuyerResponse.set(res.data.grouped);
         this.makeSellerBuyerResponseChart();
         this.cdr.markForCheck();
       },
@@ -327,7 +337,7 @@ export class NdrComponent implements OnInit {
     
     this.http.srDashboardGet('2.0/getndrfunnel', data).subscribe(
       (res: any) => {
-        this.ndrFunnel = res.data;
+        this._ndrFunnel.set(res.data);
         this.cdr.markForCheck();
       },
       (err) => {
@@ -375,7 +385,7 @@ export class NdrComponent implements OnInit {
     
     this.http.srDashboardGet('2.0/ndrSuccess', data).subscribe(
       (res: any) => {
-        this.ndrSuccessData = res.data;
+        this._ndrSuccessData.set(res.data);
         this.cdr.markForCheck();
       },
       (err) => {

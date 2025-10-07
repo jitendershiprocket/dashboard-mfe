@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -21,7 +21,7 @@ import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, Doug
 export class RtoComponent implements OnInit {
   startDate: any = moment().subtract(30, 'days').format('YYYY-MMM-DD');
   endDate: any = moment().subtract(1, 'days').format('YYYY-MMM-DD');
-  rto_stats: any;
+  private _rto_stats = signal<any>(null);
   
   // Chart.js properties
   public lineType: 'line' = 'line' as const;
@@ -31,7 +31,7 @@ export class RtoComponent implements OnInit {
   public rto_count_line_chart_data: ChartData<'line'> = { labels: [], datasets: [] };
   public rto_count_line_chart_options: ChartConfiguration<'line'>['options'] = {};
   
-  rto_tab_raw_data: any;
+  private _rto_tab_raw_data = signal<any>({});
   rto_tab_raw_hide_no_data: any;
   
   public rto_tab_status_chart_data: ChartData<'bar'> = { labels: [], datasets: [] };
@@ -43,10 +43,18 @@ export class RtoComponent implements OnInit {
   public rto_reason_pie_chart_data: ChartData<'doughnut'> = { labels: [], datasets: [] };
   public rto_reason_pie_chart_options: ChartConfiguration<'doughnut'>['options'] = {};
   
-  rto_tab_pincodes: any;
-  rto_tab_top_cities: any;
-  rto_tab_top_courier: any;
-  rto_tab_top_customers: any;
+  private _rto_tab_pincodes = signal<any[]>([]);
+  private _rto_tab_top_cities = signal<any[]>([]);
+  private _rto_tab_top_courier = signal<any[]>([]);
+  private _rto_tab_top_customers = signal<any[]>([]);
+
+  // Compatibility getters for templates and internal reads
+  get rto_stats() { return this._rto_stats(); }
+  get rto_tab_raw_data() { return this._rto_tab_raw_data(); }
+  get rto_tab_pincodes() { return this._rto_tab_pincodes(); }
+  get rto_tab_top_cities() { return this._rto_tab_top_cities(); }
+  get rto_tab_top_courier() { return this._rto_tab_top_courier(); }
+  get rto_tab_top_customers() { return this._rto_tab_top_customers(); }
 
   filterData: FilterData = {
     zone: [],
@@ -187,8 +195,8 @@ export class RtoComponent implements OnInit {
         setTimeout(() => {
           this.rtoTabRtoStatusChart();
         }, 500);
-        this.rto_stats = res.data.rto_summary;
-        this.rto_tab_raw_data = res.data.rto_status_datewise;
+        this._rto_stats.set(res.data.rto_summary);
+        this._rto_tab_raw_data.set(res.data.rto_status_datewise);
         this.rtoTabRtoCountLineChart();
         this.cdr.markForCheck();
       },
@@ -371,7 +379,7 @@ export class RtoComponent implements OnInit {
     
     this.http.srDashboardGet('2.0/rto/top/pincodes', data).subscribe(
       (res) => {
-        this.rto_tab_pincodes = res.data.pincodes;
+        this._rto_tab_pincodes.set(res.data.pincodes || []);
         this.cdr.markForCheck();
       },
       (err) => {
@@ -393,7 +401,7 @@ export class RtoComponent implements OnInit {
     
     this.http.srDashboardGet('2.0/rto/top/cities', data).subscribe(
       (res) => {
-        this.rto_tab_top_cities = res.data.cities;
+        this._rto_tab_top_cities.set(res.data.cities || []);
         this.cdr.markForCheck();
       },
       (err) => {
@@ -415,7 +423,7 @@ export class RtoComponent implements OnInit {
     
     this.http.srDashboardGet('2.0/rto/top/couriers', data).subscribe(
       (res) => {
-        this.rto_tab_top_courier = res.data.couriers;
+        this._rto_tab_top_courier.set(res.data.couriers || []);
         this.cdr.markForCheck();
       },
       (err) => {
@@ -437,7 +445,7 @@ export class RtoComponent implements OnInit {
     
     this.http.srDashboardGet('2.0/rto/top/customers', data).subscribe(
       (res) => {
-        this.rto_tab_top_customers = res.data.customers;
+        this._rto_tab_top_customers.set(res.data.customers || []);
         this.cdr.markForCheck();
       },
       (err) => {

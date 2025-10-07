@@ -39,7 +39,7 @@
               </tr>
             </thead>
             <tbody class="text-gray-700 max-h-[516px] overflow-y-auto">
-              <tr *ngFor="let data of orders">
+              @for (data of orders; track data.date_) {
                 <td class="date-col">{{ data.date_ }}</td>
                 <td class="count-col">
                   <span *ngIf="data.total > 0">{{ convertIndianFormat(data.total) }}</span>
@@ -87,7 +87,7 @@
                   }}</span>
                   <span *ngIf="data.cancelled <= 0">0</span>
                 </td>
-              </tr>
+              }
             </tbody>
           </table>
           <div class="flex justify-between items-center mt-4 py-2">
@@ -216,7 +216,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let data of locationsData">
+                  @for (data of locationsData; track data.state) {
                     <td class="smallTable w-s-i">
                       {{ toTitleCase(data.state) }}
                     </td>
@@ -235,7 +235,7 @@
                     <td class="text-center smallTable">
                       <span class="clr-inherit">{{ data.revenue_percentage }}</span>
                     </td>
-                  </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -295,7 +295,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let customer of topCustomersData">
+                  @for (customer of topCustomersData; track customer.customer_name) {
                     <td class="smallTable w-s-i">
                       {{ customer.customer_name }}
                     </td>
@@ -310,7 +310,7 @@
                       >
                       <span *ngIf="customer.rvalue <= 0">0</span>
                     </td>
-                  </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -368,7 +368,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let product of topProductsData">
+                  @for (product of topProductsData; track product.product_name_1) {
                     <td class="smallTable w-s-i">
                       {{ product.product_name_1 }}
                     </td>
@@ -383,7 +383,7 @@
                       >
                       <span *ngIf="product.rvalue <= 0">0</span>
                     </td>
-                  </tr>
+                  }
                 </tbody>
               </table>
             </div>

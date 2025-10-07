@@ -199,17 +199,19 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let rto_pincode of rto_tab_pincodes">
-                    <td class="col-4 smallTable w-s-i">
-                      {{ rto_pincode?.pincode }}
-                    </td>
-                    <td class="col-4 text-center smallTable">
-                      {{ rto_pincode?.rto_orders }}
-                    </td>
-                    <td class="col-4 text-center smallTable">
-                      {{ rto_pincode?.percentage }}
-                    </td>
-                  </tr>
+                  @for (rto_pincode of rto_tab_pincodes; track rto_pincode.pincode) {
+                    <tr>
+                      <td class="col-4 smallTable w-s-i">
+                        {{ rto_pincode?.pincode }}
+                      </td>
+                      <td class="col-4 text-center smallTable">
+                        {{ rto_pincode?.rto_orders }}
+                      </td>
+                      <td class="col-4 text-center smallTable">
+                        {{ rto_pincode?.percentage }}
+                      </td>
+                    </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -254,17 +256,19 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let top_city of rto_tab_top_cities">
-                    <td class="col-4 smallTable w-s-i">
-                      {{ top_city?.city }}
-                    </td>
-                    <td class="col-4 text-center smallTable">
-                      {{ top_city?.rto_orders }}
-                    </td>
-                    <td class="col-4 text-center smallTable">
-                      {{ top_city?.percentage }}
-                    </td>
-                  </tr>
+                  @for (top_city of rto_tab_top_cities; track top_city.city) {
+                    <tr>
+                      <td class="col-4 smallTable w-s-i">
+                        {{ top_city?.city }}
+                      </td>
+                      <td class="col-4 text-center smallTable">
+                        {{ top_city?.rto_orders }}
+                      </td>
+                      <td class="col-4 text-center smallTable">
+                        {{ top_city?.percentage }}
+                      </td>
+                    </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -312,17 +316,19 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let top_courier of rto_tab_top_courier">
-                    <td class="col-4 smallTable w-s-i">
-                      {{ top_courier?.courier }}
-                    </td>
-                    <td class="col-4 text-center smallTable">
-                      {{ top_courier?.rto_orders }}
-                    </td>
-                    <td class="col-4 text-center smallTable">
-                      {{ top_courier?.percentage }}
-                    </td>
-                  </tr>
+                  @for (top_courier of rto_tab_top_courier; track top_courier.courier) {
+                    <tr>
+                      <td class="col-4 smallTable w-s-i">
+                        {{ top_courier?.courier }}
+                      </td>
+                      <td class="col-4 text-center smallTable">
+                        {{ top_courier?.rto_orders }}
+                      </td>
+                      <td class="col-4 text-center smallTable">
+                        {{ top_courier?.percentage }}
+                      </td>
+                    </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -367,17 +373,19 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let top_customer of rto_tab_top_customers">
-                    <td class="col-4 smallTable w-s-i">
-                      {{ top_customer?.customer_name }}
-                    </td>
-                    <td class="col-4 text-center smallTable">
-                      {{ top_customer?.rto_orders }}
-                    </td>
-                    <td class="col-4 text-center smallTable">
-                      {{ top_customer?.percentage }}
-                    </td>
-                  </tr>
+                  @for (top_customer of rto_tab_top_customers; track top_customer.customer_name) {
+                    <tr>
+                      <td class="col-4 smallTable w-s-i">
+                        {{ top_customer?.customer_name }}
+                      </td>
+                      <td class="col-4 text-center smallTable">
+                        {{ top_customer?.rto_orders }}
+                      </td>
+                      <td class="col-4 text-center smallTable">
+                        {{ top_customer?.percentage }}
+                      </td>
+                    </tr>
+                  }
                 </tbody>
               </table>
             </div>
