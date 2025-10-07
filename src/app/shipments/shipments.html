@@ -212,10 +212,11 @@
         </div>
 
         <div *ngIf="shipmentCourierZoneCount && shipmentCourierZoneCount.length > 0" class="mt-4">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="courierZoneCountGraphs">
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="courierZoneCountChartData"
+            [options]="courierZoneCountChartOptions"
+            [type]="barType">
+          </canvas>
         </div>
         <div *ngIf="!shipmentCourierZoneCount || shipmentCourierZoneCount.length === 0" class="flex flex-col items-center justify-center h-48 text-gray-500">
           <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="mx-auto w-24" />
@@ -272,10 +273,11 @@
         </div>
 
         <div *ngIf="isweightProfileDataNotEmpty()" class="mt-4">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="weightProfileGraph">
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="weightProfileChartData"
+            [options]="weightProfileChartOptions"
+            [type]="doughnutType">
+          </canvas>
         </div>
         <div *ngIf="!isweightProfileDataNotEmpty()" class="flex flex-col items-center justify-center h-48 text-gray-500">
           <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="mx-auto w-24" />
@@ -293,10 +295,11 @@
         </div>
 
         <div *ngIf="shipmentZoneData && shipmentZoneData.length > 0" class="mt-4">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="shipmentZoneGraph">
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="shipmentZoneChartData"
+            [options]="shipmentZoneChartOptions"
+            [type]="doughnutType">
+          </canvas>
         </div>
         <div *ngIf="!shipmentZoneData || shipmentZoneData.length === 0" class="flex flex-col items-center justify-center h-48 text-gray-500">
           <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="mx-auto w-24" />

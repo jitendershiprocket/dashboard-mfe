@@ -6,12 +6,13 @@ import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import moment from 'moment';
-import * as Highcharts from 'highcharts';
+import { BaseChartDirective } from 'ng2-charts';
+import { Chart, ChartConfiguration, ChartData, BarElement, CategoryScale, LinearScale, BarController, Tooltip, Legend } from 'chart.js';
 
 @Component({
   selector: 'app-whatsapp',
   standalone: true,
-  imports: [CommonModule, FormsModule, DashboardFiltersComponent],
+  imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './whatsapp.html',
   styleUrl: './whatsapp.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -21,8 +22,11 @@ export class WhatsappComponent implements OnInit {
   endDate: any = moment().subtract(1, 'days').format('YYYY-MMM-DD');
   orderCount: any;
   whatsappData: any;
-  Highcharts: typeof Highcharts = Highcharts;
-  message_sent_graph: Highcharts.Options = {};
+  
+  // Chart.js properties
+  public barType: 'bar' = 'bar' as const;
+  message_sent_graph_data: ChartData<'bar'> = { labels: [], datasets: [] };
+  message_sent_graph_options: ChartConfiguration<'bar'>['options'] = {};
   showmsgsent: any;
 
   constructor(
@@ -31,6 +35,7 @@ export class WhatsappComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    Chart.register(BarElement, CategoryScale, LinearScale, BarController, Tooltip, Legend);
     this.getorderCount();
     this.getstats();
   }
@@ -97,91 +102,28 @@ export class WhatsappComponent implements OnInit {
     const uniqVisitorsCount = [];
     for (const key in uniqueVisitorsData) {
       uniqVisitorsDate.push(key);
-      uniqVisitorsCount.push({
-        y: Number(uniqueVisitorsData[key]),
-        date: key,
-      });
+      uniqVisitorsCount.push(Number(uniqueVisitorsData[key]));
     }
 
-    this.message_sent_graph = {
-      colors: ['#FCA876'],
-      title: {
-        text: '',
+    this.message_sent_graph_data = {
+      labels: uniqVisitorsDate,
+      datasets: [{
+        label: 'Messages Sent',
+        data: uniqVisitorsCount,
+        backgroundColor: '#FCA876',
+        borderWidth: 0
+      }]
+    };
+    this.message_sent_graph_options = {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: true }
       },
-      credits: {
-        enabled: false,
-      },
-      exporting: { enabled: false },
-      chart: {
-        type: 'column',
-        height: 300,
-      },
-      legend: {
-        enabled: false,
-        itemStyle: {
-          fontSize: '12px'
-        }
-      },
-      xAxis: {
-        categories: uniqVisitorsDate,
-      },
-      yAxis: {
-        gridLineWidth: 0,
-        allowDecimals: false,
-        title: {
-          text: '',
-        },
-      },
-      tooltip: {
-        style: {
-          fontSize: '12px'
-        },  
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: false,
-        pointFormat:
-          '<div style="text-align: center;"><span style="font-size: 16px; color: #FCA876;">{point.y}</span></div>',
-        useHTML: true,
-      },
-
-      plotOptions: {
-        spline: {
-          marker: {
-            enabled: true,
-            radius: 4,
-            lineColor: '#FCA876',
-            lineWidth: 1,
-          },
-        },
-      },
-
-      series: [
-        {
-          name: '',
-          data: uniqVisitorsCount,
-          type: 'column',
-        },
-      ],
-
-      responsive: {
-        rules: [
-          {
-            condition: {
-              maxWidth: 1,
-            },
-            chartOptions: {
-              legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
-              },
-            },
-          },
-        ],
-      },
+      scales: {
+        x: { beginAtZero: true },
+        y: { beginAtZero: true }
+      }
     };
   }
 }

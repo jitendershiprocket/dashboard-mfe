@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
 import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent, FilterData, FilterValues, DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
-import * as Highcharts from 'highcharts';
+import { BaseChartDirective } from 'ng2-charts';
+import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, DoughnutController, PieController } from 'chart.js';
 import moment from 'moment';
 
 // Simple utility function to get user data
@@ -15,11 +16,11 @@ function getUser() {
 
 // Simple date utility
 function getDateRange() {
-  const today = new Date();
-  const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+  const today = moment();
+  const thirtyDaysAgo = moment().subtract(30, 'days');
   return {
-    start: thirtyDaysAgo.toISOString().split('T')[0],
-    end: today.toISOString().split('T')[0]
+    start: thirtyDaysAgo.format('YYYY-MMM-DD'),
+    end: today.subtract(1, 'days').format('YYYY-MMM-DD')
   };
 }
 
@@ -31,7 +32,7 @@ interface IDateRange {
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule, DashboardFiltersComponent],
+  imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './orders.html',
   styleUrls: ['./orders.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -52,10 +53,14 @@ export class OrdersComponent implements OnInit {
   topCustomersData: any[] = [];
   topProductsData: any[] = [];
   
-  // Chart properties
-  PrepaidvsCOD: any;
-  addressQualityChart: Highcharts.Options = {};
-  Highcharts: typeof Highcharts = Highcharts;
+  // Chart.js properties
+  public doughnutType: 'doughnut' = 'doughnut' as const;
+
+  public prepaidChartData: ChartData<'doughnut'> = { labels: [], datasets: [] };
+  public prepaidChartOptions: ChartConfiguration<'doughnut'>['options'] = {};
+
+  public addressQualityChartData: ChartData<'doughnut'> = { labels: [], datasets: [] };
+  public addressQualityChartOptions: ChartConfiguration<'doughnut'>['options'] = {};
   
   // Filter properties
   filterData: FilterData = {};
@@ -85,6 +90,7 @@ export class OrdersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    Chart.register(ArcElement, Tooltip, Legend, DoughnutController, PieController);
     this.initializeCharts();
     this.getFilterData();
     this.getCodDataPinot();
@@ -94,135 +100,24 @@ export class OrdersComponent implements OnInit {
   }
 
   private initializeCharts(): void {
-    // Initialize Prepaid vs COD chart
-    this.PrepaidvsCOD = {
-      chart: {
-        plotBackgroundColor: '#fff',
-        plotBorderWidth: 0,
-        plotShadow: false,
-        type: 'pie'
-      },
-      title: {
-        text: ''
-      },
-      tooltip: {
-        style: {
-          fontSize: '12px'
-        },
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-      },
-      exporting: { enabled: false },
-      accessibility: {
-        point: {
-          valueSuffix: '%'
-        }
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            style: {
-              fontSize: '12px'
-            }
-          }
-        }
-      },
-      series: [{
-        name: 'Orders',
-        type: 'pie',
-        data: [{
-          name: 'Prepaid',
-          y: 70.67,
-          sliced: true,
-          selected: true
-        }]
-      }],
-      credits: {
-        enabled: false
-      }
+    this.prepaidChartData = {
+      labels: ['Prepaid'],
+      datasets: [{ data: [70.67], backgroundColor: ['rgb(163, 161, 251)'], borderWidth: 0 }]
+    };
+    this.prepaidChartOptions = {
+      responsive: true,
+      cutout: '60%',
+      plugins: { legend: { display: true, position: 'bottom' }, tooltip: { enabled: true } }
     };
 
-    // Initialize Address Quality chart
-    this.addressQualityChart = {
-      chart: {
-        plotBackgroundColor: '#fff',
-        plotBorderWidth: 0,
-        plotShadow: false,
-      },
-      title: {
-        text: '',
-        align: 'center',
-        verticalAlign: 'middle',
-        y: 0
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: false,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        formatter: function () {
-          const point = this as Highcharts.Point;
-          let content = '';
-      
-          if (point.name === 'Valid') {
-            content = '<table>' +
-              '<tr><td>Valid Addresses</td></tr>' +
-              '<tr><td>The given address is a Valid address, which indicates strong confidence of delivery</td></tr>' +
-              '</table>';
-          } else if (point.name === 'Ambiguous') {
-            content = '<table>' +
-              '<tr><td>Ambiguous Addresses</td></tr>' +
-              '<tr><td>The given address is an Ambiguous, which might be missing some information</td></tr>' +
-              '</table>';
-          } else {
-            content = '<table>' +
-              '<tr><td>Junk Addresses</td></tr>' +
-              '<tr><td>The given address is a Junk address, which lacks critical information for delivery</td></tr>' +
-              '</table>';
-          }
-      
-          return `<div style="font-size: 12px;">${content}</div>`;
-        }
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: false,
-            distance: -28,
-            style: {
-              fontWeight: 'bold',
-              color: 'white'
-            }
-          },
-          borderWidth: 3,
-          center: ['50%', '50%'],
-          innerSize: '65%',
-          size: 240,
-          showInLegend: true
-        }
-      },
-      credits: {
-        enabled: false
-      },
-      series: [{
-        type: 'pie' as const,
-        name: 'Address Quality',
-        data: [2, 5, 3],
-        innerSize: '60%'
-      }]
+    this.addressQualityChartData = {
+      labels: ['Valid', 'Ambiguous', 'Junk'],
+      datasets: [{ data: [2, 5, 3], backgroundColor: ['#50B432', '#DDDF00', '#ED561B'], borderWidth: 0 }]
+    };
+    this.addressQualityChartOptions = {
+      responsive: true,
+      cutout: '60%',
+      plugins: { legend: { display: true, position: 'bottom' }, tooltip: { enabled: true } }
     };
   }
 
@@ -363,123 +258,35 @@ export class OrdersComponent implements OnInit {
 
   createPaymentModeChart(item: any): void {
     if (item?.prepaid) {
-      let seriesData = [
-        {
-          name: 'Prepaid',
-          y: item.prepaid,
-          delivered: item.prepaid_delivered,
-          lostdamege: item.prepaid_lost,
-          rto: item.prepaid_rto,
-          total: item.total_orders,
-          prepaid_percentage:
-            item.total_orders > 0
-              ? ((item.prepaid / item.total_orders) * 100).toFixed(2)
-              : null,
-          color: 'rgb(163, 161, 251)',
-          dataLabels: {
-            enabled: true,
-            format: '{point.prepaid_percentage:.1f}',
-          },
-          custom: {
-            total: this.convertIndianFormat(item.prepaid),
-            delivered: this.convertIndianFormat(item.prepaid_delivered),
-            lostdamege: this.convertIndianFormat(item.prepaid_lost),
-            rto: this.convertIndianFormat(item.prepaid_rto),
-          },
-        },
-        {
-          name: 'COD',
-          y: item.cod,
-          delivered: item.cod_delivered,
-          lostdamege: item.cod_lost,
-          rto: item.cod_rto,
-          total: item.total_orders,
-          cod_percentage:
-            item.total_orders > 0
-              ? ((item.cod / item.total_orders) * 100).toFixed(2)
-              : null,
-          color: 'rgb(94, 226, 160)',
-          dataLabels: {
-            enabled: true,
-            format: '{point.cod_percentage:.1f}',
-          },
-          custom: {
-            total: this.convertIndianFormat(item.cod),
-            delivered: this.convertIndianFormat(item.cod_delivered),
-            lostdamege: this.convertIndianFormat(item.cod_lost),
-            rto: this.convertIndianFormat(item.cod_rto),
-          },
-        },
-      ];
+      const total = item.total_orders || 0;
+      const prepaid = item.prepaid || 0;
+      const cod = item.cod || 0;
 
-      this.PrepaidvsCOD = {
-        chart: {
-          plotBackgroundColor: '#fff',
-          plotBorderWidth: 0,
-          plotShadow: false,
-        },
-        title: {
-          text: '',
-          align: 'center',
-          verticalAlign: 'middle',
-          y: 0,
-        },
-        tooltip: {
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          borderWidth: 1,
-          borderRadius: 5,
-          padding: 8,
-          shadow: true,
-          shared: false,
-          useHTML: true,
-          style: {
-            fontSize: '12px'
-          },
-          followPointer: true,
-          outside: false,
-          pointFormat:
-            '<table><tr><td>Orders:</td><td align="right">{point.custom.total}</td></tr><tr><td>Delivered:</td><td align="right">{point.custom.delivered}</td></tr><tr><td>RTO:</td><td align="right">{point.custom.rto}</td></tr><tr><td>Lost & Damaged:</td><td align="right">{point.custom.lostdamege}</td></tr></table>'
-        },
-        credits: {
-          enabled: false,
-        },
-        legend: {
-          itemStyle: {
-            color: 'rgb(51, 51, 51)',
-            cursor: 'pointer',
-            fontSize: '12px',
-            fontWeight: 'bold',
-            fill: 'rgb(51, 51, 51)',
-          },
-        },
-        plotOptions: {
-          pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-              enabled: false,
-              distance: -28,
-              style: {
-                fontWeight: 'bold',
-                color: 'white',
-                fontSize: '12px'
-              },
-            },
-            borderWidth: 3,
-            center: ['50%', '50%'],
-            innerSize: '65%',
-            size: 240,
-            showInLegend: true,
-          },
-        },
-        series: [
-          {
-            name: 'Orders',
-            data: seriesData,
-            type: 'pie',
-            innerSize: '60%',
-          },
-        ],
+      this.prepaidChartData = {
+        labels: ['Prepaid', 'COD'],
+        datasets: [{
+          data: [prepaid, cod],
+          backgroundColor: ['rgb(163, 161, 251)', 'rgb(94, 226, 160)'],
+          borderWidth: 0
+        }]
+      };
+      this.prepaidChartOptions = {
+        responsive: true,
+        cutout: '65%',
+        plugins: {
+          legend: { display: true, position: 'bottom' },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: (ctx) => {
+                const label = ctx.label || '';
+                const value = ctx.parsed as number;
+                const percent = total > 0 ? ((value / total) * 100).toFixed(2) : '0.00';
+                return `${label}: ${this.convertIndianFormat(value)} (${percent}%)`;
+              }
+            }
+          }
+        }
       };
     } else {
       this.noPayments = true;
@@ -495,154 +302,25 @@ export class OrdersComponent implements OnInit {
       return;
     }
 
-    const chartData = [
-      {
-        name: 'Valid',
-        y: parseFloat(data.valid_address),
-        color: '#50B432',
-        percentage: parseFloat(data.valid_address),
-        custom: {
-          total: this.convertIndianFormat(data.valid_address),
-          percent: data.valid_address,
-        },
-        dataLabels: {
-          enabled: true,
-          format: '{point.percentage:.1f}%',
-          distance: -28,
-          style: {
-            fontWeight: 'bold',
-            color: 'white'
-          }
-        }
-      },
-      {
-        name: 'Ambiguous',
-        y: parseFloat(data.ambiguous_address),
-        color: '#DDDF00',
-        percentage: parseFloat(data.ambiguous_address),
-        custom: {
-          total: this.convertIndianFormat(data.ambiguous_address),
-          percent: data.ambiguous_address,
-        },
-        dataLabels: {
-          enabled: true,
-          format: '{point.percentage:.1f}%',
-          distance: -28,
-          style: {
-            fontWeight: 'bold',
-            color: 'white'
-          }
-        }
-      },
-      {
-        name: 'Junk',
-        y: parseFloat(data.junk_address),
-        color: '#ED561B',
-        percentage: parseFloat(data.junk_address),
-        custom: {
-          total: this.convertIndianFormat(data.junk_address),
-          percent: data.junk_address,
-        },
-        dataLabels: {
-          enabled: true,
-          format: '{point.percentage:.1f}%',
-          distance: -28,
-          style: {
-            fontWeight: 'bold',
-            color: 'white'
-          }
-        }
-      }
-    ];
+    const valid = parseFloat(data.valid_address);
+    const ambiguous = parseFloat(data.ambiguous_address);
+    const junk = parseFloat(data.junk_address);
 
-    this.addressQualityChart = {
-      chart: {
-        plotBackgroundColor: '#fff',
-        plotBorderWidth: 0,
-        plotShadow: false,
-      },
-      title: {
-        text: '',
-        align: 'center',
-        verticalAlign: 'middle',
-        y: 0
-      },
-      exporting: { enabled: false },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: false,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        formatter: function () {
-          const point = this as Highcharts.Point;
-          let content = '';
-
-          if (point.name === 'Valid') {
-            content = '<table>' +
-              '<tr><td>Valid Addresses</td></tr>' +
-              '<tr><td>The given address is a Valid address, which indicates strong confidence of delivery</td></tr>' +
-              '</table>';
-          } else if (point.name === 'Ambiguous') {
-            content = '<table>' +
-              '<tr><td>Ambiguous Addresses</td></tr>' +
-              '<tr><td>The given address is an Ambiguous, which might be missing some information</td></tr>' +
-              '</table>';
-          } else {
-            content = '<table>' +
-              '<tr><td>Junk Addresses</td></tr>' +
-              '<tr><td>The given address is a Junk address, which lacks critical information for delivery</td></tr>' +
-              '</table>';
-          }
-
-          return `<div style="font-size: 12px;">${content}</div>`;
-        }
-      },
-      legend: {
-        itemStyle: {
-          fontSize: '12px',
-          fontWeight: 'bold',
-          color: 'rgb(51, 51, 51)',
-          fill: 'rgb(51, 51, 51)',
-          cursor: 'pointer',
-        },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: false,
-            distance: -28,
-            style: {
-              fontWeight: 'bold',
-              color: 'white',
-              fontSize: '12px'
-            }
-          },
-          borderWidth: 3,
-          center: ['50%', '50%'],
-          innerSize: '65%',
-          size: 240,
-          showInLegend: true
-        }
-      },
-      credits: {
-        enabled: false
-      },
-      series: [{
-        type: 'pie' as const,
-        name: 'Address Quality',
-        data: chartData,
-        innerSize: '60%'
+    this.addressQualityChartData = {
+      labels: ['Valid', 'Ambiguous', 'Junk'],
+      datasets: [{
+        data: [valid, ambiguous, junk],
+        backgroundColor: ['#50B432', '#DDDF00', '#ED561B'],
+        borderWidth: 0
       }]
+    };
+    this.addressQualityChartOptions = {
+      responsive: true,
+      cutout: '65%',
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
+      }
     };
   }
 

@@ -133,11 +133,11 @@
           </div>
         </div>
         <div *ngIf="!noPayments" class="grid grid-cols-1 -mt-2.5">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="PrepaidvsCOD"
-          >
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="prepaidChartData"
+            [options]="prepaidChartOptions"
+            [type]="doughnutType">
+          </canvas>
         </div>
         <div *ngIf="noPayments" class="flex flex-col items-center justify-center h-48 text-gray-500">
           <img
@@ -165,11 +165,11 @@
           </div>
         </div>
         <div *ngIf="!noAddressData" class="grid grid-cols-1 -mt-2.5">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="addressQualityChart"
-          >
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="addressQualityChartData"
+            [options]="addressQualityChartOptions"
+            [type]="doughnutType">
+          </canvas>
         </div>
         <div *ngIf="noAddressData" class="flex flex-col items-center justify-center h-48 text-gray-500">
           <img

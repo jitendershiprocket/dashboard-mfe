@@ -6,12 +6,13 @@ import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { DateRange, FilterData, FilterValues } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import moment from 'moment';
-import * as Highcharts from 'highcharts';
+import { BaseChartDirective } from 'ng2-charts';
+import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, DoughnutController, PieController, BarElement, CategoryScale, LinearScale, BarController, LineElement, PointElement, LineController } from 'chart.js';
 
 @Component({
   selector: 'app-rto',
   standalone: true,
-  imports: [CommonModule, FormsModule, DashboardFiltersComponent],
+  imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './rto.html',
   styleUrl: './rto.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -20,14 +21,27 @@ export class RtoComponent implements OnInit {
   startDate: any = moment().subtract(30, 'days').format('YYYY-MMM-DD');
   endDate: any = moment().subtract(1, 'days').format('YYYY-MMM-DD');
   rto_stats: any;
-  Highcharts: typeof Highcharts = Highcharts;
-  rto_count_line_chart: Highcharts.Options = {};
+  
+  // Chart.js properties
+  public lineType: 'line' = 'line' as const;
+  public barType: 'bar' = 'bar' as const;
+  public doughnutType: 'doughnut' = 'doughnut' as const;
+  
+  public rto_count_line_chart_data: ChartData<'line'> = { labels: [], datasets: [] };
+  public rto_count_line_chart_options: ChartConfiguration<'line'>['options'] = {};
+  
   rto_tab_raw_data: any;
   rto_tab_raw_hide_no_data: any;
-  rto_tab_status_chart: Highcharts.Options = {};
+  
+  public rto_tab_status_chart_data: ChartData<'bar'> = { labels: [], datasets: [] };
+  public rto_tab_status_chart_options: ChartConfiguration<'bar'>['options'] = {};
+  
   rto_tab_reasons: any;
   noDataPieChart = false;
-  rto_reason_pie_chart: Highcharts.Options = {};
+  
+  public rto_reason_pie_chart_data: ChartData<'doughnut'> = { labels: [], datasets: [] };
+  public rto_reason_pie_chart_options: ChartConfiguration<'doughnut'>['options'] = {};
+  
   rto_tab_pincodes: any;
   rto_tab_top_cities: any;
   rto_tab_top_courier: any;
@@ -50,6 +64,7 @@ export class RtoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    Chart.register(ArcElement, Tooltip, Legend, DoughnutController, PieController, BarElement, CategoryScale, LinearScale, BarController, LineElement, PointElement, LineController);
     this.initializeChartOptions();
     this.getRtoStatsWithPinot();
     this.getRtoTabReasons();
@@ -100,105 +115,58 @@ export class RtoComponent implements OnInit {
   }
 
   initializeChartOptions(): void {
-    this.rto_tab_status_chart = {
-      chart: {
-        type: 'column',
-      },
-      title: {
-        text: '',
-      },
-      colors: ['#a3a1fb', '#5ee2a0', '#ff8484'],
-      xAxis: {
-        categories: ['rto initiated', 'rto delivered', 'rto undelivered'],
-        crosshair: true,
-        labels: {
-          y: 40,
-        },
-      },
-      credits: {
-        enabled: false,
-      },
-      exporting: { enabled: false },
-      yAxis: {
-        gridLineWidth: 0,
-        allowDecimals: false,
-        min: 0,
-        title: {
-          text: '',
-        },
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: false,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat:
-          '<tr><td style="color:{series.color};padding:0;font-weight:bold">{series.name}: </td>' +
-          '<td style="padding:0;text-align:right" align="right"><b>{point.custom.total: .0f}</b></td></tr>',
-        footerFormat:
-          '<tr><td><span style="font-size:10px">Total RTO :</span></td><td> <b>{point.total}</b></td></tr></table>',
-      },
-      plotOptions: {
-        series: {
-          events: {
-            legendItemClick: function (e) {
-              e.preventDefault();
-            },
-          },
-        },
-      },
-      series: [
+    // Initialize RTO status chart with Chart.js
+    this.rto_tab_status_chart_data = {
+      labels: ['RTO Initiated', 'RTO Delivered', 'RTO Undelivered'],
+      datasets: [
         {
-          name: 'RTO Initiated',
-          data: [1,4,6],
-          type: 'column',
+          label: 'RTO Initiated',
+          data: [1, 0, 0],
+          backgroundColor: '#a3a1fb',
+          borderWidth: 0
         },
         {
-          name: 'RTO Delivered',
-          data: [3,6,2],
-          type: 'column',
+          label: 'RTO Delivered',
+          data: [0, 4, 0],
+          backgroundColor: '#5ee2a0',
+          borderWidth: 0
         },
         {
-          name: 'RTO Undelivered',
-          data: [0,7,4],
-          type: 'column',
-        },
-      ],
+          label: 'RTO Undelivered',
+          data: [0, 0, 6],
+          backgroundColor: '#ff8484',
+          borderWidth: 0
+        }
+      ]
+    };
+    this.rto_tab_status_chart_options = {
+      responsive: true,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: { beginAtZero: true },
+        y: { beginAtZero: true }
+      }
     };
 
-    this.rto_reason_pie_chart = {
-      series: [{
-        name: 'Browsers',
-        type: 'pie',
-        data: []
-      }],
-      credits: {
-        enabled: false
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        pointFormat:
-          '<table><tr><td>RTO Count : </td><td><b> {point.custom.total} ({point.order_count_percentage})</b> </td></tr></table>',
-      },
+    // Initialize RTO reason pie chart with Chart.js
+    this.rto_reason_pie_chart_data = {
+      labels: [],
+      datasets: [{
+        data: [],
+        backgroundColor: [],
+        borderWidth: 0
+      }]
+    };
+    this.rto_reason_pie_chart_options = {
+      responsive: true,
+      cutout: '65%',
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
+      }
     };
   }
 
@@ -235,96 +203,34 @@ export class RtoComponent implements OnInit {
 
     for (const key in this.rto_tab_raw_data) {
       rto_date.push(key);
-      rto_count.push({
-        y: this.rto_tab_raw_data[key].rto,
-        rto: this.convertIndianFormat(this.rto_tab_raw_data[key].rto),
-        total_shipments: this.convertIndianFormat(
-          parseInt(this.rto_tab_raw_data[key].total_shipments)
-        ),
-        rto_percentage: this.rto_tab_raw_data[key].rto_percentage,
-      });
+      rto_count.push(this.rto_tab_raw_data[key].rto);
     }
 
-    this.rto_count_line_chart = {
-      colors: ['#a078ce'],
-      title: {
-        text: '',
-      },
-      subtitle: {
-        text: '',
-      },
-      credits: {
-        enabled: false,
-      },
-      exporting: { enabled: false },
-      xAxis: {
-        categories: rto_date,
-        labels: {
-          style: {
-            fontSize: '12px',
-          },
-        },
-        lineWidth: 1,
-        lineColor: '#ccd6eb',
-      },
-      yAxis: {
-        gridLineWidth: 0,
-        allowDecimals: false,
-        title: {
-          text: '',
-          style: {
-            fontSize: '12px'
-          }
-        },
-        labels: {
-          style: {
-            fontSize: '12px'
-          }
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: true,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        headerFormat: '<span style="font-size:10px">{point.key}</span>',
-        pointFormat: `<table>
-        <tr><td>Total Shipments :</td><td align="right"><b> {point.total_shipments}</b></td></tr>
-        <tr><td style="padding:0">RTO Count :</td><td align="right"><b> {point.rto}</b></td></tr>
-        <tr><td>RTO Percentage :</td><td align="right"><b> {point.rto_percentage}</b></td></tr>`
-      },
-      legend: {
-        itemStyle: {
-          fontSize: '12px', 
-          fontWeight: '700',
-          color: 'rgb(51, 51, 51)',
-          fill: 'rgb(51, 51, 51)',
-          cursor: 'pointer',
-        },
-      },
-      plotOptions: {
-        spline: {
-          marker: {
-            radius: 4,
-            lineColor: '#666666',
-            lineWidth: 1,
-            symbol: 'circle',
-          },
-        },
-      },
-      series: [
+    this.rto_count_line_chart_data = {
+      labels: rto_date,
+      datasets: [
         {
-          name: 'RTO Count',
+          label: 'RTO Count',
           data: rto_count,
-          type: 'line',
-        },
-      ],
+          borderColor: '#a078ce',
+          backgroundColor: 'rgba(160, 120, 206, 0.1)',
+          borderWidth: 2,
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: '#a078ce'
+        }
+      ]
+    };
+    this.rto_count_line_chart_options = {
+      responsive: true,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: { beginAtZero: true },
+        y: { beginAtZero: true }
+      }
     };
   }
 
@@ -336,122 +242,47 @@ export class RtoComponent implements OnInit {
 
     for (const key in this.rto_tab_raw_data) {
       rto_date.push(key);
-      rto_initiated.push({
-        y: parseInt(this.rto_tab_raw_data?.[key]?.rto_initiated),
-        total: this.convertIndianFormat(this.rto_tab_raw_data?.[key]?.rto),
-        custom: {
-          total: this.convertIndianFormat(
-            this.rto_tab_raw_data?.[key]?.rto_initiated
-          ),
-        },
-      });
-      rto_delivered.push({
-        y: parseInt(this.rto_tab_raw_data?.[key]?.rto_delivered),
-        total: this.convertIndianFormat(this.rto_tab_raw_data?.[key]?.rto),
-        custom: {
-          total: this.convertIndianFormat(
-            this.rto_tab_raw_data?.[key]?.rto_delivered
-          ),
-        },
-      });
-      rto_undelivered.push({
-        y: parseInt(this.rto_tab_raw_data?.[key]?.rto_undelivered),
-        total: this.convertIndianFormat(this.rto_tab_raw_data?.[key]?.rto),
-        custom: {
-          total: this.convertIndianFormat(
-            this.rto_tab_raw_data?.[key]?.rto_undelivered
-          ),
-        },
-      });
+      rto_initiated.push(parseInt(this.rto_tab_raw_data?.[key]?.rto_initiated) || 0);
+      rto_delivered.push(parseInt(this.rto_tab_raw_data?.[key]?.rto_delivered) || 0);
+      rto_undelivered.push(parseInt(this.rto_tab_raw_data?.[key]?.rto_undelivered) || 0);
     }
    
-    this.rto_tab_status_chart = {
-      chart: {
-        type: 'column',
-      },
-      title: {
-        text: '',
-      },
-      colors: ['#a3a1fb', '#5ee2a0', '#ff8484'],
-      xAxis: {
-        categories: rto_date,
-        crosshair: true,
-        labels: {
-          y: 40,
-          style: {
-            fontSize: '12px'
-          }
-        },
-        lineWidth: 1,
-        lineColor: '#ccd6eb',
-      },
-      credits: {
-        enabled: false,
-      },
-      exporting: { enabled: false },
-      yAxis: {
-        gridLineWidth: 0,
-        allowDecimals: false,
-        min: 0,
-        title: {
-          text: '',
-        },
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: true,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat:
-          '<tr><td style="color:{series.color};padding:0;font-weight:bold">{series.name}: </td>' +
-          '<td style="padding:0;text-align:right" align="right"><b>{point.custom.total: .0f}</b></td></tr>',
-        footerFormat:
-          '<tr><td><span style="font-size:10px">Total RTO :</span></td><td> <b>{point.total}</b></td></tr></table>',
-      },
-      legend: {
-        itemStyle: {
-          fontSize: '12px', 
-          fontWeight: '700',
-          color: 'rgb(51, 51, 51)',
-          fill: 'rgb(51, 51, 51)',
-          cursor: 'pointer',
-        },
-      },
-      plotOptions: {
-        series: {
-          events: {
-            legendItemClick: function (e) {
-              e.preventDefault();
-            },
-          },
-        },
-      },
-      series: [
+    this.rto_tab_status_chart_data = {
+      labels: rto_date,
+      datasets: [
         {
-          name: 'RTO Initiated',
+          label: 'RTO Initiated',
           data: rto_initiated,
-          type: 'column',
+          backgroundColor: '#a3a1fb',
+          borderWidth: 0
         },
         {
-          name: 'RTO Delivered',
+          label: 'RTO Delivered',
           data: rto_delivered,
-          type: 'column',
+          backgroundColor: '#5ee2a0',
+          borderWidth: 0
         },
         {
-          name: 'RTO Undelivered',
+          label: 'RTO Undelivered',
           data: rto_undelivered,
-          type: 'column',
-        },
-      ],
+          backgroundColor: '#ff8484',
+          borderWidth: 0
+        }
+      ]
+    };
+    this.rto_tab_status_chart_options = {
+      responsive: true,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: { stacked: false },
+        y: { stacked: false, beginAtZero: true }
+      }
     };
   }
+
 
   getRtoTabReasons(): void {
     const data = {
@@ -478,8 +309,9 @@ export class RtoComponent implements OnInit {
     if (item?.length > 0) {
       const keys = Object.keys(item);
       const length = keys.length;
-      const chartData = [];
-      const clr = [
+      const labels = [];
+      const data = [];
+      const colors = [
         'rgb(173, 134, 252)',
         'rgb(252, 154, 108)',
         'rgb(96, 235, 160)',
@@ -491,90 +323,31 @@ export class RtoComponent implements OnInit {
         'rgb(244, 122, 195)',
         'rgb(163, 161, 251)',
       ];
-      let toatalRto = 0;
+      
       for (let i = 0; i < length; i++) {
-        const formatedData = {
-          name: item[keys[i]].reason_name,
-          y: item[keys[i]].rto,
-          order_count_percentage: item[keys[i]].percentage,
-          color: clr[i],
-          dataLabels: {
-            enabled: false,
-            format: '{point.order_count_percentage}',
-            padding: 0,
-          },
-          custom: { total: this.convertIndianFormat(item[keys[i]].rto) },
-        };
-        chartData.push(formatedData);
-        this.noDataPieChart = false;
-        toatalRto = toatalRto + item[keys[i]].rto;
+        labels.push(item[keys[i]].reason_name);
+        data.push(item[keys[i]].rto);
       }
-      for (let i = 0; i < length; i++) {
-        chartData[i].y = (chartData[i].y / toatalRto) * 100;
-        if (chartData[i].y < 1) {
-          chartData[i].y = 1;
-        }
-      }
-
-      this.rto_reason_pie_chart = {
-        chart: {
-          renderTo: 'rto_reason_pie_chart',
-          type: 'pie',
-        },
-        title: {
-          text: '',
-        },
-        tooltip: {
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          borderWidth: 1,
-          borderRadius: 5,
-          padding: 8,
-          shadow: true,
-          useHTML: true,
-          style: {
-            fontSize: '12px'
-          },
-          followPointer: true,
-          outside: false,
-          pointFormat:
-            '<table><tr><td>RTO Count : </td><td><b> {point.custom.total} ({point.order_count_percentage})</b> </td></tr></table>',
-        },
-        credits: {
-          enabled: false,
-        },
-        exporting: { enabled: false },
-        plotOptions: {
-          pie: {
-            dataLabels: {
-              distance: -28,
-              style: {
-                color: '#fff',
-              },
-              enabled: true,
-            },
-            borderWidth: 3,
-            showInLegend: false,
-            innerSize: '65%',
-            size: 240,
-            center: ['50%', '50%'],
-          },
-          series: {
-            point: {
-              events: {
-                legendItemClick: function () {
-                  return false;
-                },
-              },
-            },
-          },
-        },
-        series: [
-          {
-            data: chartData,
-            type: 'pie',
-          },
-        ],
+      
+      this.noDataPieChart = false;
+      
+      this.rto_reason_pie_chart_data = {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: colors.slice(0, length),
+          borderWidth: 0
+        }]
       };
+      this.rto_reason_pie_chart_options = {
+        responsive: true,
+        cutout: '65%',
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true }
+        }
+      };
+
     } else {
       this.noDataPieChart = true;
     }

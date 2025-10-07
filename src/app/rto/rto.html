@@ -107,11 +107,11 @@
           </div>
         </div>
         <div *ngIf="rto_tab_raw_hide_no_data" class="dashboard-grid-row">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="rto_count_line_chart"
-          >
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="rto_count_line_chart_data"
+            [options]="rto_count_line_chart_options"
+            [type]="lineType">
+          </canvas>
         </div>
         <div *ngIf="!rto_tab_raw_hide_no_data" class="pt-lg mt-xl f-d-c dispFlex">
           <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
@@ -135,11 +135,11 @@
           </div>
         </div>
         <div *ngIf="rto_tab_raw_hide_no_data" class="dashboard-grid-row">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="rto_tab_status_chart"
-          >
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="rto_tab_status_chart_data"
+            [options]="rto_tab_status_chart_options"
+            [type]="barType">
+          </canvas>
         </div>
         <div *ngIf="!rto_tab_raw_hide_no_data" class="pt-lg mt-xl f-d-c dispFlex h-80">
           <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
@@ -155,11 +155,11 @@
           </div>
         </div>
         <div *ngIf="!noDataPieChart" class="dashboard-grid-row">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="rto_reason_pie_chart"
-          >
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="rto_reason_pie_chart_data"
+            [options]="rto_reason_pie_chart_options"
+            [type]="doughnutType">
+          </canvas>
         </div>
         <div *ngIf="noDataPieChart" class="pt-lg mt-xl f-d-c dispFlex h-80">
           <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />

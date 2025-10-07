@@ -7,12 +7,13 @@ import { AnalyticsService } from '../services/analytics.service';
 import { DashboardFiltersComponent } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { FilterData, FilterValues, DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import moment from 'moment';
-import * as Highcharts from 'highcharts';
+import { BaseChartDirective } from 'ng2-charts';
+import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, DoughnutController, PieController, BarElement, CategoryScale, LinearScale, BarController, LineElement, PointElement, LineController } from 'chart.js';
 
 @Component({
   selector: 'app-ndr',
   standalone: true,
-  imports: [CommonModule, FormsModule, DashboardFiltersComponent],
+  imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './ndr.html',
   styleUrl: './ndr.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -29,7 +30,10 @@ export class NdrComponent implements OnInit {
     shipment_count: 0,
   };
   
-  Highcharts: typeof Highcharts = Highcharts;
+  // Chart.js properties
+  public doughnutType: 'doughnut' = 'doughnut' as const;
+  public barType: 'bar' = 'bar' as const;
+  
   ndrSplit: any;
   showNdrSplitGraph: any;
   ndrDeliveredAttempt: any;
@@ -38,21 +42,26 @@ export class NdrComponent implements OnInit {
   ndrResponseData: any;
   ndrSellerBuyerResponse: any;
   ndrFunnel: any;
-  ndr_split: Highcharts.Options = {};
+  ndr_split_data: ChartData<'doughnut'> = { labels: [], datasets: [] };
+  ndr_split_options: ChartConfiguration<'doughnut'>['options'] = {};
   showNdrStatusGraph: any;
   ndrStatusDataChart: any;
-  ndr_status: Highcharts.Options = {};
+  ndr_status_data: ChartData<'bar'> = { labels: [], datasets: [] };
+  ndr_status_options: ChartConfiguration<'bar'>['options'] = {};
   totalNdrRaised: any;
   ndrResponseSeller: any;
   ndrResponseSellerPositive: any;
   ndrResponseBuyer: any;
   ndrResponseBuyerPositive: any;
-  ndr_delivery_attempt: Highcharts.Options = {};
+  ndr_delivery_attempt_data: ChartData = { labels: [], datasets: [] };
+  ndr_delivery_attempt_options: ChartConfiguration['options'] = {};
   ndrDeliveryAttemptChart: any;
   ndrSellerResponseDataChart: any;
   ndrBuyerResponseDataChart = false;
-  ndr_seller_response: Highcharts.Options = {};
-  ndr_buyer_response: Highcharts.Options = {};
+  ndr_seller_response_data: ChartData = { labels: [], datasets: [] };
+  ndr_seller_response_options: ChartConfiguration['options'] = {};
+  ndr_buyer_response_data: ChartData = { labels: [], datasets: [] };
+  ndr_buyer_response_options: ChartConfiguration['options'] = {};
   ndrSuccessData: any;
   showHideCourier = false;
 
@@ -75,6 +84,7 @@ export class NdrComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    Chart.register(ArcElement, Tooltip, Legend, DoughnutController, PieController, BarElement, CategoryScale, LinearScale, BarController, LineElement, PointElement, LineController);
     this.initializeChartOptions();
     this.callAllFunctions();
   }
@@ -109,191 +119,53 @@ export class NdrComponent implements OnInit {
   }
 
   initializeChartOptions(): void {
-    const seriesData: any = [
-      {
-        name: 'NDR Raised',
-        type: 'column',
-        color: 'rgb(96, 235, 160)',
-        data: [2,5,3],
+    // Initialize with empty Chart.js data structures
+    this.ndr_delivery_attempt_data = {
+      labels: [],
+      datasets: []
+    };
+    this.ndr_delivery_attempt_options = {
+      responsive: true,
+      plugins: { 
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
       },
-      {
-        name: 'Delivery Attempt',
-        type: 'line',
-        color: 'rgb(252, 160, 118)',
-        data: [2,5,3],
-      },
-    ];
-    
-    this.ndr_delivery_attempt = {
-      chart: {
-        type: 'column',
-        height: 400,
-      },
-      title: {
-        text: '',
-      },
-      xAxis: [
-        {
-          crosshair: true,
-        },
-      ],
-      yAxis: {
-        min: 0,
-        gridLineWidth: 0,
-        title: {
-          text: '',
-        },
-      },
-      credits: {
-        enabled: false,
-      },
-      exporting: {
-        enabled: false,
-      },
-      legend: {
-        align: 'right',
-        verticalAlign: 'top',
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: false,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        pointFormat:
-          '<table><tr><td>{series.name} : </td><td align="right"><b>{point.custom}</b></td></tr></table>',
-      },
-      plotOptions: {
-        column: {
-          maxPointWidth: 20,
-        },
-      },
-      series: seriesData
+      scales: {
+        x: { beginAtZero: true },
+        y: { beginAtZero: true }
+      }
     };
     
-    this.ndr_seller_response = {
-      chart: {
-        type: 'column',
-        height: 400,
+    this.ndr_seller_response_data = {
+      labels: [],
+      datasets: []
+    };
+    this.ndr_seller_response_options = {
+      responsive: true,
+      plugins: { 
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
       },
-      title: {
-        text: '',
-      },
-      xAxis: [
-        {
-          crosshair: true,
-        },
-      ],
-      yAxis: {
-        min: 0,
-        gridLineWidth: 0,
-        title: {
-          text: '',
-        },
-      },
-      credits: {
-        enabled: false,
-      },
-      exporting: {
-        enabled: false,
-      },
-      legend: {
-        align: 'right',
-        verticalAlign: 'top',
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: false,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        pointFormat:
-          '<table><tr><td>{series.name} : </td><td align="right"><b>{point.custom}</b></td></tr></table>',
-      },
-      plotOptions: {
-        column: {
-          maxPointWidth: 20,
-        },
-      },
-      series: [...seriesData, {
-        name: 'Delivery Attempt',
-        type: 'line',
-        color: 'rgb(252, 160, 118)',
-        data: [4,54,2],
-      }]
+      scales: {
+        x: { beginAtZero: true },
+        y: { beginAtZero: true }
+      }
     };
     
-    this.ndr_buyer_response = {
-      chart: {
-        type: 'column',
-        height: 400,
+    this.ndr_buyer_response_data = {
+      labels: [],
+      datasets: []
+    };
+    this.ndr_buyer_response_options = {
+      responsive: true,
+      plugins: { 
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
       },
-      title: {
-        text: '',
-      },
-      xAxis: [
-        {
-          crosshair: true,
-        },
-      ],
-      yAxis: {
-        min: 0,
-        gridLineWidth: 0,
-        title: {
-          text: '',
-        },
-      },
-      credits: {
-        enabled: false,
-      },
-      exporting: {
-        enabled: false,
-      },
-      legend: {
-        align: 'right',
-        verticalAlign: 'top',
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 8,
-        shadow: true,
-        shared: false,
-        useHTML: true,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        pointFormat:
-          '<table><tr><td>{series.name} : </td><td align="right"><b>{point.custom}</b></td></tr></table>',
-      },
-      plotOptions: {
-        column: {
-          maxPointWidth: 20,
-        },
-      },
-      series: [...seriesData, {
-        name: 'Delivery Attempt',
-        type: 'line',
-        color: 'rgb(252, 160, 118)',
-        data: [4,54,2],
-      }]
+      scales: {
+        x: { beginAtZero: true },
+        y: { beginAtZero: true }
+      }
     };
   }
 
@@ -340,7 +212,7 @@ export class NdrComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
-    this.http.get('2.0/ndr/reasons', data).subscribe(
+    this.http.srDashboardGet('2.0/ndr/reasons', data).subscribe(
       (res: any) => {
         this.getActionRequiredCount();
         this.getShipmentsCount();
@@ -381,7 +253,7 @@ export class NdrComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
-    this.http.get('2.0/ndr/action-required', data).subscribe(
+    this.http.srDashboardGet('2.0/ndr/action-required', data).subscribe(
       (res: any) => {
         this.allNdrData.ndr_action_required = res.data.ndr_action_required;
       },
@@ -401,7 +273,7 @@ export class NdrComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
-    this.http.get('2.0/ndr/all-response', data).subscribe(
+    this.http.srDashboardGet('2.0/ndr/all-response', data).subscribe(
       (res: any) => {
         this.ndrResponseData = res.data.matrix;
         this.ndrSellerBuyerResponse = res.data.grouped;
@@ -423,7 +295,7 @@ export class NdrComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
-    this.http.get('2.0/ndr/shipments', data).subscribe(
+    this.http.srDashboardGet('2.0/ndr/shipments', data).subscribe(
       (res: any) => {
         this.allNdrData.shipment_count = res.data.shipment_count;
       },
@@ -443,7 +315,7 @@ export class NdrComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
-    this.http.get('2.0/getndrfunnel', data).subscribe(
+    this.http.srDashboardGet('2.0/getndrfunnel', data).subscribe(
       (res: any) => {
         this.ndrFunnel = res.data;
       },
@@ -463,7 +335,7 @@ export class NdrComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
-    this.http.get('2.0/ndr/detailed', data).subscribe(
+    this.http.srDashboardGet('2.0/ndr/detailed', data).subscribe(
       (res: any) => {
         this.totalNdrRaised = res.data.overall;
         this.ndrResponseSeller = res.data.seller.overall;
@@ -487,7 +359,7 @@ export class NdrComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
-    this.http.get('2.0/ndrSuccess', data).subscribe(
+    this.http.srDashboardGet('2.0/ndrSuccess', data).subscribe(
       (res: any) => {
         this.ndrSuccessData = res.data;
       },
@@ -546,77 +418,29 @@ export class NdrComponent implements OnInit {
           chartData[i].y = 1;
         }
       }
-      this.ndr_split = {
-          chart: {
-            plotBackgroundColor: '#fff',
-            plotBorderWidth: 0,
-            plotShadow: false,
-            height: 275,
-          },
-          title: {
-            text: '',
-            align: 'center',
-            verticalAlign: 'middle',
-            y: 0,
-          },
-          legend: {
-            enabled: false,
-            itemStyle: {
-              fontSize: '12px',
-              fontWeight: 'bold'
-            }
-          },
-          tooltip: {
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderWidth: 1,
-            borderRadius: 5,
-            padding: 8,
-            shadow: true,
-            shared: false,
-            useHTML: true,
-            style: {
-              fontSize: '12px'
-            },
-            followPointer: true,
-            outside: false,
-            pointFormat:
-              '<table><tr><td>Total : </td><td align="right"><b>{point.custom.axis_y}({point.custom.percent_custom}%)</b></td></tr></table>',
-          },
-          credits: {
-            enabled: false,
-          },
-          exporting: { enabled: false },
-          plotOptions: {
-            pie: {
-              dataLabels: {
-                enabled: true,
-                distance: -28,
-              },
-              borderWidth: 3,
-              showInLegend: true,
-              innerSize: '65%',
-              size: 240,
-              center: ['50%', posCenter],
-            },
-            series: {
-              point: {
-                events: {
-                  legendItemClick: function () {
-                    return false; // <== returning false will cancel the default action
-                  },
-                },
-              },
-            },
-          },
-          series: [
-            {
-              data: chartData,
-              type: 'pie',
-              innerSize: '60%',
-            },
-          ],
+      
+      const labels = chartData.map((d: any) => d.name);
+      const data = chartData.map((d: any) => d.y);
+      const colors = chartData.map((d: any) => d.color);
+      
+      this.ndr_split_data = {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: colors,
+          borderWidth: 0
+        }]
+      };
+      this.ndr_split_options = {
+        responsive: true,
+        cutout: '65%',
+        plugins: { 
+          legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+          tooltip: { enabled: true }
+        }
       };
     } else {
+      this.showNdrSplitGraph = false;
     }
   }
 
@@ -650,93 +474,44 @@ export class NdrComponent implements OnInit {
 
       this.ndrDeliveryAttemptChart =
         ndrRaisedData.length || ndrDelivereddData ? true : false;
-      const seriesData: any = [
-        {
-          name: 'NDR Raised',
-          type: 'column',
-          color: 'rgb(96, 235, 160)',
-          data: ndrRaisedData,
-        },
-        {
-          name: 'Delivery Attempt',
-          type: 'line',
-          color: 'rgb(252, 160, 118)',
-          data: ndrDelivereddData,
-        },
-      ];
+      
       if (this.ndrDeliveryAttemptChart) {
-        this.ndr_delivery_attempt = {
-          chart: {
-            // zoomType: 'xy',
-            type: 'column',
-            height: 400,
-            // height: 275,
-          },
-          title: {
-            text: '',
-          },
-          xAxis: [
+        const labels = keys.map((key: string) => key);
+        const raisedValues = ndrRaisedData.map((item: any) => item.y);
+        const deliveredValues = ndrDelivereddData.map((item: any) => item.y);
+        
+        this.ndr_delivery_attempt_data = {
+          labels: labels,
+          datasets: [
             {
-              labels: {
-              style: {
-                fontSize: '11px'
-              }
-            },  
-              categories: keys,
-              crosshair: true,
-              lineColor: '#ccd6eb',
-              lineWidth: 1,
+              label: 'NDR Raised',
+              data: raisedValues,
+              type: 'bar',
+              backgroundColor: 'rgb(96, 235, 160)',
+              borderWidth: 0
             },
-          ],
-          yAxis: {
-            labels: {
-              style: {
-                fontSize: '11px'
-              }
-            },
-            min: 0,
-            gridLineWidth: 0,
-            title: {
-              text: '',
-            },
-          },
-          credits: {
-            enabled: false,
-          },
-          exporting: {
-            enabled: false,
-          },
-         
-          legend: {
-            align: 'right',
-            verticalAlign: 'top',
-            itemStyle: {
-              fontSize: '12px',
-              fontWeight: 'bold'
+            {
+              label: 'Delivery Attempt',
+              data: deliveredValues,
+              type: 'line',
+              backgroundColor: 'rgb(252, 160, 118)',
+              borderColor: 'rgb(252, 160, 118)',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.1
             }
+          ]
+        };
+        this.ndr_delivery_attempt_options = {
+          responsive: true,
+          plugins: { 
+            legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+            tooltip: { enabled: true }
           },
-          tooltip: {
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderWidth: 1,
-            borderRadius: 5,
-            padding: 8,
-            shadow: true,
-            shared: false,
-            useHTML: true,
-            style: {
-              fontSize: '12px'
-            },
-            followPointer: true,
-            outside: false,
-            pointFormat:
-              '<table><tr><td>{series.name} : </td><td align="right"><b>{point.custom}</b></td></tr></table>',
-          },
-          plotOptions: {
-            column: {
-              maxPointWidth: 20,
-            },
-          },
-          series: seriesData,
+          scales: {
+            x: { beginAtZero: true },
+            y: { beginAtZero: true }
+          }
         };
       }
     } else {
@@ -816,78 +591,51 @@ export class NdrComponent implements OnInit {
 
       this.ndrStatusDataChart = this.ndrStatusData.length;
       if (this.ndrStatusDataChart !== 0) {
-        this.ndr_status = {
-          chart: {
-            type: 'column',
-            height: 275,
-          },
-          colors: clr,
-          title: {
-            text: '',
-          },
-          xAxis: {
-            categories: keys,
-            labels: {
-              style: {
-                fontSize: '11px'
-              }
+        const labels = keys.map((key: string) => key);
+        const lostDamagedData = formatedSeries[0].data.map((item: any) => item.y);
+        const pendingData = formatedSeries[1].data.map((item: any) => item.y);
+        const rtoData = formatedSeries[2].data.map((item: any) => item.y);
+        const deliveredData = formatedSeries[3].data.map((item: any) => item.y);
+        
+        this.ndr_status_data = {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Lost/Damaged',
+              data: lostDamagedData,
+              backgroundColor: 'rgb(253, 225, 123)',
+              borderWidth: 0
             },
-            lineColor: '#ccd6eb',
-            lineWidth: 1,
-          },
-          yAxis: {
-            gridLineWidth: 0,
-            min: 0,
-            title: {
-              text: '',
-              style: {
-                fontSize: '12px'
-              }
+            {
+              label: 'Pending',
+              data: pendingData,
+              backgroundColor: 'rgb(252, 160, 118)',
+              borderWidth: 0
             },
-            labels: {
-              style: {
-                fontSize: '12px'
-              }
+            {
+              label: 'RTO',
+              data: rtoData,
+              backgroundColor: 'rgb(163, 161, 251)',
+              borderWidth: 0
+            },
+            {
+              label: 'Delivered',
+              data: deliveredData,
+              backgroundColor: 'rgb(96, 235, 160)',
+              borderWidth: 0
             }
+          ]
+        };
+        this.ndr_status_options = {
+          responsive: true,
+          plugins: { 
+            legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+            tooltip: { enabled: true }
           },
-          credits: {
-            enabled: false,
-          },
-          exporting: {
-            enabled: false,
-          },
-          legend: {
-            reversed: true,
-            align: 'right',
-            verticalAlign: 'top',
-            itemStyle: {
-      fontSize: '12px', 
-      fontWeight: 'bold'
-    },
-          },
-          tooltip: {
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderWidth: 1,
-            borderRadius: 5,
-            padding: 8,
-            shadow: true,
-            shared: false,
-            useHTML: true,
-            style: {
-              fontSize: '12px'
-            },
-            followPointer: true,
-            outside: false,
-            pointFormat:
-              '<table><tr><td>{series.name} : </td><td align="right"><b>{point.custom}</b></td></tr></table>',
-          },
-          plotOptions: {
-            column: {
-              stacking: 'normal',
-              pointWidth: 20,
-            },
-          },
-          series: formatedSeries,
+          scales: { 
+            x: { stacked: false }, 
+            y: { stacked: false, beginAtZero: true }
+          }
         };
       }
     } else {
@@ -980,198 +728,125 @@ export class NdrComponent implements OnInit {
       }
 
       if (this.ndrSellerResponseDataChart) {
-        this.ndr_seller_response = {
-          chart: {
-            height: 400,
-          },
-          title: {
-            text: '',
-          },
-          xAxis: [
+        const labels = keys.map((key: string) => key);
+        const ndrValues = ndrData.map((item: any) => item.y);
+        const sellerResponseValues = ndrSellerResponsedData.map((item: any) => item.y);
+        const sellerPositiveValues = ndrSellerPositiveResponsedData.map((item: any) => item.y);
+        
+        this.ndr_seller_response_data = {
+          labels: labels,
+          datasets: [
             {
-              labels: {
-                style: {
-                  fontSize: '11px'
-                }
-              },
-              categories: keys,
-              crosshair: true,
-              lineColor: '#ccd6eb',
-              lineWidth: 1,
-            },
-          ],
-          yAxis: {
-            labels: {
-              style: {
-                fontSize: '11px'
-              }
-            },
-            gridLineWidth: 1,
-            gridLineColor: '#ececec',
-            min: 0,
-            title: {
-              text: '',
-            },
-          },
-          credits: {
-            enabled: false,
-          },
-          exporting: {
-            enabled: false,
-          },
-          legend: {
-            align: 'right',
-            verticalAlign: 'top',
-            itemStyle: {
-              textOverflow: 'initial',
-              whiteSpace: 'initial',
-              width: 95,
-              fontSize: '12px',
-              fontWeight: 'bold'
-            },
-    
-          },
-          tooltip: {
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderWidth: 1,
-            borderRadius: 5,
-            padding: 8,
-            shadow: true,
-            shared: false,
-            useHTML: true,
-            style: {
-              fontSize: '12px'
-            },
-            followPointer: true,
-            outside: false,
-            pointFormat:
-              '<table><tr><td>{series.name} : </td><td text-align="right"><b>{point.custom}</b></td></tr></table>',
-          },
-          plotOptions: {
-            column: {
-              maxPointWidth: 20,
-            },
-          },
-          series: [
-            {
-              name: 'NDR',
-              type: 'column',
-              color: 'rgb(253, 225, 123)',
-              data: ndrData,
+              label: 'NDR',
+              data: ndrValues,
+              type: 'bar',
+              backgroundColor: 'rgb(253, 225, 123)',
+              borderWidth: 0
             },
             {
-              name: 'Seller Response',
-              type: 'column',
-              color: 'rgb(163, 161, 251)',
-              data: ndrSellerResponsedData,
+              label: 'Seller Response',
+              data: sellerResponseValues,
+              type: 'bar',
+              backgroundColor: 'rgb(163, 161, 251)',
+              borderWidth: 0
             },
             {
-              name: 'Seller +ve Response',
+              label: 'Seller +ve Response',
+              data: sellerPositiveValues,
               type: 'line',
-              color: 'rgb(96, 235, 160)',
-              data: ndrSellerPositiveResponsedData,
-            },
-          ],
+              backgroundColor: 'rgb(96, 235, 160)',
+              borderColor: 'rgb(96, 235, 160)',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.1
+            }
+          ]
+        };
+        this.ndr_seller_response_options = {
+          responsive: true,
+          plugins: { 
+            legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            x: { beginAtZero: true },
+            y: { beginAtZero: true }
+          }
         };
       }
 
       if (this.ndrBuyerResponseDataChart) {
-        this.ndr_buyer_response = {
-          chart: {
-            height: 400,
-          },
-          title: {
-            text: '',
-          },
-          credits: {
-            enabled: false,
-          },
-          exporting: {
-            enabled: false,
-          },
-          xAxis: [
+        const labels = keys.map((key: string) => key);
+        const ndrValues = ndrData.map((item: any) => item.y);
+        const buyerResponseValues = ndrBuyerResponsedData.map((item: any) => item.y);
+        const buyerPositiveValues = ndrBuyerPositiveResponsedData.map((item: any) => item.y);
+        
+        this.ndr_buyer_response_data = {
+          labels: labels,
+          datasets: [
             {
-              labels: {
-                style: {
-                  fontSize: '11px'
-                }
-              },
-              categories: keys,
-              crosshair: true,
-              lineColor: '#ccd6eb',
-              lineWidth: 1,
-            },
-          ],
-          yAxis: {
-            labels: {
-              style: {
-                fontSize: '11px'
-              }
-            },
-            gridLineWidth: 1,
-            gridLineColor: '#ececec',
-            min: 0,
-            title: {
-              text: '',
-            },
-          },
-          tooltip: {
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderWidth: 1,
-            borderRadius: 5,
-            padding: 8,
-            shadow: true,
-            shared: false,
-            useHTML: true,
-            style: {
-              fontSize: '12px'
-            },
-            followPointer: true,
-            outside: false,
-            pointFormat:
-              '<table><tr><td>{series.name} : </td><td align="right"><b>{point.custom}</b></td></tr></table>',
-          },
-          plotOptions: {
-            column: {
-              maxPointWidth: 20,
-            },
-          },
-          legend: {
-            align: 'right',
-            verticalAlign: 'top',
-            itemStyle: {
-              textOverflow: 'initial',
-              whiteSpace: 'initial',
-              width: 95,
-              fontSize: '12px',
-              fontWeight: 'bold'
-            },
-            
-          },
-          series: [
-            {
-              name: 'NDR',
-              type: 'column',
-              color: 'rgb(253, 225, 123)',
-              data: ndrData,
+              label: 'NDR',
+              data: ndrValues,
+              type: 'bar',
+              backgroundColor: 'rgb(253, 225, 123)',
+              borderWidth: 0
             },
             {
-              name: 'Buyer Response',
-              type: 'column',
-              color: 'rgb(244, 122, 194)',
-              data: ndrBuyerResponsedData,
+              label: 'Buyer Response',
+              data: buyerResponseValues,
+              type: 'bar',
+              backgroundColor: 'rgb(252, 160, 118)',
+              borderWidth: 0
             },
             {
-              name: 'Buyer +ve Response',
+              label: 'Buyer +ve Response',
+              data: buyerPositiveValues,
               type: 'line',
-              color: 'rgb(163, 161, 251)',
-              data: ndrBuyerPositiveResponsedData,
-            },
-          ],
+              backgroundColor: 'rgb(163, 161, 251)',
+              borderColor: 'rgb(163, 161, 251)',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.1
+            }
+          ]
+        };
+        this.ndr_buyer_response_options = {
+          responsive: true,
+          plugins: { 
+            legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            x: { beginAtZero: true },
+            y: { beginAtZero: true }
+          }
         };
       }
     } else {
       // $scope.showNdrSellerBuyerResponseGraph = false;
+    }
+  }
+
+  calculateSubTotal(...args: any[]): number {
+    return args.reduce((sum, val) => (sum + (val || 0)), 0);
+  }
+
+  calculatendrSuccessTotal(...args: any[]): number {
+    return args.reduce((sum, val) => (sum + (val || 0)), 0);
+  }
+
+  calculateCourierSuccessTotal(...args: any[]): number {
+    return args.reduce((sum, val) => (sum + (val || 0)), 0);
+  }
+
+  toggleData(index: number): void {
+    const element1 = document.getElementById('dashNdrP' + index);
+    const element2 = document.getElementById('dashNdrPP' + index);
+    
+    if (element1 && element2) {
+      const isVisible = element1.style.display !== 'none';
+      element1.style.display = isVisible ? 'none' : 'block';
+      element2.style.display = isVisible ? 'none' : 'block';
     }
   }
 }

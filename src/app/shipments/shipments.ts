@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
 import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent, FilterData, FilterValues, DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
-import * as Highcharts from 'highcharts';
+import { BaseChartDirective } from 'ng2-charts';
+import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, DoughnutController, PieController, BarElement, CategoryScale, LinearScale, BarController } from 'chart.js';
 import moment from 'moment';
 
 // Simple utility function to get user data
@@ -15,11 +16,11 @@ function getUser() {
 
 // Simple date utility
 function getDateRange() {
-  const today = new Date();
-  const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+  const today = moment();
+  const thirtyDaysAgo = moment().subtract(30, 'days');
   return {
-    start: thirtyDaysAgo.toISOString().split('T')[0],
-    end: today.toISOString().split('T')[0]
+    start: thirtyDaysAgo.format('YYYY-MMM-DD'),
+    end: today.subtract(1, 'days').format('YYYY-MMM-DD')
   };
 }
 
@@ -31,7 +32,7 @@ interface IDateRange {
 @Component({
   selector: 'app-shipments',
   standalone: true,
-  imports: [CommonModule, FormsModule, DashboardFiltersComponent],
+  imports: [CommonModule, FormsModule, DashboardFiltersComponent, BaseChartDirective],
   templateUrl: './shipments.html',
   styleUrls: ['./shipments.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -55,11 +56,18 @@ export class ShipmentsComponent implements OnInit {
   weightProfileData: any;
   shipmentZoneData: any;
   
-  // Chart properties
-  courierZoneCountGraphs: Highcharts.Options = {};
-  weightProfileGraph: Highcharts.Options = {};
-  shipmentZoneGraph: Highcharts.Options = {};
-  Highcharts: typeof Highcharts = Highcharts;
+  // Chart.js properties
+  public doughnutType: 'doughnut' = 'doughnut' as const;
+  public barType: 'bar' = 'bar' as const;
+  
+  public courierZoneCountChartData: ChartData<'bar'> = { labels: [], datasets: [] };
+  public courierZoneCountChartOptions: ChartConfiguration<'bar'>['options'] = {};
+  
+  public weightProfileChartData: ChartData<'doughnut'> = { labels: [], datasets: [] };
+  public weightProfileChartOptions: ChartConfiguration<'doughnut'>['options'] = {};
+  
+  public shipmentZoneChartData: ChartData<'doughnut'> = { labels: [], datasets: [] };
+  public shipmentZoneChartOptions: ChartConfiguration<'doughnut'>['options'] = {};
   
   // Filter properties
   filterData: FilterData = {};
@@ -92,6 +100,7 @@ export class ShipmentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    Chart.register(ArcElement, Tooltip, Legend, DoughnutController, PieController, BarElement, CategoryScale, LinearScale, BarController);
     this.getFilterData();
     this.getStaticsData();
     this.getshipmentchannel();
@@ -101,18 +110,17 @@ export class ShipmentsComponent implements OnInit {
   }
 
   private calculatePreviousStartDate(): string {
-    const start = new Date(this.startDate);
-    const end = new Date(this.endDate);
-    const diffTime = end.getTime() - start.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-    const previousStart = new Date(start.getTime() - (diffDays * 24 * 60 * 60 * 1000));
-    return previousStart.toISOString().split('T')[0];
+    const start = moment(this.startDate, 'YYYY-MMM-DD');
+    const end = moment(this.endDate, 'YYYY-MMM-DD');
+    const diffDays = end.diff(start, 'days') + 1;
+    const previousStart = start.clone().subtract(diffDays, 'days');
+    return previousStart.format('YYYY-MMM-DD');
   }
 
   private calculatePreviousEndDate(): string {
-    const start = new Date(this.startDate);
-    const previousEnd = new Date(start.getTime() - (24 * 60 * 60 * 1000));
-    return previousEnd.toISOString().split('T')[0];
+    const start = moment(this.startDate, 'YYYY-MMM-DD');
+    const previousEnd = start.clone().subtract(1, 'days');
+    return previousEnd.format('YYYY-MMM-DD');
   }
 
   private formatDateForDisplay(dateStr: string): string {
@@ -175,7 +183,9 @@ export class ShipmentsComponent implements OnInit {
       (res) => {
         this.shipmentCourierZoneCount = res.data;
         if (this.shipmentCourierZoneCount?.length) {
-          this.courierZoneCountGraph(this.shipmentCourierZoneCount);
+          setTimeout(() => {
+            this.courierZoneCountGraph(this.shipmentCourierZoneCount);
+          }, 100);
         }
       },
       (err) => {
@@ -185,182 +195,65 @@ export class ShipmentsComponent implements OnInit {
   }
 
   courierZoneCountGraph(graphData: any): void {
-    const series: any = [];
-    const categories: any = [];
-    const zones: any = [];
+    console.log('courierZoneCountGraph called with data:', graphData);
+    // Simplified bar chart for Chart.js - showing total counts by courier
+    const categories: string[] = [];
+    const deliveredData: number[] = [];
+    const rtoData: number[] = [];
+    const lostData: number[] = [];
 
-    const totalCount: any = [];
-    graphData.forEach((item: any, rootIndex: any) => {
-      Object.keys(item.zones).forEach((key, index) => {
-        const getZonekey = key.split('_');
-        if (series?.length == 0) {
-          zones.push(getZonekey[1].toUpperCase());
-        }
-
-        const deliveredData: any = {
-          name: 'Delivered',
-          data: [item.zones[key].delivered_count],
-          stack: getZonekey[1].toUpperCase(),
-          color: '#5ee2a0',
-        };
-        const rtoData: any = {
-          name: 'RTO',
-          data: [item.zones[key].RTO_count],
-          stack: getZonekey[1].toUpperCase(),
-          color: '#a3a1fb',
-        };
-        const lostData: any = {
-          name: 'Lost/Damage',
-          data: [item.zones[key].canceled_count],
-          stack: getZonekey[1].toUpperCase(),
-          color: '#ffe17a',
-        };
-
-        totalCount.push(
-          item.zones[key].delivered_count +
-            item.zones[key].RTO_count +
-            item.zones[key].canceled_count
-        );
-
-        if (rootIndex == 0) {
-          if (index == 0) {
-            deliveredData.id = 'delivered';
-            rtoData.id = 'rto';
-            lostData.id = 'lost-damage';
-          } else {
-            deliveredData.linkedTo = 'delivered';
-            rtoData.linkedTo = 'rto';
-            lostData.linkedTo = 'lost-damage';
-          }
-
-          series.push(deliveredData);
-          series.push(rtoData);
-          series.push(lostData);
-        } else {
-          if (index == 0) {
-            series[index].data.push(item.zones[key].delivered_count);
-            series[index + 1].data.push(item.zones[key].RTO_count);
-            series[index + 2].data.push(item.zones[key].canceled_count);
-          } else {
-            series[index * 3].data.push(item.zones[key].delivered_count);
-            series[index * 3 + 1].data.push(item.zones[key].RTO_count);
-            series[index * 3 + 2].data.push(item.zones[key].canceled_count);
-          }
-        }
-      });
+    graphData.forEach((item: any) => {
       categories.push(item.courier_name);
-    });
+      let totalDelivered = 0;
+      let totalRTO = 0;
+      let totalLost = 0;
 
-    this.courierZoneCountGraphs = {
-      chart: {
-        type: 'column',
+      Object.keys(item.zones).forEach((key) => {
+        totalDelivered += item.zones[key].delivered_count || 0;
+        totalRTO += item.zones[key].RTO_count || 0;
+        totalLost += item.zones[key].canceled_count || 0;
+      });
+
+      deliveredData.push(totalDelivered);
+      rtoData.push(totalRTO);
+      lostData.push(totalLost);
+    });
+    
+    console.log('Chart data prepared:', { categories, deliveredData, rtoData, lostData });
+
+    this.courierZoneCountChartData = {
+      labels: categories,
+      datasets: [
+        {
+          label: 'Delivered',
+          data: deliveredData,
+          backgroundColor: '#5ee2a0',
+          borderWidth: 0
+        },
+        {
+          label: 'RTO',
+          data: rtoData,
+          backgroundColor: '#a3a1fb',
+          borderWidth: 0
+        },
+        {
+          label: 'Lost/Damage',
+          data: lostData,
+          backgroundColor: '#ffe17a',
+          borderWidth: 0
+        }
+      ]
+    };
+    this.courierZoneCountChartOptions = {
+      responsive: true,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
       },
-      title: {
-        text: '',
-      },
-      xAxis: {
-        categories: categories,
-        labels: {
-          y: 40,
-          style: {
-            fontSize: '12px'
-          }
-        },
-        lineColor: '#ccd6eb',
-        lineWidth: 1,
-      },
-      yAxis: {
-        gridLineWidth: 0,
-        reversedStacks: false,
-        allowDecimals: false,
-        min: 0,
-        title: {
-          text: 'Number of Shipments',
-          style: {
-            fontSize: '12px'
-          }
-        },
-        labels: {
-          style: {
-            fontSize: '12px'
-          }
-        },
-        stackLabels: {
-          enabled: true,
-          verticalAlign: 'bottom',
-          crop: false,
-          y: 20,
-          style: {
-            fontSize: '12px',
-          },
-        },
-      },
-      credits: {
-        enabled: false,
-      },
-      exporting: { enabled: false },
-      legend: {
-        itemStyle: {
-          fontSize: '12px', 
-          fontWeight: 'bold',
-          color: 'rgb(51, 51, 51)',
-          fill: 'rgb(51, 51, 51)',
-          cursor: 'pointer',
-        },
-        align: 'right',
-        verticalAlign: 'top',
-        labelFormatter: function () {
-          return this.name;
-        },
-      },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 10,
-        shadow: true,
-        shared: false,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        useHTML: true,
-        formatter: function () {
-          const stackName = this.series.userOptions.stack;
-          const points: any = this as Highcharts.Point;
-          const seriess: any = this.series;
-          const totalShipmentCount: any =
-            totalCount[5 * points.index + seriess.columnIndex];
-          return (
-            '<table><tr><td colspan="2">Zone ' +
-            stackName +
-            '</td></tr><tr><td colspan="2">' +
-            this.x +
-            '</tr><tr><td>' +
-            this.series.name +
-            ' :&nbsp;</td><td style="text-align:right"> <b>' +
-            points.y +
-            ' (' +
-            parseInt(((points.y / totalShipmentCount) * 100).toString()) +
-            '%)</b></td></tr><table>'
-          );
-        },
-      },
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          pointWidth: 20,
-        },
-        series: {
-          states: {
-            inactive: {
-              enabled: false,
-            },
-          },
-        },
-      },
-      series: series,
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Number of Shipments' } }
+      }
     };
   }
 
@@ -400,7 +293,9 @@ export class ShipmentsComponent implements OnInit {
         if (Array.isArray(this.weightProfileData) && this.weightProfileData?.length == 0) {
           // Handle empty data
         } else {
-          this.creategGetWeightProfile(res.data);
+          setTimeout(() => {
+            this.creategGetWeightProfile(res.data);
+          }, 100);
         }
       },
       (err) => {
@@ -410,143 +305,41 @@ export class ShipmentsComponent implements OnInit {
   }
 
   creategGetWeightProfile(item: any): void {
-    const seriesData = [
-      {
-        name: '0.5 Kgs',
-        y: item['0.5'],
-        color: 'rgb(163, 161, 251)',
-        dataLabels: {
-          enabled: true,
-          format: '{point.percent}',
-        },
-      },
-      {
-        name: '0.5-1 Kgs',
-        y: item['0.5-1'],
-        color: 'rgb(96, 235, 160)',
-        dataLabels: {
-          enabled: true,
-          format: '{point.percent}',
-        },
-      },
-      {
-        name: '1-1.5 Kgs',
-        y: item['1-1.5'],
-        color: 'rgb(40, 95, 219)',
-        dataLabels: {
-          enabled: true,
-          format: '{point.percent}',
-        },
-      },
-      {
-        name: '1.5-2 Kgs',
-        y: item['1.5-2'],
-        color: 'rgb(252, 160, 118)',
-        dataLabels: {
-          enabled: true,
-          format: '{point.percent}',
-        },
-      },
-      {
-        name: '2-5 Kgs',
-        y: item['2-5'],
-        color: 'rgb(244, 122, 194)',
-        dataLabels: {
-          enabled: true,
-          format: '{point.percent}',
-        },
-      },
-      {
-        name: '5+ Kgs',
-        y: item['5+'],
-        color: 'rgb(253, 236, 111)',
-        dataLabels: {
-          enabled: true,
-          format: '{point.percent}',
-        },
-      },
+    console.log('creategGetWeightProfile called with data:', item);
+    const labels = ['0.5 Kgs', '0.5-1 Kgs', '1-1.5 Kgs', '1.5-2 Kgs', '2-5 Kgs', '5+ Kgs'];
+    const data = [
+      item['0.5'] || 0,
+      item['0.5-1'] || 0,
+      item['1-1.5'] || 0,
+      item['1.5-2'] || 0,
+      item['2-5'] || 0,
+      item['5+'] || 0
+    ];
+    console.log('Weight profile chart data:', { labels, data });
+    const colors = [
+      'rgb(163, 161, 251)',
+      'rgb(96, 235, 160)',
+      'rgb(40, 95, 219)',
+      'rgb(252, 160, 118)',
+      'rgb(244, 122, 194)',
+      'rgb(253, 236, 111)'
     ];
 
-    this.weightProfileGraph = {
-      chart: {
-        plotBackgroundColor: '#fff',
-        plotBorderWidth: 0,
-        plotShadow: false,
-      },
-      title: {
-        text: '',
-        align: 'center',
-        verticalAlign: 'middle',
-        y: 0,
-      },
-      exporting: { enabled: false },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 10,
-        shadow: true,
-        shared: false,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        useHTML: true,
-        formatter: function () {
-          const point = this as Highcharts.Point;
-          const stackName = point.name;
-          return (
-            'Weight Profile: ' +
-            stackName +
-            '<br/> Total Shipments: <b>' +
-            point.y +
-            ' (' +
-            parseInt(
-              point.percentage ? point.percentage.toString() : '0'
-            ) +
-            '%)</b>'
-          );
-        },
-      },
-      credits: {
-        enabled: false,
-      },
-      legend: {
-        itemStyle: {
-          fontSize: '12px', 
-          fontWeight: 'bold',
-          color: 'rgb(51, 51, 51)',
-          fill: 'rgb(51, 51, 51)',
-          cursor: 'pointer',
-        },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: false,
-            distance: -28,
-            style: {
-              fontWeight: 'bold',
-              color: 'white',
-            },
-          },
-          center: ['50%', '50%'],
-          size: 240,
-          innerSize: '65%',
-          showInLegend: true,
-        },
-      },
-      series: [
-        {
-          name: 'Browsers',
-          data: seriesData,
-          type: 'pie',
-          innerSize: '60%',
-        },
-      ],
+    this.weightProfileChartData = {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors,
+        borderWidth: 0
+      }]
+    };
+    this.weightProfileChartOptions = {
+      responsive: true,
+      cutout: '65%',
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
+      }
     };
   }
 
@@ -564,7 +357,9 @@ export class ShipmentsComponent implements OnInit {
       (res) => {
         this.shipmentZoneData = res.data;
         if (this.shipmentZoneData?.length) {
-          this.createShipmentZoneProfile(res.data);
+          setTimeout(() => {
+            this.createShipmentZoneProfile(res.data);
+          }, 100);
         }
       },
       (err) => {
@@ -574,6 +369,7 @@ export class ShipmentsComponent implements OnInit {
   }
 
   createShipmentZoneProfile(items: any): void {
+    console.log('createShipmentZoneProfile called with data:', items);
     const zomeMap: any = {
       z_a: { name: 'Zone A', color: 'rgb(163, 161, 251)' },
       z_b: { name: 'Zone B', color: 'rgb(96, 235, 160)' },
@@ -582,99 +378,33 @@ export class ShipmentsComponent implements OnInit {
       z_e: { name: 'Zone E', color: 'rgb(244, 122, 194)' },
     };
 
-    const data: any = [];
-    for (const item of items) {
-      const graphData = {
-        name: zomeMap[item.zone].name,
-        y: item.count,
-        color: zomeMap[item.zone].color,
-        dataLabels: {
-          enabled: true,
-          format: '{point.percent}',
-        },
-      };
-      data.push(graphData);
-    }
+    const labels: string[] = [];
+    const data: number[] = [];
+    const colors: string[] = [];
 
-    this.shipmentZoneGraph = {
-      chart: {
-        plotBackgroundColor: '#fff',
-        plotBorderWidth: 0,
-        plotShadow: false,
-      },
-      title: {
-        text: '',
-        align: 'center',
-        verticalAlign: 'middle',
-        y: 0,
-      },
-      exporting: { enabled: false },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 10,
-        shadow: true,
-        shared: false,
-        style: {
-          fontSize: '12px'
-        },
-        followPointer: true,
-        outside: false,
-        useHTML: true,
-        formatter: function () {
-          const point = this as Highcharts.Point;
-          const stackName = point.name;
-          return (
-            stackName +
-            '<br/>Total Shipments: <b>' +
-            this.y +
-            '</b> (' +
-            parseInt(
-              point.percentage ? point.percentage.toString() : '0'
-            ) +
-            '%)'
-          );
-        },
-      },
-      credits: {
-        enabled: false,
-      },
-      legend: {
-        itemStyle: {
-          fontSize: '12px', 
-          fontWeight: 'bold',
-          color: 'rgb(51, 51, 51)',
-          fill: 'rgb(51, 51, 51)',
-          cursor: 'pointer',
-        },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: false,
-            distance: -28,
-            style: {
-              fontWeight: 'bold',
-              color: 'white',
-            },
-          },
-          center: ['50%', '50%'],
-          size: 240,
-          innerSize: '65%',
-          showInLegend: true,
-        },
-      },
-      series: [
-        {
-          name: 'Browsers',
-          data: data,
-          type: 'pie',
-          innerSize: '60%',
-        },
-      ],
+    for (const item of items) {
+      labels.push(zomeMap[item.zone].name);
+      data.push(item.count);
+      colors.push(zomeMap[item.zone].color);
+    }
+    
+    console.log('Shipment zone chart data:', { labels, data, colors });
+
+    this.shipmentZoneChartData = {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors,
+        borderWidth: 0
+      }]
+    };
+    this.shipmentZoneChartOptions = {
+      responsive: true,
+      cutout: '65%',
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { enabled: true }
+      }
     };
   }
 

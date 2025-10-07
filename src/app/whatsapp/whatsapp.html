@@ -191,11 +191,11 @@
           </div>
         </div>
         <div *ngIf="whatsappData?.countData?.chart" class="dashboard-grid-row">
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="message_sent_graph"
-          >
-          </highcharts-chart>
+          <canvas baseChart
+            [data]="message_sent_graph_data"
+            [options]="message_sent_graph_options"
+            [type]="barType">
+          </canvas>
         </div>
         <div *ngIf="!whatsappData?.countData" class="pt-lg mt-xl dispFlex f-d-c">
           <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
