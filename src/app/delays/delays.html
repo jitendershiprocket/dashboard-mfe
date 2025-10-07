@@ -83,58 +83,63 @@
 
         <div class="dashboard-grid-row d-flex dashOverview">
           <div class="dashboard-col-12">
-            <div *ngIf="pickupPendencyHasData" class="tableFixHead tableFixHeadChild">
-              <table>
-                <thead>
-                  <tr>
-                    <th class="w-s-i th-v-center-small col-4"></th>
-                    <th class="w-s-i th-v-center-small col-2 text-center">
-                      1 Day<br />
-                      Delayed
-                    </th>
-                    <th class="w-s-i th-v-center-small col-2 text-center">
-                      2 Day<br />
-                      Delayed
-                    </th>
-                    <th class="w-s-i th-v-center-small col-2 text-center">
-                      3 Day<br />
-                      Delayed
-                    </th>
-                    <th class="w-s-i th-v-center-small col-2 text-center">
-                      3+ Day<br />
-                      Delayed
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of pickupPendency">
-                    <td class="col-4 smallTable w-s-i">
-                      {{ data?.courier_name }}
-                    </td>
-                    <td class="col-2 text-center smallTable">
-                      {{ data?.delay_info['1_day'] }}
-                    </td>
-                    <td class="col-2 text-center smallTable">
-                      {{ data?.delay_info['2_days'] }}
-                    </td>
-                    <td class="col-2 text-center smallTable">
-                      {{ data?.delay_info['3_days'] }}
-                    </td>
-                    <td class="col-2 text-center smallTable">
-                      {{ data?.delay_info['3_plus_days'] }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div *ngIf="!pickupPendencyHasData" class="d-flex j-content-c">
-              <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
-                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
-                  <h3 class="text-blue">No Delays</h3>
+            @if (pickupPendencyHasData) {
+              <div class="tableFixHead tableFixHeadChild">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="w-s-i th-v-center-small col-4"></th>
+                      <th class="w-s-i th-v-center-small col-2 text-center">
+                        1 Day<br />
+                        Delayed
+                      </th>
+                      <th class="w-s-i th-v-center-small col-2 text-center">
+                        2 Day<br />
+                        Delayed
+                      </th>
+                      <th class="w-s-i th-v-center-small col-2 text-center">
+                        3 Day<br />
+                        Delayed
+                      </th>
+                      <th class="w-s-i th-v-center-small col-2 text-center">
+                        3+ Day<br />
+                        Delayed
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (data of pickupPendency; track data.courier_name) {
+                      <tr>
+                        <td class="col-4 smallTable w-s-i">
+                          {{ data?.courier_name }}
+                        </td>
+                        <td class="col-2 text-center smallTable">
+                          {{ data?.delay_info['1_day'] }}
+                        </td>
+                        <td class="col-2 text-center smallTable">
+                          {{ data?.delay_info['2_days'] }}
+                        </td>
+                        <td class="col-2 text-center smallTable">
+                          {{ data?.delay_info['3_days'] }}
+                        </td>
+                        <td class="col-2 text-center smallTable">
+                          {{ data?.delay_info['3_plus_days'] }}
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            } @else {
+              <div class="d-flex j-content-c">
+                <div colspan="11">
+                  <div class="pt-lg mt-xl f-d-c dispFlex">
+                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                    <h3 class="text-blue">No Delays</h3>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>
@@ -154,67 +159,72 @@
 
         <div class="dashboard-grid-row d-flex dashOverview">
           <div class="dashboard-col-12">
-            <div *ngIf="ndrReattemptHasData" class="tableFixHead tableFixHeadChild">
-              <table>
-                <thead>
-                  <tr>
-                    <th class="w-s-i th-v-center-small col-4"></th>
-                    <th class="w-s-i th-v-center-small col-2 text-center">
-                      1 Day<br />
-                      Delayed
-                    </th>
-                    <th class="w-s-i th-v-center-small col-2 text-center">
-                      2 Day<br />
-                      Delayed
-                    </th>
-                    <th class="w-s-i th-v-center-small col-2 text-center">
-                      3 Day<br />
-                      Delayed
-                    </th>
-                    <th class="w-s-i th-v-center-small col-2 text-center">
-                      3+ Day<br />
-                      Delayed
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of ndrReattempt; let i = index">
-                    <td class="col-4 smallTable w-s-i">
-                      {{
-                        i + 1 === 1
-                          ? 'First'
-                          : i + 1 === 2
-                          ? 'Second'
-                          : i + 1 === 3
-                          ? 'Third'
-                          : ''
-                      }}
-                      NDR Attempt
-                    </td>
-                    <td class="col-2 text-center smallTable">
-                      {{ data['1_day'] }}
-                    </td>
-                    <td class="col-2 text-center smallTable">
-                      {{ data['2_days'] }}
-                    </td>
-                    <td class="col-2 text-center smallTable">
-                      {{ data['3_days'] }}
-                    </td>
-                    <td class="col-2 text-center smallTable">
-                      {{ data['3_plus_days'] }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div *ngIf="!ndrReattemptHasData" class="d-flex j-content-c">
-              <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
-                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
-                  <h3 class="text-blue">No Delays</h3>
+            @if (ndrReattemptHasData) {
+              <div class="tableFixHead tableFixHeadChild">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="w-s-i th-v-center-small col-4"></th>
+                      <th class="w-s-i th-v-center-small col-2 text-center">
+                        1 Day<br />
+                        Delayed
+                      </th>
+                      <th class="w-s-i th-v-center-small col-2 text-center">
+                        2 Day<br />
+                        Delayed
+                      </th>
+                      <th class="w-s-i th-v-center-small col-2 text-center">
+                        3 Day<br />
+                        Delayed
+                      </th>
+                      <th class="w-s-i th-v-center-small col-2 text-center">
+                        3+ Day<br />
+                        Delayed
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (data of ndrReattempt; track $index; let i = $index) {
+                      <tr>
+                        <td class="col-4 smallTable w-s-i">
+                          {{
+                            i + 1 === 1
+                              ? 'First'
+                              : i + 1 === 2
+                              ? 'Second'
+                              : i + 1 === 3
+                              ? 'Third'
+                              : ''
+                          }}
+                          NDR Attempt
+                        </td>
+                        <td class="col-2 text-center smallTable">
+                          {{ data['1_day'] }}
+                        </td>
+                        <td class="col-2 text-center smallTable">
+                          {{ data['2_days'] }}
+                        </td>
+                        <td class="col-2 text-center smallTable">
+                          {{ data['3_days'] }}
+                        </td>
+                        <td class="col-2 text-center smallTable">
+                          {{ data['3_plus_days'] }}
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            } @else {
+              <div class="d-flex j-content-c">
+                <div colspan="11">
+                  <div class="pt-lg mt-xl f-d-c dispFlex">
+                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                    <h3 class="text-blue">No Delays</h3>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>
@@ -237,7 +247,8 @@
 
         <div class="dashboard-grid-row d-flex dashOverview" style="height: 90%">
           <div class="dashboard-col-12">
-            <div *ngIf="inTransitHasData" class="tableFixHead tableFixHeadChildTransitDelay">
+            @if (inTransitHasData) {
+              <div class="tableFixHead tableFixHeadChildTransitDelay">
               <table>
                 <thead>
                   <tr>
@@ -334,15 +345,17 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div *ngIf="!inTransitHasData" class="dispFlex h-80 j-content-c">
+              </div>
+            } @else {
+              <div class="dispFlex h-80 j-content-c">
               <div colspan="11">
                 <div class="pt-lg mt-xl f-d-c">
                   <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
                   <h3 class="text-blue">No Delays</h3>
                 </div>
               </div>
-            </div>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -362,7 +375,8 @@
 
         <div class="dashboard-grid-row d-flex dashOverview" style="height: 90%;">
           <div class="dashboard-col-12">
-            <div *ngIf="radHasData" class="tableFixHead tableFixHeadChildTransitDelay">
+            @if (radHasData) {
+              <div class="tableFixHead tableFixHeadChildTransitDelay">
               <table>
                 <thead>
                   <tr>
@@ -414,15 +428,17 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div *ngIf="!radHasData" class="dispFlex h-80 j-content-c positionError">
-              <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
-                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
-                  <h3 class="text-blue">No Delays</h3>
+              </div>
+            } @else {
+              <div class="dispFlex h-80 j-content-c positionError">
+                <div colspan="11">
+                  <div class="pt-lg mt-xl f-d-c dispFlex">
+                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                    <h3 class="text-blue">No Delays</h3>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>
@@ -442,7 +458,8 @@
 
         <div class="dashboard-grid-row d-flex dashOverview" style="height: 90%;">
           <div class="dashboard-col-12">
-            <div *ngIf="rtoHasData" class="tableFixHead tableFixHeadChildTransitDelay">
+            @if (rtoHasData) {
+              <div class="tableFixHead tableFixHeadChildTransitDelay">
               <table>
                 <thead>
                   <tr>
@@ -539,15 +556,17 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div *ngIf="!rtoHasData" class="dispFlex h-80 j-content-c">
-              <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
-                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
-                  <h3 class="text-blue">No Delays</h3>
+              </div>
+            } @else {
+              <div class="dispFlex h-80 j-content-c">
+                <div colspan="11">
+                  <div class="pt-lg mt-xl f-d-c dispFlex">
+                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                    <h3 class="text-blue">No Delays</h3>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>

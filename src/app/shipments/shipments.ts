@@ -1,8 +1,7 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
-import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent, FilterData, FilterValues, DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, DoughnutController, PieController, BarElement, CategoryScale, LinearScale, BarController } from 'chart.js';
@@ -84,7 +83,7 @@ export class ShipmentsComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService,
+    
     private cdr: ChangeDetectorRef
   ) {
     // Initialize date range
@@ -185,14 +184,14 @@ export class ShipmentsComponent implements OnInit {
       (res) => {
         this.shipmentCourierZoneCount = res.data;
         if (this.shipmentCourierZoneCount?.length) {
-          setTimeout(() => {
+          afterNextRender(() => {
             this.courierZoneCountGraph(this.shipmentCourierZoneCount);
-          }, 100);
+          });
         }
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error?.message || 'Error fetching courier zone count data');
+        console.error(err.error?.message || 'Error fetching courier zone count data');
         this.cdr.markForCheck();
       }
     );
@@ -277,7 +276,7 @@ export class ShipmentsComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error?.message || 'Error fetching shipment channel data');
+        console.error(err.error?.message || 'Error fetching shipment channel data');
         this.cdr.markForCheck();
       }
     );
@@ -299,15 +298,15 @@ export class ShipmentsComponent implements OnInit {
         if (Array.isArray(this.weightProfileData) && this.weightProfileData?.length == 0) {
           // Handle empty data
         } else {
-          setTimeout(() => {
+          afterNextRender(() => {
             this.creategGetWeightProfile(res.data);
             this.cdr.markForCheck();
-          }, 100);
+          });
         }
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error?.message || 'Error fetching weight profile data');
+        console.error(err.error?.message || 'Error fetching weight profile data');
         this.cdr.markForCheck();
       }
     );
@@ -366,15 +365,15 @@ export class ShipmentsComponent implements OnInit {
       (res) => {
         this.shipmentZoneData = res.data;
         if (this.shipmentZoneData?.length) {
-          setTimeout(() => {
+          afterNextRender(() => {
             this.createShipmentZoneProfile(res.data);
             this.cdr.markForCheck();
-          }, 100);
+          });
         }
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err?.error?.message || 'Error fetching shipment zone data');
+        console.error(err?.error?.message || 'Error fetching shipment zone data');
         this.cdr.markForCheck();
       }
     );
@@ -449,7 +448,7 @@ export class ShipmentsComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err?.error?.message || 'Error fetching shipment count data');
+        console.error(err?.error?.message || 'Error fetching shipment count data');
         this.cdr.markForCheck();
       }
     );
@@ -471,7 +470,7 @@ export class ShipmentsComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err?.error?.message || 'Error fetching previous shipment data');
+        console.error(err?.error?.message || 'Error fetching previous shipment data');
         this.cdr.markForCheck();
       }
     );

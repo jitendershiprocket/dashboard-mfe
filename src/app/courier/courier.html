@@ -18,14 +18,14 @@
   
   <div class="dashboard-grid-row fontFamily">
     <div class="dashboard-col-12">
-      <div
-        #courierWrapper
-        class="table-responsive d-flex mt-50-media-600 dashboard-grid-row flex-nowrap"
-        id="courier-wrapper"
-        *ngIf="courierResponse && courierResponse.length > 0"
-      >
-        
-        <div class="dashboard-col-2 courier-label-wrap">
+      @if (courierResponse && courierResponse.length > 0) {
+        <div
+          #courierWrapper
+          class="table-responsive d-flex mt-50-media-600 dashboard-grid-row flex-nowrap"
+          id="courier-wrapper"
+        >
+          
+          <div class="dashboard-col-2 courier-label-wrap">
           <div style="height: 125px"></div>
           <div class="courier-row-th text-left cdb-mb-11">Courier</div>
           <div class="courier-row-th text-left cdb-mb-11">Mode</div>
@@ -158,31 +158,34 @@
           #courierDataWrap
         >
           <div class="dashboard-grid-row w-100per d-inline-b">
-            <div
-              class="courier-data w-25per"
-              *ngFor="let data of courierResponse; let index = index"
-              #scrollContainer
-            >
-              <div *ngIf="couriers">
-                <select
-                  #selectElement
-                  [(ngModel)]="courierName[index]"
-                  class="nameFieldInput form-control form-select"
-                  (change)="
-                    changeCourier(courierName[index], index, 'change', $event)
-                  "
-                >
-                  <option
-                    *ngFor="let item of couriers"
-                    [value]="item?.courier_id"
-                  >
-                    {{ item?.courier }}({{item?.total_shipments}})
-                  </option>
-                </select>
-              </div>
+            @for (data of courierResponse; track data.courier_name; let index = $index) {
+              <div
+                class="courier-data w-25per"
+                #scrollContainer
+              >
+                @if (couriers) {
+                  <div>
+                    <select
+                      #selectElement
+                      [(ngModel)]="courierName[index]"
+                      class="nameFieldInput form-control form-select"
+                      (change)="
+                        changeCourier(courierName[index], index, 'change', $event)
+                      "
+                    >
+                      @for (item of couriers; track item.courier_id) {
+                        <option [value]="item?.courier_id">
+                          {{ item?.courier }}({{item?.total_shipments}})
+                        </option>
+                      }
+                    </select>
+                  </div>
+                }
 
               <div class="db-courier-img inputAddOn j-content-c" style="height: 92px">
-                <img *ngIf="imgDataArray[index]" [src]="imgDataArray[index]" style="max-width: -webkit-fill-available;"/>
+                @if (imgDataArray[index]) {
+                  <img [src]="imgDataArray[index]" style="max-width: -webkit-fill-available;"/>
+                }
               </div>
               <div class="data-badge text-bold cdb-mb-11">
                 {{ data?.courier_name ? data?.courier_name : '-' | titlecase}}
@@ -199,36 +202,25 @@
                 }}
               </div>
               <div class="data-badge cdb-mb-11">
-                <span
-                  *ngIf="
-                    !data?.shipment_report?.cod?.count &&
-                    (!data?.shipment_report?.cod?.percentage ||
-                      data?.shipment_report?.cod?.percentage === '0%')
-                  "
-                  >-</span
-                >
-
-                <span
-                  *ngIf="
-                    data?.shipment_report?.cod?.count &&
-                    data?.shipment_report?.cod?.percentage &&
-                    data?.shipment_report?.cod?.percentage !== '0%'
-                  "
-                >
-                  {{
-                    data?.shipment_report?.cod?.count ||
-                    data?.shipment_report?.cod?.count === 0
-                      ? convertIndianFormat(data?.shipment_report?.cod?.count)
-                      : '-'
-                  }}
-                  <span class="text-primary1"
-                    >({{
-                      data?.shipment_report?.cod?.percentage
-                        ? data?.shipment_report?.cod?.percentage
+                @if (!data?.shipment_report?.cod?.count && (!data?.shipment_report?.cod?.percentage || data?.shipment_report?.cod?.percentage === '0%')) {
+                  <span>-</span>
+                } @else if (data?.shipment_report?.cod?.count && data?.shipment_report?.cod?.percentage && data?.shipment_report?.cod?.percentage !== '0%') {
+                  <span>
+                    {{
+                      data?.shipment_report?.cod?.count ||
+                      data?.shipment_report?.cod?.count === 0
+                        ? convertIndianFormat(data?.shipment_report?.cod?.count)
                         : '-'
-                    }})</span
-                  >
-                </span>
+                    }}
+                    <span class="text-primary1"
+                      >({{
+                        data?.shipment_report?.cod?.percentage
+                          ? data?.shipment_report?.cod?.percentage
+                          : '-'
+                      }})</span
+                    >
+                  </span>
+                }
               </div>
               <div class="data-badge cdb-mb-11">
                 <span
@@ -849,7 +841,9 @@
                 }}
               </div>
             </div>
-            <div class="dashboard-col-3 courier-data" *ngIf="hideAddCourier">
+            }
+            @if (hideAddCourier) {
+              <div class="dashboard-col-3 courier-data">
               <select
                 #selectElementE
                 [(ngModel)]="courierName[courierResponse?.length]"
@@ -864,29 +858,27 @@
                 class="form-control br-12"
               >
                 <option value="choose">Choose Courier</option>
-                <option *ngFor="let item of couriers" [value]="item?.courier_id">
-                  {{ item?.courier }}
-                </option>
+                @for (item of couriers; track item.courier_id) {
+                  <option [value]="item?.courier_id">
+                    {{ item?.courier }}
+                  </option>
+                }
               </select>
-            </div>
+              </div>
+            }
           </div>
         </div>
-        <div
-        class="text-center cursor-p ml-5 addIcon"
-          *ngIf="
-            couriers?.length >= 4 &&
-            courierName?.length < couriers?.length &&
-            !hideAddCourier
-          "
-          (click)="addCourier()"
-        >
-          +
+        @if (couriers?.length >= 4 && courierName?.length < couriers?.length && !hideAddCourier) {
+          <div
+            class="text-center cursor-p ml-5 addIcon"
+            (click)="addCourier()"
+          >
+            +
+          </div>
+        }
         </div>
-      </div>
-      <div
-        *ngIf="!courierResponse || courierResponse.length === 0"
-        class="dispFlex"
-      >
+      } @else {
+        <div class="dispFlex">
         <div colspan="11">
           <div
             class="pt-lg mt-xl f-d-c dispFlex"
@@ -900,7 +892,8 @@
             </h3>
           </div>
         </div>
-      </div>
+        </div>
+      }
     </div>
   </div>
 </div>

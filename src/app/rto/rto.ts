@@ -1,8 +1,7 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, signal } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, signal, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
-import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { DateRange, FilterData, FilterValues } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import moment from 'moment';
@@ -47,6 +46,17 @@ export class RtoComponent implements OnInit {
   private _rto_tab_top_cities = signal<any[]>([]);
   private _rto_tab_top_courier = signal<any[]>([]);
   private _rto_tab_top_customers = signal<any[]>([]);
+  // Loading/Error signals
+  private _loading = signal(false);
+  get loading() { return this._loading(); }
+  private _error = signal<string | null>(null);
+  get error() { return this._error(); }
+
+  // trackBy helpers for tables
+  trackByPincode = (_: number, item: any) => item?.pincode;
+  trackByCity = (_: number, item: any) => item?.city;
+  trackByCourier = (_: number, item: any) => item?.courier;
+  trackByCustomer = (_: number, item: any) => item?.customer_name;
 
   // Compatibility getters for templates and internal reads
   get rto_stats() { return this._rto_stats(); }
@@ -69,7 +79,6 @@ export class RtoComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -190,18 +199,28 @@ export class RtoComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
+    this._loading.set(true);
+    this._error.set(null);
     this.http.getPinot('dashboard/rto/summary', data).subscribe(
       (res) => {
-        setTimeout(() => {
-          this.rtoTabRtoStatusChart();
-        }, 500);
+        console.log('RTO Stats Response:', res);
         this._rto_stats.set(res.data.rto_summary);
         this._rto_tab_raw_data.set(res.data.rto_status_datewise);
         this.rtoTabRtoCountLineChart();
+        
+        // Use setTimeout for chart rendering with OnPush
+        setTimeout(() => {
+          this.rtoTabRtoStatusChart();
+          this.cdr.markForCheck();
+        }, 100);
+        
+        this._loading.set(false);
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err?.error?.message);
+        this._loading.set(false);
+        this._error.set(err?.error?.message || 'Failed to load RTO stats');
+        console.error('RTO Stats Error:', err);
         this.cdr.markForCheck();
       }
     );
@@ -313,7 +332,7 @@ export class RtoComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error?.message);
         this.cdr.markForCheck();
       }
     );
@@ -383,7 +402,7 @@ export class RtoComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error?.message);
         this.cdr.markForCheck();
       }
     );
@@ -405,7 +424,7 @@ export class RtoComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error?.message);
         this.cdr.markForCheck();
       }
     );
@@ -427,7 +446,7 @@ export class RtoComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error?.message);
         this.cdr.markForCheck();
       }
     );
@@ -449,7 +468,7 @@ export class RtoComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error?.message);
         this.cdr.markForCheck();
       }
     );

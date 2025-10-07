@@ -40,7 +40,8 @@
             </thead>
             <tbody class="text-gray-700 max-h-[516px] overflow-y-auto">
               @for (data of orders; track data.date_) {
-                <td class="date-col">{{ data.date_ }}</td>
+                <tr>
+                  <td class="date-col">{{ data.date_ }}</td>
                 <td class="count-col">
                   <span *ngIf="data.total > 0">{{ convertIndianFormat(data.total) }}</span>
                   <span *ngIf="data?.total <= 0">0</span>
@@ -87,6 +88,7 @@
                   }}</span>
                   <span *ngIf="data.cancelled <= 0">0</span>
                 </td>
+                </tr>
               }
             </tbody>
           </table>
@@ -217,16 +219,17 @@
                 </thead>
                 <tbody>
                   @for (data of locationsData; track data.state) {
-                    <td class="smallTable w-s-i">
-                      {{ toTitleCase(data.state) }}
-                    </td>
-                    <td class="text-center smallTable">
-                      <span class="clr-inherit" *ngIf="data.order_count > 0">{{
-                        convertIndianFormat(data.order_count)
-                      }}</span>
-                      <span *ngIf="data?.order_count <= 0">0</span>
-                    </td>
-                    <td class="text-center smallTable">
+                    <tr>
+                      <td class="smallTable w-s-i">
+                        {{ toTitleCase(data.state) }}
+                      </td>
+                      <td class="text-center smallTable">
+                        <span class="clr-inherit" *ngIf="data.order_count > 0">{{
+                          convertIndianFormat(data.order_count)
+                        }}</span>
+                        <span *ngIf="data?.order_count <= 0">0</span>
+                      </td>
+                      <td class="text-center smallTable">
                       <span class="clr-inherit" *ngIf="data.revenue > 0"
                         >₹{{ convertIndianFormat(data.revenue) }}</span
                       >
@@ -235,6 +238,7 @@
                     <td class="text-center smallTable">
                       <span class="clr-inherit">{{ data.revenue_percentage }}</span>
                     </td>
+                    </tr>
                   }
                 </tbody>
               </table>
@@ -296,20 +300,22 @@
                 </thead>
                 <tbody>
                   @for (customer of topCustomersData; track customer.customer_name) {
-                    <td class="smallTable w-s-i">
-                      {{ customer.customer_name }}
-                    </td>
-                    <td class="text-center smallTable">
-                      <span class="clr-inherit" *ngIf="customer.order_total > 0">{{
-                        convertIndianFormat(customer.order_total)
-                      }}</span>
-                    </td>
-                    <td class="text-center smallTable">
-                      <span class="clr-inherit" *ngIf="customer.rvalue > 0"
-                        >₹{{ convertIndianFormat(customer.rvalue) }}</span
-                      >
-                      <span *ngIf="customer.rvalue <= 0">0</span>
-                    </td>
+                    <tr>
+                      <td class="smallTable w-s-i">
+                        {{ customer.customer_name }}
+                      </td>
+                      <td class="text-center smallTable">
+                        <span class="clr-inherit" *ngIf="customer.order_total > 0">{{
+                          convertIndianFormat(customer.order_total)
+                        }}</span>
+                      </td>
+                      <td class="text-center smallTable">
+                        <span class="clr-inherit" *ngIf="customer.rvalue > 0"
+                          >₹{{ convertIndianFormat(customer.rvalue) }}</span
+                        >
+                        <span *ngIf="customer.rvalue <= 0">0</span>
+                      </td>
+                    </tr>
                   }
                 </tbody>
               </table>
@@ -369,20 +375,22 @@
                 </thead>
                 <tbody>
                   @for (product of topProductsData; track product.product_name_1) {
-                    <td class="smallTable w-s-i">
-                      {{ product.product_name_1 }}
-                    </td>
-                    <td class="text-center smallTable">
-                      <span class="clr-inherit" *ngIf="product.total > 0">{{
-                        convertIndianFormat(product.total)
-                      }}</span>
-                    </td>
-                    <td class="text-center smallTable">
-                      <span class="clr-inherit" *ngIf="product.rvalue > 0"
-                        >₹{{ convertIndianFormat(product.rvalue) }}</span
-                      >
-                      <span *ngIf="product.rvalue <= 0">0</span>
-                    </td>
+                    <tr>
+                      <td class="smallTable w-s-i">
+                        {{ product.product_name_1 }}
+                      </td>
+                      <td class="text-center smallTable">
+                        <span class="clr-inherit" *ngIf="product.total > 0">{{
+                          convertIndianFormat(product.total)
+                        }}</span>
+                      </td>
+                      <td class="text-center smallTable">
+                        <span class="clr-inherit" *ngIf="product.rvalue > 0"
+                          >₹{{ convertIndianFormat(product.rvalue) }}</span
+                        >
+                        <span *ngIf="product.rvalue <= 0">0</span>
+                      </td>
+                    </tr>
                   }
                 </tbody>
               </table>

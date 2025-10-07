@@ -1,8 +1,7 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, signal } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, signal, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
-import { ToastrService } from '../services/toastr.service';
 import { AnalyticsService } from '../services/analytics.service';
 import { DashboardFiltersComponent } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { FilterData, FilterValues, DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
@@ -66,6 +65,15 @@ export class NdrComponent implements OnInit {
   ndr_buyer_response_options: ChartConfiguration['options'] = {};
   private _ndrSuccessData = signal<any>(null);
   showHideCourier = false;
+  // Loading/Error signals
+  private _loading = signal(false);
+  get loading() { return this._loading(); }
+  private _error = signal<string | null>(null);
+  get error() { return this._error(); }
+
+  // trackBy helpers
+  trackByReason = (_: number, item: any) => item?.reason;
+  trackByCourier = (_: number, item: any) => item?.courier;
   // Compatibility getters
   get ndrSplit() { return this._ndrSplit(); }
   get ndrDeliveredAttempt() { return this._ndrDeliveredAttempt(); }
@@ -90,7 +98,7 @@ export class NdrComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService,
+    
     private analyticsService: AnalyticsService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -224,6 +232,8 @@ export class NdrComponent implements OnInit {
       zones: this.currentFilterValues.zones?.join(',') || '',
     };
     
+    this._loading.set(true);
+    this._error.set(null);
     this.http.srDashboardGet('2.0/ndr/reasons', data).subscribe(
       (res: any) => {
         this.getActionRequiredCount();
@@ -235,23 +245,32 @@ export class NdrComponent implements OnInit {
         this._ndrSplit.set(res.data.reason_chart);
         if (this._ndrSplit().length) {
           this.showNdrSplitGraph = true;
-          this.createndrReasonSplitChart(this._ndrSplit());
+          afterNextRender(() => {
+            this.createndrReasonSplitChart(this._ndrSplit());
+          });
         } else {
           this.showNdrSplitGraph = false;
         }
 
         this._ndrDeliveredAttempt.set(res.data.delivery_attempt);
-        this.makeNDRDeliveryAttemptChart();
+        afterNextRender(() => {
+          this.makeNDRDeliveryAttemptChart();
+        });
 
         this._ndrStatusData.set(res.data.status_chart);
         this.showNdrStatusGraph = true;
-        this.makeNDRStatusChart();
+        afterNextRender(() => {
+          this.makeNDRStatusChart();
+        });
 
         this._ndrReasonData.set(res.data.reason_wise_split);
+        this._loading.set(false);
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        this._loading.set(false);
+        this._error.set(err?.error?.message || 'Failed to load NDR metrics');
+        console.error(this.error as any);
         this.cdr.markForCheck();
       }
     );
@@ -273,7 +292,7 @@ export class NdrComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -297,7 +316,7 @@ export class NdrComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -319,7 +338,7 @@ export class NdrComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -341,7 +360,7 @@ export class NdrComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -367,7 +386,7 @@ export class NdrComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -389,7 +408,7 @@ export class NdrComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );

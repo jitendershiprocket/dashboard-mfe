@@ -2,7 +2,6 @@ import { Component, OnInit, ElementRef, ViewChild, ViewChildren, QueryList, CUST
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
-import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { DateRange, FilterData, FilterValues } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import moment from 'moment';
@@ -83,7 +82,7 @@ export class CourierComponent implements OnInit {
 
   constructor(
     private http: HttpService, 
-    private toastr: ToastrService,
+    
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -185,7 +184,7 @@ export class CourierComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -207,7 +206,7 @@ export class CourierComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -217,7 +216,7 @@ export class CourierComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -225,7 +224,7 @@ export class CourierComponent implements OnInit {
 
   changeCourier(courier_id: any, index: any, courierAction: any, even: any): void {
     if (this.courierSelected.includes(courier_id.toString())) {
-      this.toastr.info('Courier already Selected');
+      console.info('Courier already Selected');
       if (courierAction === 'add') {
         this.courierName[this.courierResponse.length] = 'choose'
         this.selectElementE.nativeElement.value = 'choose';
@@ -278,7 +277,7 @@ export class CourierComponent implements OnInit {
           this.cdr.markForCheck();
         },
         (err) => {
-          this.toastr.error(err.error.message);
+          console.error(err.error.message);
           this.cdr.markForCheck();
         }
       );

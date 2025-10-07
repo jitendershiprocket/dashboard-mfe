@@ -2,7 +2,6 @@ import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, Cha
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
-import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import moment from 'moment';
@@ -36,7 +35,7 @@ export class WhatsappComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService,
+    
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -66,7 +65,7 @@ export class WhatsappComponent implements OnInit {
       },
       (err) => {
         this._orderCount.set(false);
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );
@@ -89,7 +88,7 @@ export class WhatsappComponent implements OnInit {
       },
       (err) => {
         this._whatsappData.set(false);
-        this.toastr.error(err.error.message);
+        console.error(err.error.message);
         this.cdr.markForCheck();
       }
     );

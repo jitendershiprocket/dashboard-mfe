@@ -2,7 +2,6 @@ import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, Cha
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
-import { ToastrService } from '../services/toastr.service';
 import { DashboardFiltersComponent, FilterData, FilterValues, DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, ChartConfiguration, ChartData, ArcElement, Tooltip, Legend, DoughnutController, PieController } from 'chart.js';
@@ -89,7 +88,7 @@ export class OrdersComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    private toastr: ToastrService,
+    
     private cdr: ChangeDetectorRef
   ) {
     // Initialize date range
@@ -206,7 +205,7 @@ export class OrdersComponent implements OnInit {
       },
       (err) => {
         this.isOrderData = false;
-        this.toastr.error(err.error?.message || 'Error fetching orders data');
+        console.error(err.error?.message || 'Error fetching orders data');
         this.cdr.markForCheck();
       }
     );
@@ -233,7 +232,7 @@ export class OrdersComponent implements OnInit {
       (err) => {
         this.noPayments = true;
         this.noAddressData = true;
-        this.toastr.error(err.error?.message || 'Error fetching statistics data');
+        console.error(err.error?.message || 'Error fetching statistics data');
         this.cdr.markForCheck();
       }
     );
@@ -250,7 +249,7 @@ export class OrdersComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error?.message || 'Error fetching top customers data');
+        console.error(err.error?.message || 'Error fetching top customers data');
         this.cdr.markForCheck();
       }
     );
@@ -267,7 +266,7 @@ export class OrdersComponent implements OnInit {
         this.cdr.markForCheck();
       },
       (err) => {
-        this.toastr.error(err.error?.message || 'Error fetching top products data');
+        console.error(err.error?.message || 'Error fetching top products data');
         this.cdr.markForCheck();
       }
     );

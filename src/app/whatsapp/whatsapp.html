@@ -137,7 +137,7 @@
             <div class="border1"></div>
           </div>
         </div>
-        <div *ngIf="whatsappData?.eventData">
+        @if (whatsappData?.eventData) {
           <div class="dashboard-grid-row msg-header-row">
             <div class="dashboard-col-3 msg-header">Status</div>
             <div class="dashboard-col-2 msg-header">Sent</div>
@@ -145,33 +145,36 @@
             <div class="dashboard-col-2 msg-header">Read</div>
             <div class="dashboard-col-3 msg-header">Read rate</div>
           </div>
-          <div class="dashboard-grid-row msg_sent" *ngFor="let event of whatsappData?.eventData">
-            <div class="dashboard-col-3 d-flex align-items-center">
-              <img class="mr-10px" src="https://sr-cdn-1.shiprocket.in/img/{{ event.icon }}.svg"
-                alt="{{ event.event_id }}" />
-              {{ event.event_id }}
-            </div>
-            <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
-              <span class="msg_count">{{ event.total_messages }}</span>
-            </div>
-            <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
-              <span class="msg_count">{{ event.delivered }}</span>
-            </div>
-            <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
-              <span class="msg_count">{{ event.message_read }}</span>
-            </div>
-            <div class="dashboard-col-3 d-flex align-items-center">
-              <div class="outer" style="flex:1; margin-right:8px;">
-                <div class="inner" [ngStyle]="{ width: event.percen > 0 ? event.percen + '%' : '0' }"></div>
+          @for (event of whatsappData?.eventData; track event.event_id) {
+            <div class="dashboard-grid-row msg_sent">
+              <div class="dashboard-col-3 d-flex align-items-center">
+                <img class="mr-10px" src="https://sr-cdn-1.shiprocket.in/img/{{ event.icon }}.svg"
+                  alt="{{ event.event_id }}" />
+                {{ event.event_id }}
               </div>
-              <span style="font-size:13px; color:#222; min-width:40px; text-align:right;">{{ event.percen }}%</span>
+              <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+                <span class="msg_count">{{ event.total_messages }}</span>
+              </div>
+              <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+                <span class="msg_count">{{ event.delivered }}</span>
+              </div>
+              <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+                <span class="msg_count">{{ event.message_read }}</span>
+              </div>
+              <div class="dashboard-col-3 d-flex align-items-center">
+                <div class="outer" style="flex:1; margin-right:8px;">
+                  <div class="inner" [ngStyle]="{ width: event.percen > 0 ? event.percen + '%' : '0' }"></div>
+                </div>
+                <span style="font-size:13px; color:#222; min-width:40px; text-align:right;">{{ event.percen }}%</span>
+              </div>
             </div>
+          }
+        } @else {
+          <div class="pt-lg mt-xl d-flex f-d-c dispFlex">
+            <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+            <h3 class="text-blue">No Data Available</h3>
           </div>
-        </div>
-        <div *ngIf="!whatsappData?.eventData" class="pt-lg mt-xl d-flex f-d-c dispFlex">
-          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
-          <h3 class="text-blue">No Data Available</h3>
-        </div>
+        }
       </div>
     </div>
     
@@ -190,19 +193,22 @@
             <div class="border1"></div>
           </div>
         </div>
-        <div *ngIf="whatsappData?.countData?.chart" class="dashboard-grid-row">
-          <canvas baseChart
-            [data]="message_sent_graph_data"
-            [options]="message_sent_graph_options"
-            [type]="barType">
-          </canvas>
-        </div>
-        <div *ngIf="!whatsappData?.countData" class="pt-lg mt-xl dispFlex f-d-c">
-          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
-          <h3 class="text-blue">
-            Data not found for the selected filters.
-          </h3>
-        </div>
+        @if (whatsappData?.countData?.chart) {
+          <div class="dashboard-grid-row">
+            <canvas baseChart
+              [data]="message_sent_graph_data"
+              [options]="message_sent_graph_options"
+              [type]="barType">
+            </canvas>
+          </div>
+        } @else if (!whatsappData?.countData) {
+          <div class="pt-lg mt-xl dispFlex f-d-c">
+            <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+            <h3 class="text-blue">
+              Data not found for the selected filters.
+            </h3>
+          </div>
+        }
       </div>
     </div>
   </div>
