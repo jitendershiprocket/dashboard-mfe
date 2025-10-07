@@ -182,16 +182,20 @@ export class ShipmentsComponent implements OnInit {
 
     this.http.srDashboardGet('2.0/getcourierzonecount', data).subscribe(
       (res) => {
+        console.log('Zone Wise Shipments Response:', res);
         this.shipmentCourierZoneCount = res.data;
+        console.log('shipmentCourierZoneCount:', this.shipmentCourierZoneCount);
+        
         if (this.shipmentCourierZoneCount?.length) {
-          afterNextRender(() => {
-            this.courierZoneCountGraph(this.shipmentCourierZoneCount);
-          });
+          setTimeout(() => {
+          this.courierZoneCountGraph(this.shipmentCourierZoneCount);
+            this.cdr.markForCheck();
+          }, 100);
         }
         this.cdr.markForCheck();
       },
       (err) => {
-        console.error(err.error?.message || 'Error fetching courier zone count data');
+        console.error('Zone count error:', err);
         this.cdr.markForCheck();
       }
     );
@@ -294,19 +298,23 @@ export class ShipmentsComponent implements OnInit {
 
     this.http.srDashboardGet('2.0/getshipmentweight', data).subscribe(
       (res) => {
+        console.log('Weight Profile Response:', res);
         this.weightProfileData = res.data;
+        console.log('weightProfileData:', this.weightProfileData);
+        
         if (Array.isArray(this.weightProfileData) && this.weightProfileData?.length == 0) {
-          // Handle empty data
+          console.log('Weight profile data is empty array');
         } else {
-          afterNextRender(() => {
-            this.creategGetWeightProfile(res.data);
+          console.log('Creating weight profile chart...');
+          setTimeout(() => {
+          this.creategGetWeightProfile(res.data);
             this.cdr.markForCheck();
-          });
+          }, 100);
         }
         this.cdr.markForCheck();
       },
       (err) => {
-        console.error(err.error?.message || 'Error fetching weight profile data');
+        console.error('Weight profile error:', err);
         this.cdr.markForCheck();
       }
     );
@@ -363,17 +371,20 @@ export class ShipmentsComponent implements OnInit {
 
     this.http.srDashboardGet('2.0/getshipmentzone', data).subscribe(
       (res) => {
+        console.log('Shipment Zone Response:', res);
         this.shipmentZoneData = res.data;
+        console.log('shipmentZoneData:', this.shipmentZoneData);
+        
         if (this.shipmentZoneData?.length) {
-          afterNextRender(() => {
-            this.createShipmentZoneProfile(res.data);
+          setTimeout(() => {
+          this.createShipmentZoneProfile(res.data);
             this.cdr.markForCheck();
-          });
+          }, 100);
         }
         this.cdr.markForCheck();
       },
       (err) => {
-        console.error(err?.error?.message || 'Error fetching shipment zone data');
+        console.error('Shipment zone error:', err);
         this.cdr.markForCheck();
       }
     );
@@ -404,7 +415,7 @@ export class ShipmentsComponent implements OnInit {
     this.shipmentZoneChartData = {
       labels: labels,
       datasets: [{
-        data: data,
+          data: data,
         backgroundColor: colors,
         borderWidth: 0
       }]

@@ -150,8 +150,8 @@ export class OverviewComponent implements OnInit {
         this._pinotData.set(res.data);
         console.log('Pinot data loaded:', res.data);
         
-        // Ensure DOM is ready for charts
-        afterNextRender(() => {
+        // Use setTimeout for chart rendering with OnPush
+        setTimeout(() => {
           if (res.data?.shipment_details && res.data?.shipment_details.length > 0) {
             console.log('Creating shipment chart...');
             this.createShipmentStatusDonutChart(res.data.shipment_details?.[0]);
@@ -160,11 +160,14 @@ export class OverviewComponent implements OnInit {
             console.log('Creating courier chart...');
             this.createDonutChart(res.data.courier_split);
           }
-        });
+          this.cdr.markForCheck();
+        }, 100);
+        
         this.cdr.markForCheck();
       },
       (err: any) => {
         console.error('Error fetching pinot data', err);
+        this.cdr.markForCheck();
       }
     );
   }

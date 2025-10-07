@@ -2,7 +2,6 @@ import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, Cha
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
-import { AnalyticsService } from '../services/analytics.service';
 import { DashboardFiltersComponent } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import { FilterData, FilterValues, DateRange } from '../shared/components/dashboard-filters/dashboard-filters.component';
 import moment from 'moment';
@@ -98,8 +97,6 @@ export class NdrComponent implements OnInit {
 
   constructor(
     private http: HttpService,
-    
-    private analyticsService: AnalyticsService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -236,6 +233,7 @@ export class NdrComponent implements OnInit {
     this._error.set(null);
     this.http.srDashboardGet('2.0/ndr/reasons', data).subscribe(
       (res: any) => {
+        console.log('NDR Reasons Response:', res);
         this.getActionRequiredCount();
         this.getShipmentsCount();
         this.allNdrData.ndr_raised_count = res.data.overall.ndr_raised_count;
@@ -243,34 +241,43 @@ export class NdrComponent implements OnInit {
         this.allNdrData.ndr_rto_count = res.data.overall.ndr_rto_count;
 
         this._ndrSplit.set(res.data.reason_chart);
+        console.log('NDR Split data:', this._ndrSplit());
+        
         if (this._ndrSplit().length) {
           this.showNdrSplitGraph = true;
-          afterNextRender(() => {
+          setTimeout(() => {
             this.createndrReasonSplitChart(this._ndrSplit());
-          });
+            this.cdr.markForCheck();
+          }, 100);
         } else {
           this.showNdrSplitGraph = false;
         }
 
         this._ndrDeliveredAttempt.set(res.data.delivery_attempt);
-        afterNextRender(() => {
+        console.log('NDR Delivered Attempt data:', this._ndrDeliveredAttempt());
+        setTimeout(() => {
           this.makeNDRDeliveryAttemptChart();
-        });
+          this.cdr.markForCheck();
+        }, 100);
 
         this._ndrStatusData.set(res.data.status_chart);
+        console.log('NDR Status data:', this._ndrStatusData());
         this.showNdrStatusGraph = true;
-        afterNextRender(() => {
+        setTimeout(() => {
           this.makeNDRStatusChart();
-        });
+          this.cdr.markForCheck();
+        }, 100);
 
         this._ndrReasonData.set(res.data.reason_wise_split);
+        console.log('NDR Reason data (table):', this._ndrReasonData());
+        
         this._loading.set(false);
         this.cdr.markForCheck();
       },
       (err) => {
         this._loading.set(false);
         this._error.set(err?.error?.message || 'Failed to load NDR metrics');
-        console.error(this.error as any);
+        console.error('NDR Reasons Error:', err);
         this.cdr.markForCheck();
       }
     );
