@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -16,22 +16,34 @@ import { ChartConfiguration, ChartData } from 'chart.js';
 export class OverviewComponent implements OnInit {
   @ViewChild('carouselElement') carouselElement!: ElementRef;
   
-  // Data properties used in HTML
+  // Data properties (signals with compatibility getters)
   kycNewStrip = false;
   kycByPass: any;
   is_seller: any;
   kyc_status: any;
-  bannerdata: any;
-  pinotData: any;
-  shippingData: any;
-  ndrData: any;
-  avgshipCost: any;
-  statuses: any;
-  codStatuses: any;
-  revenues: any;
-  mapData: any;
+  private _bannerdata = signal<any>(null);
+  private _pinotData = signal<any>(null);
+  private _shippingData = signal<any>(null);
+  private _ndrData = signal<any>(null);
+  private _avgshipCost = signal<any>(null);
+  private _statuses = signal<any>(null);
+  private _codStatuses = signal<any>(null);
+  private _revenues = signal<any>(null);
+  private _mapData = signal<any>(null);
   mapFilterData = 'Order';
-  pinotDistributionData: any;
+  private _pinotDistributionData = signal<any>(null);
+
+  // Compatibility getters so templates remain unchanged
+  get bannerdata() { return this._bannerdata(); }
+  get pinotData() { return this._pinotData(); }
+  get shippingData() { return this._shippingData(); }
+  get ndrData() { return this._ndrData(); }
+  get avgshipCost() { return this._avgshipCost(); }
+  get statuses() { return this._statuses(); }
+  get codStatuses() { return this._codStatuses(); }
+  get revenues() { return this._revenues(); }
+  get mapData() { return this._mapData(); }
+  get pinotDistributionData() { return this._pinotDistributionData(); }
   
   // Chart.js properties
   public doughnutChartType: 'doughnut' = 'doughnut' as const;
@@ -121,7 +133,7 @@ export class OverviewComponent implements OnInit {
     this.http.get('shiprocket-pilot').subscribe(
       (res: any) => {
         if (res.top_banner !== null) {
-          this.bannerdata = res.top_banner;
+          this._bannerdata.set(res.top_banner);
         }
         this.initializeCarouselEvents();
         this.cdr.markForCheck();
@@ -135,7 +147,7 @@ export class OverviewComponent implements OnInit {
   getPinotData() {
     this.http.getPinot('dashboard/details').subscribe(
       (res: any) => {
-        this.pinotData = res.data;
+        this._pinotData.set(res.data);
         console.log('Pinot data loaded:', res.data);
         
         // Use setTimeout to ensure DOM is ready
@@ -172,7 +184,7 @@ export class OverviewComponent implements OnInit {
   getDistributionDataPinot() {
     this.http.getPinot('dashboard/shipment-courier-wise').subscribe(
       (res: any) => {
-        this.pinotDistributionData = res.data.shipment_overview_by_courier;
+        this._pinotDistributionData.set(res.data.shipment_overview_by_courier);
         this.cdr.markForCheck();
       },
       (err: any) => {
@@ -196,7 +208,7 @@ export class OverviewComponent implements OnInit {
   getavgShipCost() {
     this.http.srDashboardGet('getavgshippingcost').subscribe(
       (res: any) => {
-        this.avgshipCost = res.data[0];
+        this._avgshipCost.set(res.data[0]);
         this.cdr.markForCheck();
       },
       (err: any) => {
@@ -208,7 +220,7 @@ export class OverviewComponent implements OnInit {
   getRevenuesData() {
     this.http.srDashboardGet('getrevenuedata').subscribe(
       (res: any) => {
-        this.revenues = res.data[0];
+        this._revenues.set(res.data[0]);
         this.cdr.markForCheck();
       },
       (err: any) => {
@@ -220,7 +232,7 @@ export class OverviewComponent implements OnInit {
   getCodData() {
     this.http.get('account/details/remittance_summary').subscribe(
       (res: any) => {
-        this.codStatuses = res;
+        this._codStatuses.set(res);
         this.cdr.markForCheck();
       },
       (err: any) => {
@@ -230,7 +242,7 @@ export class OverviewComponent implements OnInit {
     
     this.http.srDashboardGet('getcoddata').subscribe(
       (res: any) => {
-        this.statuses = res.data;
+        this._statuses.set(res.data);
         this.cdr.markForCheck();
       },
       (err: any) => {
@@ -242,8 +254,8 @@ export class OverviewComponent implements OnInit {
   getShippingOverviewCombinedData() {
     this.http.srDashboardGet('2.0/shipment/details').subscribe(
       (res: any) => {
-        this.shippingData = res.data.shipping_data;
-        this.ndrData = res.data.ndr_data;
+        this._shippingData.set(res.data.shipping_data);
+        this._ndrData.set(res.data.ndr_data);
         this.cdr.markForCheck();
       },
       (err: any) => {
@@ -498,7 +510,7 @@ export class OverviewComponent implements OnInit {
   }
 
   mapCalculation(type: string, res: any) {
-    this.mapData = res.data.state_wise_data;
+    this._mapData.set(res.data.state_wise_data);
     console.log('Map data loaded:', this.mapData);
     console.log('Map data available:', this.isMapDataAvailable());
     

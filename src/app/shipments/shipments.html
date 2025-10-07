@@ -69,7 +69,7 @@
               </tr>
             </thead>
             <tbody [ngClass]="shipmentDisplayMode ? 'show-percent' : ''">
-              <tr *ngFor="let list of shipmentoverview; let key = index">
+              <tr *ngFor="let list of shipmentoverview; let key = index; trackBy: trackByShipmentOverview">
                 <td class="courier-col">
                   <span>{{ list?.name }}</span>
                 </td>
@@ -245,7 +245,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let channellist of getshipmentchannellist">
+                <tr *ngFor="let channellist of getshipmentchannellist; trackBy: trackByChannel">
                   <td class="p-2 border-b">
                     {{ channellist.channel_name === 'Web' ? 'Manual Orders' : channellist.channel_name === 'Bulk' ? 'Bulk Orders' : channellist.channel_name }}
                   </td>

@@ -578,4 +578,8 @@ export class ShipmentsComponent implements OnInit {
     this.shipmentZoneProfile();
     this.getshipmentcount();
   }
+
+  // trackBy helpers for template performance
+  trackByShipmentOverview = (_: number, item: any) => item?.id ?? item?.name ?? _;
+  trackByChannel = (_: number, item: any) => item?.channel_name ?? _;
 }

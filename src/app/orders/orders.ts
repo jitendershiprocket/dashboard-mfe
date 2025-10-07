@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -46,13 +46,13 @@ export class OrdersComponent implements OnInit {
   endDate: any = moment().subtract(1, 'days').format('YYYY-MMM-DD');
   
   // Data properties
-  orders: any[] = [];
-  paginationData: any;
+  private _orders = signal<any[]>([]);
+  private _paginationData = signal<any>(null);
   pageSize = 1;
   isOrderData = false;
-  locationsData: any[] = [];
-  topCustomersData: any[] = [];
-  topProductsData: any[] = [];
+  private _locationsData = signal<any[]>([]);
+  private _topCustomersData = signal<any[]>([]);
+  private _topProductsData = signal<any[]>([]);
   
   // Chart.js properties
   public doughnutType: 'doughnut' = 'doughnut' as const;
@@ -79,6 +79,13 @@ export class OrdersComponent implements OnInit {
   // State properties
   noPayments = false;
   noAddressData = false;
+
+  // Compatibility getters for template
+  get orders() { return this._orders(); }
+  get paginationData() { return this._paginationData(); }
+  get locationsData() { return this._locationsData(); }
+  get topCustomersData() { return this._topCustomersData(); }
+  get topProductsData() { return this._topProductsData(); }
 
   constructor(
     private http: HttpService,
@@ -174,9 +181,9 @@ export class OrdersComponent implements OnInit {
 
     this.http.getPinot(`dashboard/orders/summary?current_page=${this.pageSize}`, data).subscribe(
       (res) => {
-        this.locationsData = res?.data?.statewise_order_revenue || [];
-        this.orders = res?.data?.orders_summary || [];
-        this.paginationData = {
+        this._locationsData.set(res?.data?.statewise_order_revenue || []);
+        this._orders.set(res?.data?.orders_summary || []);
+        this._paginationData.set({
           "total": res?.total ?? 0,
           "count": res?.count ?? 0,
           "total_pages": null,
@@ -186,9 +193,9 @@ export class OrdersComponent implements OnInit {
             "previous": res?.links?.previous ?? null,
             "next": res?.links?.next ?? null
           }
-        };
+        });
 
-        if (this.orders?.length > 0) {
+        if (this._orders()?.length > 0) {
           this.isOrderData = true;
         } else {
           this.isOrderData = false;
@@ -239,7 +246,7 @@ export class OrdersComponent implements OnInit {
 
     this.http.srDashboardGet('gettopcustomer', data).subscribe(
       (res) => {
-        this.topCustomersData = res?.data || [];
+        this._topCustomersData.set(res?.data || []);
         this.cdr.markForCheck();
       },
       (err) => {
@@ -256,7 +263,7 @@ export class OrdersComponent implements OnInit {
 
     this.http.srDashboardGet('gettopproducts', data).subscribe(
       (res) => {
-        this.topProductsData = res?.data || [];
+        this._topProductsData.set(res?.data || []);
         this.cdr.markForCheck();
       },
       (err) => {

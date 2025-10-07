@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../services/http-service.service';
@@ -21,14 +21,18 @@ import { Chart, ChartConfiguration, ChartData, BarElement, CategoryScale, Linear
 export class WhatsappComponent implements OnInit {
   startDate: any = moment().subtract(30, 'days').format('YYYY-MMM-DD');
   endDate: any = moment().subtract(1, 'days').format('YYYY-MMM-DD');
-  orderCount: any;
-  whatsappData: any;
+  private _orderCount = signal<any>(null);
+  private _whatsappData = signal<any>(null);
   
   // Chart.js properties
   public barType: 'bar' = 'bar' as const;
   message_sent_graph_data: ChartData<'bar'> = { labels: [], datasets: [] };
   message_sent_graph_options: ChartConfiguration<'bar'>['options'] = {};
   showmsgsent: any;
+
+  // Compatibility getters for template
+  get orderCount() { return this._orderCount(); }
+  get whatsappData() { return this._whatsappData(); }
 
   constructor(
     private http: HttpService,
@@ -57,11 +61,11 @@ export class WhatsappComponent implements OnInit {
     
     this.http.get('vas/getOrdersCountWhatsapp', data).subscribe(
       (res) => {
-        this.orderCount = res.data;
+        this._orderCount.set(res.data);
         this.cdr.markForCheck();
       },
       (err) => {
-        this.orderCount = false;
+        this._orderCount.set(false);
         this.toastr.error(err.error.message);
         this.cdr.markForCheck();
       }
@@ -76,15 +80,15 @@ export class WhatsappComponent implements OnInit {
     
     this.http.get('settings/whatsapp-dashboard/listing', data).subscribe(
       (res) => {
-        this.whatsappData = res.data;
+        this._whatsappData.set(res.data);
 
-        if (this.whatsappData) {
-          this.uniqVisitor(this.whatsappData.countData.chart);
+        if (this._whatsappData()) {
+          this.uniqVisitor(this._whatsappData().countData.chart);
         }
         this.cdr.markForCheck();
       },
       (err) => {
-        this.whatsappData = false;
+        this._whatsappData.set(false);
         this.toastr.error(err.error.message);
         this.cdr.markForCheck();
       }
