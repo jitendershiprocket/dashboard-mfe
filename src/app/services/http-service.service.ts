@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment';
+import { ApiCacheService } from './api-cache.service';
 
 /**
  * Optimized HTTP Service for Dashboard MFE
@@ -10,6 +11,9 @@ import { environment } from '../../environment';
  * - get() - General API calls
  * - getPinot() - Pinot database queries
  * - srDashboardGet() - Dashboard-specific API calls (PRIMARY)
+ * 
+ * All methods now support intelligent caching to reduce redundant API calls.
+ * Cache automatically clears on page refresh.
  */
 @Injectable({
   providedIn: 'root',
@@ -23,7 +27,10 @@ export class HttpService {
   
   private token = localStorage.getItem('satellizer_token');
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private cacheService: ApiCacheService
+  ) {
     if (this.auth_token == null) {
       this.token = '';
     } else {
@@ -71,54 +78,148 @@ export class HttpService {
   }
 
   /**
-   * Standard GET request
+   * Standard GET request with caching
    * Used in: overview.ts, whatsapp.ts
+   * 
+   * Cache TTL: 5 minutes (default)
+   * Cache key: URL + params
    */
   get(
     apiURL: string,
     params: unknown = {},
-    responseType: any = 'json'
+    responseType: any = 'json',
+    useCache: boolean = true
   ): Observable<any> {
-    const paramsData = this.getQueryParam(params);
-    return this.http.get(this._getURL(apiURL), {
-      params: paramsData,
-      headers: this.getHeaders(),
-      withCredentials: true,
-      responseType: responseType,
-    });
+    const fullUrl = this._getURL(apiURL);
+    
+    // If caching is disabled, make direct API call
+    if (!useCache) {
+      const paramsData = this.getQueryParam(params);
+      return this.http.get(fullUrl, {
+        params: paramsData,
+        headers: this.getHeaders(),
+        withCredentials: true,
+        responseType: responseType,
+      });
+    }
+    
+    // Use cacheable request
+    return this.cacheService.cacheableRequest(
+      fullUrl,
+      params,
+      () => {
+        const paramsData = this.getQueryParam(params);
+        return this.http.get(fullUrl, {
+          params: paramsData,
+          headers: this.getHeaders(),
+          withCredentials: true,
+          responseType: responseType,
+        });
+      }
+    );
   }
 
   /**
-   * Pinot database GET request
+   * Pinot database GET request with caching
    * Used in: overview.ts, orders.ts, rto.ts
+   * 
+   * Cache TTL: 5 minutes (default)
+   * Cache key: URL + params
    */
   getPinot(
     apiURL: string,
     params: unknown = {},
-    responseType: any = 'json'
+    responseType: any = 'json',
+    useCache: boolean = true
   ): Observable<any> {
-    const paramsData = this.getQueryParam(params);
-    return this.http.get(this.pinotPath + apiURL, {
-      params: paramsData,
-      headers: this.getHeaders(),
-      responseType: responseType,
-    });
+    const fullUrl = this.pinotPath + apiURL;
+    
+    // If caching is disabled, make direct API call
+    if (!useCache) {
+      const paramsData = this.getQueryParam(params);
+      return this.http.get(fullUrl, {
+        params: paramsData,
+        headers: this.getHeaders(),
+        responseType: responseType,
+      });
+    }
+    
+    // Use cacheable request
+    return this.cacheService.cacheableRequest(
+      fullUrl,
+      params,
+      () => {
+        const paramsData = this.getQueryParam(params);
+        return this.http.get(fullUrl, {
+          params: paramsData,
+          headers: this.getHeaders(),
+          responseType: responseType,
+        });
+      }
+    );
   }
 
   /**
-   * Dashboard-specific GET request (PRIMARY METHOD)
+   * Dashboard-specific GET request with caching (PRIMARY METHOD)
    * Used in: overview.ts, orders.ts, shipments.ts, ndr.ts, rto.ts, courier.ts, delays.ts
+   * 
+   * Cache TTL: 5 minutes (default)
+   * Cache key: URL + params
    */
   srDashboardGet(
     apiURL: string,
     params: unknown = {},
-    responseType: any = 'json'
+    responseType: any = 'json',
+    useCache: boolean = true
   ): Observable<any> {
-    const paramsData = this.getQueryParam(params);
-    return this.http.get(this.srDashboard + apiURL, {
-      params: paramsData,
-      headers: this.getHeaders(),
-      responseType: responseType,
-    });
+    const fullUrl = this.srDashboard + apiURL;
+    
+    // If caching is disabled, make direct API call
+    if (!useCache) {
+      const paramsData = this.getQueryParam(params);
+      return this.http.get(fullUrl, {
+        params: paramsData,
+        headers: this.getHeaders(),
+        responseType: responseType,
+      });
+    }
+    
+    // Use cacheable request
+    return this.cacheService.cacheableRequest(
+      fullUrl,
+      params,
+      () => {
+        const paramsData = this.getQueryParam(params);
+        return this.http.get(fullUrl, {
+          params: paramsData,
+          headers: this.getHeaders(),
+          responseType: responseType,
+        });
+      }
+    );
+  }
+
+  /**
+   * Clear all cached API responses
+   * Useful when user manually refreshes data or changes global filters
+   */
+  clearCache(): void {
+    this.cacheService.clear();
+  }
+
+  /**
+   * Clear specific cached API response
+   * @param apiURL API endpoint URL
+   * @param params Request parameters
+   */
+  clearSpecificCache(apiURL: string, params: unknown = {}): void {
+    this.cacheService.clear(apiURL, params);
+  }
+
+  /**
+   * Get cache statistics for debugging
+   */
+  getCacheStats() {
+    return this.cacheService.getStats();
   }
 }
