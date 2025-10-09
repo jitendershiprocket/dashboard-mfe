@@ -76,16 +76,16 @@
 
                 <td class="count-col">
                   <span>
-                    <span class="font-bold text-blue shipment-current d-inline-b">
+                    <span class="font-bold text-blue shipment-current inline-block">
                       {{ list?.total ? convertIndianFormat(list?.total) : 0 }}
                     </span>
                     <em [ngClass]="calculateClass(list?.total, shipmentoverviewPrevious?.[key]?.total) ? 'text-green' : 'text-red'">
-                      <span class="d-inline-b" *ngIf="calculateClass(list?.total, shipmentoverviewPrevious?.[key]?.total)">&#11014;</span>
-                      <span class="d-inline-b" *ngIf="!calculateClass(list?.total, shipmentoverviewPrevious?.[key]?.total)">&#11015;</span>
+                      <span class="inline-block" *ngIf="calculateClass(list?.total, shipmentoverviewPrevious?.[key]?.total)">&#11014;</span>
+                      <span class="inline-block" *ngIf="!calculateClass(list?.total, shipmentoverviewPrevious?.[key]?.total)">&#11015;</span>
                       {{ !list?.total && !shipmentoverviewPrevious?.[key]?.total ? null : !list?.total ? -100 : !shipmentoverviewPrevious?.[key]?.total ? 100 : ((list?.total - shipmentoverviewPrevious?.[key]?.total) / shipmentoverviewPrevious?.[key]?.total) * 100 === null ? '' : convertToPositive(!list?.total && !shipmentoverviewPrevious?.[key]?.total ? null : !list?.total ? -100 : !shipmentoverviewPrevious?.[key]?.total ? 100 : ((list?.total - shipmentoverviewPrevious?.[key]?.total) / shipmentoverviewPrevious?.[key]?.total) * 100) }}%
                     </em>
                     <br />
-                    <span class="d-inline-b">{{ shipmentoverviewPrevious?.[key]?.total ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.total) : 0 }}</span>
+                    <span class="inline-block">{{ shipmentoverviewPrevious?.[key]?.total ? convertIndianFormat(shipmentoverviewPrevious?.[key]?.total) : 0 }}</span>
                   </span>
                 </td>
 
@@ -99,8 +99,8 @@
                     </em>
 
                     <em *ngIf="shouldShowElement(list, shipmentoverviewPrevious, key) !== null" [ngClass]="calculateClass2(list, shipmentoverviewPrevious, key) ? 'text-green' : 'text-red'">
-                      <span class="d-inline-b" *ngIf="calculateClass2(list, shipmentoverviewPrevious, key)">&#11014;</span>
-                      <span class="d-inline-b" *ngIf="!calculateClass2(list, shipmentoverviewPrevious, key)">&#11015;</span>
+                      <span class="inline-block" *ngIf="calculateClass2(list, shipmentoverviewPrevious, key)">&#11014;</span>
+                      <span class="inline-block" *ngIf="!calculateClass2(list, shipmentoverviewPrevious, key)">&#11015;</span>
                       {{ shouldShowElement(list, shipmentoverviewPrevious, key) === null ? '' : !shouldShowElement(list, shipmentoverviewPrevious, key) ? 0 + '%' : convertToPositive(shouldShowElement(list, shipmentoverviewPrevious, key)) + '%' }}
                     </em>
                     <br />

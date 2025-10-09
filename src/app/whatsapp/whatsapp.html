@@ -16,14 +16,14 @@
   
   <div class="dashboard-grid-row">
     <div class="dashboard-col-3">
-      <div class="align-v-center bg-white radius-10 box">
-        <span class="float-end mt-right-top">
+      <div class="flex items-center bg-white rounded-[10px] box">
+        <span class="float-right mt-[5px]">
           <img src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
         </span>
-        <div class="d-flex">
+        <div class="flex">
           <div class="icon-container">
-            <div class="radius-4 bg bg-order">
-              <img src="https://sr-cdn-1.shiprocket.in/img/order_total.svg" class="img-responsive" alt="" />
+            <div class="rounded bg bg-order">
+              <img src="https://sr-cdn-1.shiprocket.in/img/order_total.svg" class="block max-w-full h-auto" alt="" />
             </div>
           </div>
           <div class="whatsApp-container">
@@ -40,14 +40,14 @@
     </div>
     
     <div class="dashboard-col-3">
-      <div class="align-v-center bg-white radius-10 box">
-        <span class="float-end mt-right-top">
+      <div class="flex items-center bg-white rounded-[10px] box">
+        <span class="float-right mt-[5px]">
           <img src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
         </span>
-        <div class="d-flex">
+        <div class="flex">
           <div class="icon-container">
-            <div class="radius-4 bg bg-w">
-              <img src="https://sr-cdn-1.shiprocket.in/img/whatsapp.svg" class="img-responsive" alt="WhatsApp Logo" />
+            <div class="rounded bg bg-w">
+              <img src="https://sr-cdn-1.shiprocket.in/img/whatsapp.svg" class="block max-w-full h-auto" alt="WhatsApp Logo" />
             </div>
           </div>
           <div class="whatsApp-container">
@@ -63,14 +63,14 @@
     </div>
 
     <div class="dashboard-col-3">
-      <div class="align-v-center bg-white radius-10 box">
-        <span class="float-end mt-right-top">
+      <div class="flex items-center bg-white rounded-[10px] box">
+        <span class="float-right mt-[5px]">
           <img src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
         </span>
-        <div class="d-flex">
+        <div class="flex">
           <div class="icon-container">
-            <div class="radius-4 bg bg-check">
-              <img src="https://sr-cdn-1.shiprocket.in/img/blue_tick.png" class="img-responsive" alt="Message Read" />
+            <div class="rounded bg bg-check">
+              <img src="https://sr-cdn-1.shiprocket.in/img/blue_tick.png" class="block max-w-full h-auto" alt="Message Read" />
             </div>
           </div>
           <div class="whatsApp-container">
@@ -89,14 +89,14 @@
     </div>
     
     <div class="dashboard-col-3">
-      <div class="align-v-center bg-white radius-10 box">
-        <span class="float-end mt-right-top">
+      <div class="flex items-center bg-white rounded-[10px] box">
+        <span class="float-right mt-[5px]">
           <img src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28" alt="Real-time data" />
         </span>
-        <div class="d-flex">
+        <div class="flex">
           <div class="icon-container">
-            <div class="radius-4 bg bg-query">
-              <img src="https://sr-cdn-1.shiprocket.in/img/query_resolved.svg" class="img-responsive"
+            <div class="rounded bg bg-query">
+              <img src="https://sr-cdn-1.shiprocket.in/img/query_resolved.svg" class="block max-w-full h-auto"
                 alt="Query Resolved" />
             </div>
           </div>
@@ -121,7 +121,7 @@
     </div>
   </div>
   
-  <div class="dashboard-grid-row d-flex">
+  <div class="dashboard-grid-row flex">
     <div class="dashboard-col-6 mb-4">
       <div class="donutChart">
         <div class="dashboard-grid-row">
@@ -147,21 +147,21 @@
           </div>
           @for (event of whatsappData?.eventData; track event.event_id) {
             <div class="dashboard-grid-row msg_sent">
-              <div class="dashboard-col-3 d-flex align-items-center">
-                <img class="mr-10px" src="https://sr-cdn-1.shiprocket.in/img/{{ event.icon }}.svg"
+              <div class="dashboard-col-3 flex items-center">
+                <img class="mr-[10px]" src="https://sr-cdn-1.shiprocket.in/img/{{ event.icon }}.svg"
                   alt="{{ event.event_id }}" />
                 {{ event.event_id }}
               </div>
-              <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+              <div class="dashboard-col-2 flex items-center justify-start">
                 <span class="msg_count">{{ event.total_messages }}</span>
               </div>
-              <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+              <div class="dashboard-col-2 flex items-center justify-start">
                 <span class="msg_count">{{ event.delivered }}</span>
               </div>
-              <div class="dashboard-col-2 d-flex align-items-center justify-content-flex-start">
+              <div class="dashboard-col-2 flex items-center justify-start">
                 <span class="msg_count">{{ event.message_read }}</span>
               </div>
-              <div class="dashboard-col-3 d-flex align-items-center">
+              <div class="dashboard-col-3 flex items-center">
                 <div class="outer" style="flex:1; margin-right:8px;">
                   <div class="inner" [ngStyle]="{ width: event.percen > 0 ? event.percen + '%' : '0' }"></div>
                 </div>
@@ -170,8 +170,8 @@
             </div>
           }
         } @else {
-          <div class="pt-lg mt-xl d-flex f-d-c dispFlex">
-            <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+          <div class="pt-6 mt-8 flex flex-col">
+            <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
             <h3 class="text-blue">No Data Available</h3>
           </div>
         }
@@ -202,8 +202,8 @@
             </canvas>
           </div>
         } @else if (!whatsappData?.countData) {
-          <div class="pt-lg mt-xl dispFlex f-d-c">
-            <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+          <div class="pt-6 mt-8 flex flex-col">
+            <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
             <h3 class="text-blue">
               Data not found for the selected filters.
             </h3>

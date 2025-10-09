@@ -1,8 +1,10 @@
-/* NDR Component Styles */
+/* NDR Component - Optimized with Tailwind */
+
 .dashOverview {
   font-family: var(--font-sf-pro-text);
 }
 
+/* Dashboard Grid Layout */
 .dashboard-grid-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -20,6 +22,7 @@
 .dashboard-col-6 { grid-column: span 6 / span 6; }
 .dashboard-col-4 { grid-column: span 4 / span 4; }
 
+/* Donut chart component */
 .donutChart {
   background: white;
   border-radius: 12px;
@@ -28,6 +31,7 @@
   min-height: 300px;
 }
 
+/* NDR box styles - Component specific */
 .ndb_bx {
   text-align: center;
   padding: 1rem;
@@ -57,6 +61,7 @@
   display: block;
 }
 
+/* Table styles - Component specific */
 .tableFixHead {
   max-height: 300px;
   overflow-y: auto;
@@ -90,6 +95,7 @@
   text-align: center;
 }
 
+/* Custom text colors */
 .text-blue {
   color: #3b82f6;
 }
@@ -102,91 +108,16 @@
   letter-spacing: 0.02em;
 }
 
-.opacity-80 {
-  opacity: 0.8;
-}
-
 .mt-15px {
   margin-top: 15px;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
 }
 
 .dashboard-shadow {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.flex-sb-sm {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.dispFlex {
-  display: flex;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.align-v-center {
-  align-items: center;
-}
-
-.j-content-c {
-  justify-content: center;
-}
-
-.f-d-c {
-  flex-direction: column;
-}
-
-.center-block {
-  display: block;
-  margin: 0 auto;
-}
-
-.w-100px {
-  width: 100px;
-}
-
-.pb-0 {
-  padding-bottom: 0;
-}
-
-.br-12 {
-  border-radius: 12px;
-}
-
-.h-100p {
-  height: 100%;
-}
-
-.lblca {
-  padding: 1.5rem;
-}
-
-.p-lg {
-  padding: 1.5rem;
-}
-
-.relative {
-  position: relative;
-}
-
-.float-end {
-  float: right;
-}
-
 .sphere-black {
   color: #1f2937;
-}
-
-.text-right {
-  text-align: right;
 }
 
 .mt-sm {
@@ -217,14 +148,6 @@
   overflow-y: auto;
 }
 
-.pt-lg {
-  padding-top: 1.5rem;
-}
-
-.mt-xl {
-  margin-top: 2rem;
-}
-
 .h-80 {
   height: 320px;
 }
@@ -245,3 +168,24 @@
     grid-column: span 1 / span 1;
   }
 }
+
+/* All Tailwind duplicate classes removed:
+- .mb-4 → mb-4 (Tailwind)
+- .flex-sb-sm → flex justify-between items-center (Tailwind)
+- .dispFlex → flex (Tailwind)
+- .flex-column → flex-col (Tailwind)
+- .align-v-center → items-center (Tailwind)
+- .j-content-c → justify-center (Tailwind)
+- .f-d-c → flex-col (Tailwind)
+- .center-block → block mx-auto (Tailwind)
+- .w-100px → w-[100px] (Tailwind)
+- .pb-0 → pb-0 (Tailwind)
+- .br-12 → rounded-xl (Tailwind)
+- .h-100p → h-full (Tailwind)
+- .lblca, .p-lg → p-6 (Tailwind)
+- .relative → relative (Tailwind)
+- .float-end → float-right (Tailwind)
+- .text-right → text-right (Tailwind)
+- .pt-lg, .mt-xl → pt-6, mt-8 (Tailwind)
+- .opacity-80 → opacity-80 (Tailwind)
+*/

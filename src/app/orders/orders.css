@@ -1,8 +1,6 @@
-/* Orders Component Styles */
+/* Orders Component - Optimized with Tailwind */
 
-
-
-
+/* Custom scroll table styling */
 .custom_scroll td {
   color: grey;
 }
@@ -13,32 +11,7 @@
   cursor: not-allowed;
 }
 
-
-
-
-@media only screen and (max-width: 575px) {
-  .dashOverview .w-A {
-    width: 50%;
-    margin-bottom: 8px;
-  }
-  
-  .dashOverview .w-A .filter-info {
-    position: absolute;
-    right: -8%;
-    top: 26%;
-  }
-  
-  .dashOverview .w-A .sr_btn.dt_btn {
-    width: 100%;
-  }
-  
-  .dashOverview .w-A .custom-select-css {
-    width: 100%;
-  }
-  
-}
-
-
+/* Table column widths - Component specific */
 .date-col {
   width: 12%;
 }
@@ -64,23 +37,18 @@
   vertical-align: middle;
 }
 
-/* Dashboard tile heading styles */
-
-
-/* Chart container styles */
-
+/* Chart container with relative positioning */
 .donutChart.p-r {
   position: relative;
 }
 
-/* Table styles */
-
+/* Small table styling */
 .smallTable {
   font-size: 13px;
   padding: 8px;
 }
 
-/* Table column widths */
+/* Table fixed layout */
 .tableFixHead table {
   width: 100%;
   table-layout: fixed;
@@ -116,8 +84,7 @@
   white-space: nowrap;
 }
 
-/* Pagination styles */
-
+/* Pagination button styling */
 .previousBtn,
 .nextBtn {
   padding: 8px 16px;
@@ -141,8 +108,7 @@
   cursor: not-allowed;
 }
 
-/* No data container */
-
+/* Custom text color */
 .text-blue {
   color: #007bff;
   font-family: var(--font-sf-pro-text);
@@ -150,109 +116,20 @@
   margin-top: 15px;
 }
 
-/* Form styles */
-
+/* Form styling */
 .form-select:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Button styles */
-
-
 .clearButtonContainer:hover {
   background-color: #5a6268;
 }
 
-/* Utility classes */
-
-
-
-
-
-.pb-0 {
-  padding-bottom: 0;
-}
-
-.bg-white {
-  background-color: white;
-}
-
-
-.mt-6 {
-  margin-top: 24px;
-}
-
-.mb-4 {
-  margin-bottom: 16px;
-}
-
-/* Ensure proper spacing between grid rows */
-.dashOverview .grid {
-  margin-bottom: 24px;
-}
-
-.dashOverview .grid:last-child {
-  margin-bottom: 0;
-}
-
-
-.text-right {
-  text-align: right;
-}
-
-
-
-
-
-
-.w-full {
-  width: 100%;
-}
-
-
-
-
-
-
-
+/* Color inheritance */
 .clr-inherit {
   color: inherit;
-}
-
-
-.overflow-x-auto {
-  overflow-x: auto;
-}
-
-
-/* Grid utility classes */
-.grid {
-  display: grid;
-}
-
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-
-/* Ensure proper grid layout for dashboard sections */
-.dashOverview .grid {
-  display: grid;
-}
-
-.dashOverview .grid.grid-cols-1 {
-  grid-template-columns: 1fr;
-}
-
-/* Force grid items to stay in their columns */
-.dashOverview .grid > div {
-  min-width: 0; /* Prevents grid items from overflowing */
 }
 
 /* Dashboard Grid Layout */
@@ -269,7 +146,6 @@
   }
 }
 
-/* Column spans for desktop */
 .dashboard-col-4 {
   grid-column: span 1 / span 1;
 }
@@ -304,38 +180,32 @@
   }
 }
 
-@media (min-width: 768px) {
-  .md\:grid-cols-12 {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+/* Responsive mobile styles */
+@media only screen and (max-width: 575px) {
+  .dashOverview .w-A {
+    width: 50%;
+    margin-bottom: 8px;
   }
   
-  .md\:col-span-3 {
-    grid-column: span 3 / span 3;
+  .dashOverview .w-A .filter-info {
+    position: absolute;
+    right: -8%;
+    top: 26%;
   }
   
-  .md\:col-span-4 {
-    grid-column: span 4 / span 4;
+  .dashOverview .w-A .sr_btn.dt_btn {
+    width: 100%;
   }
   
-  .md\:col-span-5 {
-    grid-column: span 5 / span 5;
-  }
-  
-  .md\:col-span-6 {
-    grid-column: span 6 / span 6;
+  .dashOverview .w-A .custom-select-css {
+    width: 100%;
   }
 }
 
-.col-span-1 {
-  grid-column: span 1 / span 1;
-}
-
-.gap-4 {
-  gap: 16px;
-}
-
-.gap-6 {
-  gap: 24px;
-}
-
-/* Responsive grid adjustments - moved above */
+/* All Tailwind duplicate classes removed:
+- .pb-0, .bg-white, .mt-6, .mb-4 → Already in Tailwind
+- .text-right, .w-full, .overflow-x-auto → Already in Tailwind  
+- .grid, .grid-cols-1, .grid-cols-2 → Already in Tailwind
+- .gap-4, .gap-6, .col-span-1 → Already in Tailwind
+- All md: responsive variants → Already in Tailwind
+*/

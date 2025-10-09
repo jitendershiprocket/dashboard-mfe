@@ -21,7 +21,7 @@
       @if (courierResponse && courierResponse.length > 0) {
         <div
           #courierWrapper
-          class="table-responsive d-flex mt-50-media-600 dashboard-grid-row flex-nowrap"
+          class="overflow-x-auto flex mt-50-media-600 dashboard-grid-row flex-nowrap"
           id="courier-wrapper"
         >
           
@@ -31,14 +31,14 @@
           <div class="courier-row-th text-left cdb-mb-11">Mode</div>
           <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0 dbc-has-ul">
             <span>Shipment count</span>
-            <ul class="pl-lg">
+            <ul class="pl-6">
               <li>COD Orders</li>
               <li>Prepaid Orders</li>
             </ul>
           </div>
           <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
             <span>Delivered</span>
-            <ul class="pl-lg">
+            <ul class="pl-6">
               <li>1st Attempt Delivery</li>
               <li>NDR Delivered</li>
             </ul>
@@ -68,7 +68,7 @@
 
           <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
             <span>Delivered within SLA</span>
-            <ul class="pl-lg">
+            <ul class="pl-6">
               <li>
                 Zone A
                 <div
@@ -128,7 +128,7 @@
           </h3>
 
           <div class="courier-row-th text-left cdb-mb-11 pb-0 pt-0">
-            <ul class="pl-lg">
+            <ul class="pl-6">
               <li class="courier-row-title">Zone A</li>
               <li class="courier-row-title">Zone B</li>
               <li class="courier-row-title">Zone C</li>
@@ -153,14 +153,14 @@
           </div>
         </div>
         <div
-          class="dashboard-col-9 courier-data-wrap d-inline-b"
+          class="dashboard-col-9 courier-data-wrap inline-block"
           id="courier-data-wrap"
           #courierDataWrap
         >
-          <div class="dashboard-grid-row w-100per d-inline-b">
+          <div class="dashboard-grid-row w-full inline-block">
             @for (data of courierResponse; track data.courier_name; let index = $index) {
               <div
-                class="courier-data w-25per"
+                class="courier-data w-1/4"
                 #scrollContainer
               >
                 @if (couriers) {
@@ -182,12 +182,12 @@
                   </div>
                 }
 
-              <div class="db-courier-img inputAddOn j-content-c" style="height: 92px">
+              <div class="db-courier-img relative justify-center" style="height: 92px">
                 @if (imgDataArray[index]) {
                   <img [src]="imgDataArray[index]" style="max-width: -webkit-fill-available;"/>
                 }
               </div>
-              <div class="data-badge text-bold cdb-mb-11">
+              <div class="data-badge font-bold cdb-mb-11">
                 {{ data?.courier_name ? data?.courier_name : '-' | titlecase}}
               </div>
               <div class="data-badge cdb-mb-11 capitalize">
@@ -855,7 +855,7 @@
                     $event
                   )
                 "
-                class="form-control br-12"
+                class="form-control rounded-xl"
               >
                 <option value="choose">Choose Courier</option>
                 @for (item of couriers; track item.courier_id) {
@@ -870,7 +870,7 @@
         </div>
         @if (couriers?.length >= 4 && courierName?.length < couriers?.length && !hideAddCourier) {
           <div
-            class="text-center cursor-p ml-5 addIcon"
+            class="text-center cursor-pointer ml-5 addIcon"
             (click)="addCourier()"
           >
             +
@@ -878,14 +878,14 @@
         }
         </div>
       } @else {
-        <div class="dispFlex">
+        <div class="flex">
         <div colspan="11">
           <div
-            class="pt-lg mt-xl f-d-c dispFlex"
+            class="pt-6 mt-8 flex-col flex"
           >
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-              class="center-block w-100px"
+              class="block mx-auto w-[100px]"
             />
             <h3 class="text-blue" style="text-align: center;">
               No Shipments for selected filter. <br />Please Change your filter.

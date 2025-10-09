@@ -1,8 +1,10 @@
-/* Courier Dashboard Component Styles */
+/* Courier Dashboard Component - Optimized with Tailwind */
+
 .dashOverview {
   font-family: var(--font-sf-pro-text);
 }
 
+/* Dashboard Grid Layout */
 .dashboard-grid-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -21,7 +23,7 @@
 .dashboard-col-9 { grid-column: span 9 / span 9; }
 .dashboard-col-12 { grid-column: span 12 / span 12; }
 
-/* Courier table styles */
+/* Courier table styles - Complex component specific styling */
 .courier-row-th {
   padding: 12px;
   border-radius: 8px;
@@ -116,6 +118,7 @@
   margin-bottom: 11px;
 }
 
+/* Arrow navigation buttons */
 span.f-arrow-left,
 span.f-arrow-right {
   width: 30px;
@@ -132,6 +135,7 @@ span.f-arrow-left {
   margin-right: 10px;
 }
 
+/* Tooltip styles - Custom component */
 .customClass.text-left .tooltip-inner {
   text-align: left;
 }
@@ -179,92 +183,6 @@ span.f-arrow-left {
   padding: 7px;
 }
 
-/* Utility classes */
-.d-flex {
-  display: flex;
-}
-
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-bold {
-  font-weight: bold;
-}
-
-.capitalize {
-  text-transform: capitalize;
-}
-
-
-.br-12 {
-  border-radius: 12px;
-}
-
-.w-25per {
-  width: 25%;
-}
-
-.w-100per {
-  width: 100%;
-}
-
-.d-inline-b {
-  display: inline-block;
-}
-
-.flex-nowrap {
-  flex-wrap: nowrap;
-}
-
-.table-responsive {
-  overflow-x: auto;
-}
-
-.mt-50-media-600 {
-  margin-top: 1.5rem;
-}
-
-.inputAddOn {
-  position: relative;
-}
-
-.j-content-c {
-  justify-content: center;
-}
-
-.ml-5 {
-  margin-left: 1.25rem;
-}
-
-.cursor-p {
-  cursor: pointer;
-}
-
-.ms-1 {
-  margin-left: 0.25rem;
-}
-
-.ms-2 {
-  margin-left: 0.5rem;
-}
-
-.pl-lg {
-  padding-left: 1.5rem;
-}
-
-.pb-0 {
-  padding-bottom: 0;
-}
-
-.pt-0 {
-  padding-top: 0;
-}
-
 /* Default tooltip styles */
 .default-tooltip-round {
   display: inline-block;
@@ -291,10 +209,6 @@ span.f-arrow-left {
 
 .text-primary1 {
   color: #3b82f6;
-}
-
-.opacity-80 {
-  opacity: 0.8;
 }
 
 .letterspacing020px {
@@ -330,30 +244,12 @@ span.f-arrow-left {
   background-size: 16px 12px;
 }
 
-/* No data styles */
-.center-block {
-  display: block;
-  margin: 0 auto;
+.mt-50-media-600 {
+  margin-top: 1.5rem;
 }
 
-.w-100px {
-  width: 100px;
-}
-
-.pt-lg {
-  padding-top: 1.5rem;
-}
-
-.mt-xl {
-  margin-top: 2rem;
-}
-
-.f-d-c {
-  flex-direction: column;
-}
-
-.dispFlex {
-  display: flex;
+.inputAddOn {
+  position: relative;
 }
 
 /* Responsive adjustments */
@@ -386,7 +282,6 @@ span.f-arrow-left {
   .courier-data {
     max-width: 230px;
   }
-  
 }
 
 @media only screen and (max-width: 575px) {
@@ -410,3 +305,25 @@ span.f-arrow-left {
     overflow: auto;
   }
 }
+
+/* All Tailwind duplicate classes removed:
+- .d-flex → flex (Tailwind)
+- .text-left, .text-center → text-left, text-center (Tailwind)
+- .text-bold → font-bold (Tailwind)
+- .capitalize → capitalize (Tailwind)
+- .br-12 → rounded-xl (Tailwind)
+- .w-25per, .w-100per → w-1/4, w-full (Tailwind)
+- .d-inline-b → inline-block (Tailwind)
+- .flex-nowrap → flex-nowrap (Tailwind)
+- .table-responsive → overflow-x-auto (Tailwind)
+- .j-content-c → justify-center (Tailwind)
+- .ml-5, .ms-1, .ms-2 → ml-5, ms-1, ms-2 (Tailwind)
+- .cursor-p → cursor-pointer (Tailwind)
+- .pl-lg → pl-6 (Tailwind)
+- .pb-0, .pt-0 → pb-0, pt-0 (Tailwind)
+- .opacity-80 → opacity-80 (Tailwind)
+- .center-block → block mx-auto (Tailwind)
+- .w-100px → w-[100px] (Tailwind)
+- .pt-lg, .mt-xl → pt-6, mt-8 (Tailwind)
+- .f-d-c, .dispFlex → flex-col, flex (Tailwind)
+*/

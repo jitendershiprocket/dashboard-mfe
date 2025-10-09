@@ -1,8 +1,10 @@
-/* WhatsApp Dashboard Component Styles */
+/* WhatsApp Dashboard Component - Optimized with Tailwind */
+
 .dashOverview {
   font-family: var(--font-sf-pro-text);
 }
 
+/* Dashboard Grid Layout */
 .dashboard-grid-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -21,33 +23,12 @@
 .dashboard-col-8 { grid-column: span 8 / span 8; }
 .dashboard-col-12 { grid-column: span 12 / span 12; }
 
-/* Box styles */
-.radius-10 {
-  border-radius: 10px;
-}
-
+/* Custom box styles - specific padding/border combination */
 .box {
   padding: 22px 20px;
 }
 
-.align-v-center {
-  display: flex;
-  align-items: center;
-}
-
-.bg-white {
-  background-color: #ffffff;
-}
-
-.float-end {
-  float: right;
-}
-
-.mt-right-top {
-  margin-top: 5px;
-}
-
-/* Icon container styles */
+/* Icon container styles - specific sizes */
 .icon-container {
   width: 80px;
   display: flex;
@@ -62,10 +43,7 @@
   align-items: center;
 }
 
-.radius-4 {
-  border-radius: 4px;
-}
-
+/* Custom background colors - brand specific */
 .bg-w {
   background-color: #edf3ee;
 }
@@ -82,7 +60,7 @@
   background-color: #edf3ee;
 }
 
-/* WhatsApp container styles */
+/* WhatsApp container styles - specific styling */
 .whatsApp-container {
   flex-grow: 1;
   padding-left: 15px;
@@ -133,7 +111,7 @@
   font-weight: 600;
 }
 
-/* Progress bar styles */
+/* Progress bar styles - custom component */
 .outer {
   position: relative;
   border-radius: 12px;
@@ -154,7 +132,7 @@
   margin-bottom: 20px !important;
 }
 
-/* Tooltip styles */
+/* Tooltip styles - custom component */
 .default-tooltip-round {
   font-family: Georgia, serif;
   font-style: italic;
@@ -172,13 +150,6 @@
   margin: 0px 0px 2px 2px;
   color: white;
   background-color: black;
-}
-
-/* Image styles */
-.img-responsive {
-  display: block;
-  max-width: 100%;
-  height: auto;
 }
 
 /* Donut chart styles */
@@ -209,62 +180,8 @@
   color: #6b7280;
 }
 
-.opacity-80 {
-  opacity: 0.8;
-}
-
 .letterspacing020px {
   letter-spacing: 0.02em;
-}
-
-/* Utility classes */
-.d-flex {
-  display: flex;
-}
-
-.align-items-center {
-  align-items: center;
-}
-
-.justify-content-flex-start {
-  justify-content: flex-start;
-}
-
-.mr-10px {
-  margin-right: 10px;
-}
-
-.center-block {
-  display: block;
-  margin: 0 auto;
-}
-
-.w-100px {
-  width: 100px;
-}
-
-.pt-lg {
-  padding-top: 1.5rem;
-}
-
-.mt-xl {
-  margin-top: 2rem;
-}
-
-.f-d-c {
-  flex-direction: column;
-}
-
-.dispFlex {
-  display: flex;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
-.mt-2 {
-  margin-top: 0.5rem;
 }
 
 /* Responsive adjustments */
@@ -289,5 +206,24 @@
     flex-wrap: nowrap;
     overflow: auto;
   }
-  
 }
+
+/* All Tailwind duplicate classes removed:
+- .radius-10, .radius-4 → rounded-[10px], rounded
+- .align-v-center → flex items-center
+- .bg-white → bg-white (Tailwind)
+- .float-end → float-right (Tailwind)
+- .mt-right-top → mt-[5px]
+- .img-responsive → block max-w-full h-auto (Tailwind)
+- .opacity-80 → opacity-80 (Tailwind)
+- .d-flex → flex (Tailwind)
+- .align-items-center → items-center (Tailwind)
+- .justify-content-flex-start → justify-start (Tailwind)
+- .mr-10px → mr-[10px]
+- .center-block → block mx-auto (Tailwind)
+- .w-100px → w-[100px]
+- .pt-lg, .mt-xl → pt-6, mt-8 (Tailwind)
+- .f-d-c → flex-col (Tailwind)
+- .dispFlex → flex (Tailwind)
+- .mb-4, .mt-2 → mb-4, mt-2 (Tailwind)
+*/

@@ -45,7 +45,7 @@
             <img
               src="{{ bannerdata[0].banner_image }}"
               alt="{{ bannerdata[0].alt ? bannerdata[0].alt : 'SR Fulfillment' }}"
-              class="inline-block w-100 br-12 bannerImg"
+              class="inline-block w-100 br-12 h-[75px] object-contain"
             />
           </a>
         </div>
@@ -107,18 +107,18 @@
     </div> -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="dashTilebg dataCardContainer rounded-xl h-full overflow-auto">
+        <div class="dashTilebg relative rounded-xl h-full overflow-auto">
           <span class="float-right sphere-black my-3 me-3">
             <img  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/>
           </span>
-          <div class="flex ms-2 mt-48px">
+          <div class="flex ms-2 mt-[48px]">
             <div class="md:col-span-4 flex">
               <img  src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg" alt="Todays Data"
                 width="70px" />
             </div>
-            <div class="md:col-span-8 flex dashTileData">
+            <div class="md:col-span-8 flex flex-col gap-2">
             <p class="text-sm font-sf-pro-text">Today's Orders</p>
-            <p class="dashTileMainData">
+            <p class="text-[22px] font-sf-pro-display font-semibold">
               {{
               pinotData?.today_orders?.[1]?.total > 0
               ? convertIndianFormat(pinotData.today_orders[1].total)
@@ -126,7 +126,7 @@
               }}
             </p>
   
-            <p class="dashTileSubData mb-0">
+            <p class="text-[11px] mb-0">
               Yesterday<br>
               {{
               pinotData?.today_orders?.[0]?.total > 0
@@ -140,68 +140,68 @@
         </div>
       </div>
       <div class="md:col-span-8">
-        <div class="dashTilebg dataCardContainer rounded-xl h-full overflow-auto dashShipmentTile inputAddOn justify-center p-[15px] flex-col">
+        <div class="dashTilebg relative rounded-xl h-full overflow-auto flex justify-center p-[15px] flex-col">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
               <p class="text-sm font-sf-pro-text font-semibold">Shipments Details</p>
             </div>
             <div class="col-span-1">
-              <p class="text-right sphere-black"><img class="mt-25px"  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
+              <p class="text-right sphere-black"><img class="mt-[25px]"  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
             </div>
           </div>
           <div class="grid grid-cols-6 gap-2">
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.total_shipments ? numFormat(pinotData.shipment_details[0].total_shipments) : 0 }}
                 </div>
     
-                <div class="dashShipTileDataTitle">Total Shipments</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">Total Shipments</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.pickup_pending ? numFormat(pinotData.shipment_details[0].pickup_pending) : 0 }}
                 </div>
     
-                <div class="dashShipTileDataTitle">Pickup Pending</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">Pickup Pending</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.in_transit ? numFormat(pinotData.shipment_details[0].in_transit) : 0 }}
                 </div>
     
-                <div class="dashShipTileDataTitle">In-Transit</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">In-Transit</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.delivered ? numFormat(pinotData.shipment_details[0].delivered) : 0 }}
                 </div>
     
-                <div class="dashShipTileDataTitle">Delivered</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">Delivered</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ shippingData?.undelivered?numFormat(+shippingData?.undelivered):0 }}
                 </div>
     
-                <div class="dashShipTileDataTitle">NDR Pending</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">NDR Pending</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.rto ? numFormat(pinotData.shipment_details[0].rto) : 0 }}
                 </div>
     
-                <div class="dashShipTileDataTitle">RTO</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">RTO</div>
               </div>
             </div>
           </div>
@@ -210,11 +210,11 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="h-full rounded-xl overflow-auto dashTilebgGreen dataCardContainer">
+        <div class="h-full rounded-xl overflow-auto dashTilebgGreen relative">
           <span class="float-right sphere-black my-3 me-3">
             <img  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/>
           </span>
-          <div class="flex ms-2 mt-48px">
+          <div class="flex ms-2 mt-[48px]">
             <div class="md:col-span-4 flex">
               <img
 src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
@@ -222,10 +222,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 width="70px"
               />
             </div>
-            <div class="md:col-span-8 flex dashTileData">
+            <div class="md:col-span-8 flex flex-col gap-2">
             <p class="text-sm font-sf-pro-text">Today's Revenue</p>
             <p
-              class="dashTileMainData"
+              class="text-[22px] font-sf-pro-display font-semibold"
             >
               &#8377;{{
                 pinotData?.today_revenue?.[1]?.total_shipment_revenue > 0
@@ -235,7 +235,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
             </p>
            
             <p
-              class="dashTileSubData mb-0"
+              class="text-[11px] mb-0"
             >
               Yesterday <br>&#8377;{{
                 pinotData?.today_revenue?.[0]?.total_shipment_revenue > 0
@@ -249,58 +249,58 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         </div>
       </div>
       <div class="md:col-span-8">
-        <div class="rounded-xl h-full overflow-auto headertr dashTilebgWhite dashShipmentTile inputAddOn justify-center p-[15px] flex-col">
+        <div class="rounded-xl h-full overflow-auto dashTilebgWhite flex justify-center p-[15px] flex-col">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
               <p class="text-sm font-sf-pro-text font-semibold">NDR Details</p>
             </div>
             <div class="col-span-1">
-              <p class="text-right sphere-black"><img class="mt-25px"  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
+              <p class="text-right sphere-black"><img class="mt-[25px]"  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
             </div>
           </div>
           <div class="grid grid-cols-4 gap-2">
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
                   {{ ndrData?.records?numFormat(+ndrData?.records):0 }}
                 </div>
                
-                <div class="dashShipTileDataTitle">Total NDR</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">Total NDR</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
                   {{ ndrData?.seller?numFormat(+ndrData?.seller):0 }}
                 </div>
                
-                <div class="dashShipTileDataTitle">Your Reattempt Request</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">Your Reattempt Request</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
                   {{ ndrData?.buyer?numFormat(+ndrData?.buyer):0 }}
                 </div>
                
-                <div class="dashShipTileDataTitle">Buyer Reattempt Request</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">Buyer Reattempt Request</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
                   {{ ndrData?.delivered?numFormat(+ndrData?.delivered):0 }}
                 </div>
                
-                <div class="dashShipTileDataTitle">NDR Delivered</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">NDR Delivered</div>
               </div>
             </div>
           </div>
@@ -309,16 +309,16 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
     </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="dashTilebg dataCardContainer rounded-xl h-full overflow-auto">
+        <div class="dashTilebg relative rounded-xl h-full overflow-auto">
           <span class="float-right sphere-black my-3 me-3">Last 30 days</span>
-          <div class="flex ms-2 mt-53px">
+          <div class="flex ms-2 mt-[53px]">
             <div class="md:col-span-4 flex">
               <img  src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg" alt="Todays Data"
                 width="70px" />
             </div>
-            <div class="md:col-span-8 flex dashTileData">
+            <div class="md:col-span-8 flex flex-col gap-2">
               <p class="text-sm font-sf-pro-text">Average Shipping Cost</p>
-              <p class="dashTileMainData">
+              <p class="text-[22px] font-sf-pro-display font-semibold">
                 &#8377;{{
                 avgshipCost?.avg_shipping_cost > 0
                 ? convertIndianFormat(avgshipCost?.avg_shipping_cost)
@@ -331,7 +331,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         </div>
       </div>
       <div class="md:col-span-8">
-        <div class="rounded-xl h-full overflow-auto headertr dashTilebgWhite dashShipmentTile inputAddOn justify-center p-[15px] flex-col">
+        <div class="rounded-xl h-full overflow-auto dashTilebgWhite flex justify-center p-[15px] flex-col">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
               <p class="text-sm font-sf-pro-text font-semibold">COD Status</p>
@@ -342,32 +342,32 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
           <div class="grid grid-cols-4 gap-2">
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
                   &#8377;{{ statuses?.total_cod?numFormat(+statuses?.total_cod):0 }}
                 </div>
                
-                <div class="dashShipTileDataTitle">
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">
                   Total COD <br />
                   (Last 30 Days)
                 </div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
                   &#8377;{{ codStatuses?.cod_payble?.cod_payble?numFormat(+codStatuses?.cod_payble?.cod_payble):0 }}
                 </div>
                
-                <div class="dashShipTileDataTitle">COD Available</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">COD Available</div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 
@@ -375,14 +375,14 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                   &#8377;{{ statuses?.pendig_data?numFormat(+statuses?.pendig_data):0 }}
                 </div>
               
-                <div class="dashShipTileDataTitle">
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">
                   COD Pending <br />
                   (Greater than 8 days)
                 </div>
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn items-center justify-center flex-col">
+              <div class="flex items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                  
@@ -392,7 +392,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                   }}
                 </div>
                
-                <div class="dashShipTileDataTitle">Last COD Remitted</div>
+                <div class="text-xs font-sf-pro-display font-semibold my-[5px] text-center">Last COD Remitted</div>
               </div>
             </div>
           </div>
@@ -401,7 +401,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
     </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart relative">
+        <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px] relative">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
               <span class="text-sm font-sf-pro-text font-semibold">Couriers Split</span><img  width="12"
@@ -411,7 +411,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               <p class="text-right sphere-black">Last 30 days</p>
             </div>
           </div>
-          <div *ngIf="pinotData?.courier_split?.length > 0" class="row donutChartContainer">
+          <div *ngIf="pinotData?.courier_split?.length > 0" class="row py-5">
             <canvas baseChart
               [type]="doughnutChartType"
               [data]="courierChartData"
@@ -420,19 +420,19 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
           <div
             *ngIf="!(pinotData?.courier_split?.length > 0)"
-            class="pt-lg mt-xl flex h-80 noDataContainer"
+            class="pt-10 mt-10 flex flex-col justify-center items-center mb-[50px] h-[80%]"
           >
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
               style="width: 100px"
-              class="center-block"
+              class="block mx-auto"
             />
-            <h3 class="text-blue">Data not found for the selected filter.</h3>
+            <h3 class="text-[#2899fa]">Data not found for the selected filter.</h3>
           </div>
         </div>
       </div>
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart relative">
+        <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px] relative">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
               <span class="text-sm font-sf-pro-text font-semibold">Overall Shipment Status</span><img                  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"
@@ -442,25 +442,25 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               <p class="text-right sphere-black"><img  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
             </div>
           </div>
-          <div *ngIf="isPinotshipingDataDataNotEmpty()" class="row donutChartContainer">
+          <div *ngIf="isPinotshipingDataDataNotEmpty()" class="row py-5">
             <canvas baseChart
               [type]="doughnutChartType"
               [data]="shipmentChartData"
               [options]="shipmentChartOptions">
             </canvas>
           </div>
-          <div *ngIf="!(isPinotshipingDataDataNotEmpty())" class="pt-lg mt-xl flex h-80 noDataContainer">
+          <div *ngIf="!(isPinotshipingDataDataNotEmpty())" class="pt-10 mt-10 flex flex-col justify-center items-center mb-[50px] h-[80%]">
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
               style="width: 100px"
-              class="center-block"
+              class="block mx-auto"
             />
-            <h3 class="text-blue">No Shipment in last 30 days</h3>
+            <h3 class="text-[#2899fa]">No Shipment in last 30 days</h3>
           </div>
         </div>
       </div>
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart relative">
+        <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px] relative">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
               <span class="text-sm font-sf-pro-text font-semibold">Delivery Performance</span><img                 width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"
@@ -470,7 +470,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               <p class="text-right sphere-black"><img  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
             </div>
           </div>
-          <div *ngIf="isdeliveryDonutDataNotEmpty()" class="row donutChartContainer">
+          <div *ngIf="isdeliveryDonutDataNotEmpty()" class="row py-5">
             <canvas baseChart
               [type]="doughnutChartType"
               [data]="deliveryChartData"
@@ -479,21 +479,21 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
           <div
             *ngIf="!(isdeliveryDonutDataNotEmpty())"
-            class="pt-lg mt-xl flex h-80 noDataContainer"
+            class="pt-10 mt-10 flex flex-col justify-center items-center mb-[50px] h-[80%]"
           >
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
               style="width: 100px"
-              class="center-block"
+              class="block mx-auto"
             />
-            <h3 class="text-blue">No Shipment Delivered in last 30 days.</h3>
+            <h3 class="text-[#2899fa]">No Shipment Delivered in last 30 days.</h3>
           </div>
         </div>
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart">
+        <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px]">
           <div *ngIf="isMapDataAvailable()" class="grid grid-cols-2 gap-4">
             <div class="col-span-1 flex items-center">
               <select name="type" class="form-select switchDashBoardNew" (change)="switchDashboard($event)" id="dashChange"
@@ -519,19 +519,19 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           
           <div
             *ngIf="!isMapDataAvailable()"
-            class="pt-lg mt-xl flex h-80 noDataContainer"
+            class="pt-10 mt-10 flex flex-col justify-center items-center mb-[50px] h-[80%]"
           >
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
               style="width: 100px"
-              class="center-block"
+              class="block mx-auto"
             />
-            <h3 class="text-blue">Data not found.</h3>
+            <h3 class="text-[#2899fa]">Data not found.</h3>
           </div>
         </div>
       </div>
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart">
+        <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px]">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
               <span class="text-sm font-sf-pro-text font-semibold">Shipments - Zone Distribution</span>
@@ -655,7 +655,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         </div>
       </div>
       <div class="md:col-span-4">
-        <div class="donutChart">
+        <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px]">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
               <span class="text-sm font-sf-pro-text font-semibold">Revenue</span>
@@ -757,42 +757,42 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
   
           <div *ngIf="pinotDistributionData?.length > 0" class="table-responsive">
-            <table class="table table-res order_location min-width">
+            <table class="table table-res order_location min-w-[700px]">
               <thead>
-                <tr class="headertr">
-                  <th class="th-v-center col-3 sm-min-w-195">Courier Name</th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                <tr class="bg-white">
+                  <th class="align-middle text-black font-bold col-3 w-[195px] py-5 px-2 whitespace-normal">Courier Name</th>
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     Pickup Unscheduled
                   </th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     Pickup Scheduled
                   </th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     In-Transit
                   </th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     Delivered
                   </th>
                   <!-- <th class="th-v-center col-1 text-center sm-min-w-98">
                     NDR Raised
                   </th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     NDR Delivered
                   </th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     NDR Pending
                   </th> -->
-                  <th class="th-v-center col-1 text-center sm-min-w-98">RTO</th>
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">RTO</th>
                   <th class="th-v-center col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">Delivered within TAT</th>
                   <th class="th-v-center col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">1st attempt within TAT</th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     Lost/Damaged
                     <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
                     alt="" class="ms-2"
                     />
   
                   </th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98">
+                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     Total Shipment
                     <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
                     alt="" class="ms-2"
@@ -800,24 +800,24 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                   </th>
                 </tr>
               </thead>
-              <tbody class="custom_scroll max-h-300">
+              <tbody class="max-h-[300px] overflow-y-auto overflow-x-hidden">
                 <tr *ngFor="let data of pinotDistributionData">
-                  <td class="col-3 sm-min-w-195">
+                  <td class="col-3 w-[195px] py-5 px-2 whitespace-normal">
                     {{ data.s_courier }}
                   </td>
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     <span class="clr-inherit"  *ngIf="data.pickup_unscheduled > 0">{{
                       convertIndianFormat(data.pickup_unscheduled)
                     }}</span>
                     <span *ngIf="data.pickup_unscheduled <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     <span class="clr-inherit"  *ngIf="data?.pickup_scheduled > 0">{{
                       convertIndianFormat(data?.pickup_scheduled)
                     }}</span>
                     <span *ngIf="data?.pickup_scheduled <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     <span
                       class="clr-inherit"
                       *ngIf="data?.in_transit > 0"
@@ -825,7 +825,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                     >
                     <span *ngIf="data?.in_transit <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     <span class="clr-inherit" *ngIf="data?.delivered > 0">{{
                       convertIndianFormat(data?.delivered)
                     }}</span>
@@ -846,28 +846,28 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                   <!-- <td class="col-1 text-center sm-min-w-98">
                     {{ convertIndianFormat(data.ndr_raised) }}
                   </td>
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     {{ convertIndianFormat(data.ndr_delivered) }}
                   </td>
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     <span class="clr-inherit" *ngIf="data.ndr > 0">{{
                       convertIndianFormat(data.ndr)
                     }}</span>
                     <span *ngIf="data.ndr <= 0">0</span>
                   </td> -->
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     <span class="clr-inherit" *ngIf="data.rto > 0">{{
                       convertIndianFormat(data.rto)
                     }}</span>
                     <span *ngIf="data.rto <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     <span class="clr-inherit" *ngIf="data.lost > 0">{{
                       convertIndianFormat(data.lost)
                     }}</span>
                     <span *ngIf="data?.lost <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center sm-min-w-98">
+                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     <span class="clr-inherit" *ngIf="data.total_shipments">{{
                       convertIndianFormat(data.total_shipments)
                     }}</span>
@@ -878,13 +878,13 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               </tbody>
             </table>
           </div>
-          <div *ngIf="!(pinotDistributionData?.length > 0)" class="errorContainer">
+          <div *ngIf="!(pinotDistributionData?.length > 0)" class="flex flex-col justify-center items-center mb-[50px]">
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
               style="width: 100px"
-              class="center-block"
+              class="block mx-auto"
             />
-            <h3 class="text-blue">Data not found for the selected filter.</h3>
+            <h3 class="text-[#2899fa]">Data not found for the selected filter.</h3>
           </div>
         </div>
       </div>

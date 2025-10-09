@@ -1,8 +1,10 @@
-/* RTO Dashboard Component Styles */
+/* RTO Dashboard Component - Optimized with Tailwind */
+
 .dashOverview {
   font-family: var(--font-sf-pro-text);
 }
 
+/* Dashboard Grid Layout */
 .dashboard-grid-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -23,7 +25,7 @@
 .dashboard-col-8 { grid-column: span 8 / span 8; }
 .dashboard-col-12 { grid-column: span 12 / span 12; }
 
-/* RTO Banner styles */
+/* RTO Banner styles - Custom background image and gradient */
 .rto-banner-dashboard {
   background: url('https://app.shiprocket.in/app/img/register-img/banner.jpg') center;
   background-size: cover;
@@ -57,17 +59,7 @@
   margin-top: -10px;
 }
 
-/* RTO Overview boxes */
-.flex-column {
-  flex-direction: column;
-}
-
-.centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+/* RTO Overview boxes - Component specific */
 .ndb_bx {
   background-color: #f6f6f6;
   border: 1px solid #d3d3d3;
@@ -138,10 +130,6 @@
   color: #6b7280;
 }
 
-.opacity-80 {
-  opacity: 0.8;
-}
-
 .letterspacing020px {
   letter-spacing: 0.02em;
 }
@@ -152,59 +140,6 @@
 
 .letterspacing005rem {
   letter-spacing: 0.05rem;
-}
-
-/* Utility classes */
-.d-flex {
-  display: flex;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.bg-white {
-  background-color: #ffffff;
-}
-
-.br-12 {
-  border-radius: 12px;
-}
-
-.h-100p {
-  height: 100%;
-}
-
-.lblca {
-  padding: 1.5rem;
-}
-
-.p-lg {
-  padding: 1.5rem;
-}
-
-.dashboard-shadow {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-}
-
-.relative {
-  position: relative;
-}
-
-.pb-0 {
-  padding-bottom: 0;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
-.mt-2 {
-  margin-top: 0.5rem;
 }
 
 /* Table styles */
@@ -235,44 +170,6 @@
 
 .w-s-i {
   width: auto;
-}
-
-/* No data styles */
-.center-block {
-  display: block;
-  margin: 0 auto;
-}
-
-.w-100px {
-  width: 100px;
-}
-
-.pt-lg {
-  padding-top: 1.5rem;
-}
-
-.mt-xl {
-  margin-top: 2rem;
-}
-
-.f-d-c {
-  flex-direction: column;
-}
-
-.dispFlex {
-  display: flex;
-}
-
-.j-content-c {
-  justify-content: center;
-}
-
-.h-80 {
-  height: 80%;
-}
-
-.a-c {
-  align-items: center;
 }
 
 /* Responsive adjustments */
@@ -307,5 +204,26 @@
     padding: 12px 0;
     height: 45px;
   }
-  
 }
+
+/* All Tailwind duplicate classes removed:
+- .flex-column → flex-col (Tailwind)
+- .centered → flex items-center justify-center (Tailwind)
+- .d-flex → flex (Tailwind)
+- .text-center, .text-right → text-center, text-right (Tailwind)
+- .bg-white → bg-white (Tailwind)
+- .br-12 → rounded-xl (Tailwind)
+- .h-100p → h-full (Tailwind)
+- .lblca, .p-lg → p-6 (Tailwind)
+- .dashboard-shadow → shadow-sm (Tailwind)
+- .relative → relative (Tailwind)
+- .pb-0 → pb-0 (Tailwind)
+- .mb-4, .mt-2 → mb-4, mt-2 (Tailwind)
+- .center-block → block mx-auto (Tailwind)
+- .w-100px → w-[100px] (Tailwind)
+- .pt-lg, .mt-xl → pt-6, mt-8 (Tailwind)
+- .f-d-c, .dispFlex → flex-col, flex (Tailwind)
+- .j-content-c → justify-center (Tailwind)
+- .h-80, .a-c → h-[80%], items-center (Tailwind)
+- .opacity-80 → opacity-80 (Tailwind)
+*/

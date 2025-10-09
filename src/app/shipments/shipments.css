@@ -1,6 +1,6 @@
-/* Shipments Component Styles */
+/* Shipments Component - Optimized with Tailwind */
 
-/* Toggle Switch Styles */
+/* Toggle Switch Styles - Custom component, cannot use Tailwind */
 .toggle {
   position: relative;
   display: inline-block;
@@ -22,7 +22,6 @@
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: 0.4s;
   transition: 0.4s;
   border-radius: 34px;
 }
@@ -35,7 +34,6 @@
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: 0.4s;
   transition: 0.4s;
   border-radius: 50%;
   z-index: 1000;
@@ -46,12 +44,8 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
-
-/* Toggle Labels */
 
 .toggle:before {
   content: '#';
@@ -69,9 +63,7 @@ input:checked + .slider:before {
   color: #fff;
 }
 
-/* Tooltip Styles */
-
-/* Table Styles */
+/* Table Styles - Component specific */
 .tableFixHead1 td {
   padding: 20px 16px;
   border-bottom: 1px solid #eee;
@@ -100,13 +92,7 @@ input:checked + .slider:before {
   white-space: nowrap;
 }
 
-/* Capsule Marker Styles */
-
-
-
-
-
-/* Color Classes */
+/* Color Classes - Custom brand colors */
 .text-green {
   color: #27c24c;
 }
@@ -133,32 +119,6 @@ input:checked + .slider:before {
 }
 
 .shipment-current {
-  font-weight: 700;
-}
-
-/* Height Utilities */
-
-
-/* Display Utilities */
-.d-inline-b {
-  display: inline-block;
-}
-
-/* Margin Utilities */
-.mb-1 {
-  margin-bottom: 0.25rem;
-}
-
-.mr-1 {
-  margin-right: 0.25rem;
-}
-
-.mr-2 {
-  margin-right: 0.5rem;
-}
-
-/* Font Weight Utilities */
-.font-bold {
   font-weight: 700;
 }
 
@@ -190,8 +150,6 @@ input:checked + .slider:before {
   grid-column: span 1 / span 1;
 }
 
-/* Card Styles */
-
 /* Responsive Styles */
 @media only screen and (max-width: 575px) {
   .dashboard-grid-row {
@@ -210,160 +168,15 @@ input:checked + .slider:before {
   }
 }
 
-/* Filter Info */
-
-
-@media only screen and (max-width: 575px) {
-  
-}
-
-/* Utility Classes */
-.w-full {
-  width: 100%;
-}
-
-.table-auto {
-  table-layout: auto;
-}
-
-.overflow-x-auto {
-  overflow-x: auto;
-}
-
-.overflow-y-auto {
-  overflow-y: auto;
-}
-
-.max-h-\[300px\] {
-  max-height: 300px;
-}
-
-.min-h-\[300px\] {
-  min-height: 300px;
-}
-
-.relative {
-  position: relative;
-}
-
-.flex {
-  display: flex;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.justify-end {
-  justify-content: flex-end;
-}
-
-.gap-4 {
-  gap: 1rem;
-}
-
-.mt-4 {
-  margin-top: 1rem;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
-.p-2 {
-  padding: 0.5rem;
-}
-
-.p-4 {
-  padding: 1rem;
-}
-
-.border-b {
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-}
-
-.text-base {
-  font-size: 1rem;
-}
-
-.font-semibold {
-  font-weight: 600;
-}
-
-.text-gray-900 {
-  color: #111827;
-}
-
-.text-gray-500 {
-  color: #6b7280;
-}
-
-
-.text-blue-600 {
-  color: #2563eb;
-}
-
-.bg-white {
-  background-color: white;
-}
-
-.bg-blue-500 {
-  background-color: #3b82f6;
-}
-
-.bg-gray-400 {
-  background-color: #9ca3af;
-}
-
-.rounded-xl {
-  border-radius: 0.75rem;
-}
-
-.rounded-full {
-  border-radius: 9999px;
-}
-
-.shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.inline-block {
-  display: inline-block;
-}
-
-.w-3 {
-  width: 0.75rem;
-}
-
-.h-3 {
-  height: 0.75rem;
-}
-
-.w-24 {
-  width: 6rem;
-}
-
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
+/* All Tailwind duplicate classes removed:
+- .w-full, .table-auto, .overflow-x-auto, .overflow-y-auto → Already in Tailwind
+- .max-h-[300px], .min-h-[300px] → Already in Tailwind
+- .relative, .flex, .flex-col, .items-center, .justify-center, .justify-end → Already in Tailwind
+- .gap-4, .mt-4, .mb-4, .p-2, .p-4 → Already in Tailwind
+- .border-b, .text-left, .text-center, .text-sm, .text-base → Already in Tailwind
+- .font-semibold, .text-gray-900, .text-gray-500, .text-blue-600 → Already in Tailwind
+- .bg-white, .bg-blue-500, .bg-gray-400 → Already in Tailwind
+- .rounded-xl, .rounded-full, .shadow-lg → Already in Tailwind
+- .inline-block, .d-inline-b, .w-3, .h-3, .w-24, .mx-auto → Already in Tailwind
+- .mb-1, .mr-1, .mr-2, .font-bold → Already in Tailwind
+*/

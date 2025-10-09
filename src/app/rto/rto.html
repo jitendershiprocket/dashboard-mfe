@@ -16,9 +16,9 @@
       date.</span>
   </div>
   
-  <div class="dashboard-grid-row d-flex">
+  <div class="dashboard-grid-row flex">
     <div class="dashboard-col-12">
-      <div class="pb-0 br-12 h-100p lblca p-lg bg-white dashboard-shadow relative">
+      <div class="pb-0 rounded-xl h-full p-6 bg-white dashboard-shadow relative">
         <div class="dashboard-grid-row">
           <div class="dashboard-col-8">
             <p class="dashTileHeading">RTO Overview</p>
@@ -29,7 +29,7 @@
             </p>
           </div>
         </div>
-        <div class="rto-banner-dashboard d-flex">
+        <div class="rto-banner-dashboard flex">
           <span>
             <h2 class="letterspacing032px">Protect Your
               <span class="cod-order">COD Orders &nbsp;</span>from
@@ -47,9 +47,9 @@
             </a>
           </span>
         </div>
-        <div class="dashboard-grid-row flex-sb-sm">
+        <div class="dashboard-grid-row flex justify-between">
           <div class="dashboard-col-2 padding-custom-5 text-center">
-            <div class="centered flex-column">
+            <div class="flex items-center justify-center flex-col">
               <div class="ndb_bx">
                 <h6>Total RTO</h6>
                 <p>{{ rto_stats?.rto_count }}</p>
@@ -57,7 +57,7 @@
             </div>
           </div>
           <div class="dashboard-col-3 padding-custom-5 text-center">
-            <div class="centered flex-column">
+            <div class="flex items-center justify-center flex-col">
               <div class="ndb_bx">
                 <h6>RTO Percentage</h6>
                 <p>{{ rto_stats?.rto_percentage }}</p>
@@ -65,7 +65,7 @@
             </div>
           </div>
           <div class="dashboard-col-2 padding-custom-5 text-center">
-            <div class="centered flex-column">
+            <div class="flex items-center justify-center flex-col">
               <div class="ndb_bx">
                 <h6>RTO Initiated</h6>
                 <p>{{ rto_stats?.rto_initiated }}</p>
@@ -73,7 +73,7 @@
             </div>
           </div>
           <div class="dashboard-col-3 padding-custom-5 text-center">
-            <div class="centered flex-column">
+            <div class="flex items-center justify-center flex-col">
               <div class="ndb_bx">
                 <h6>RTO Undelivered</h6>
                 <p>{{ rto_stats?.rto_undelivered }}</p>
@@ -81,7 +81,7 @@
             </div>
           </div>
           <div class="dashboard-col-2 padding-custom-5 text-center">
-            <div class="centered flex-column">
+            <div class="flex items-center justify-center flex-col">
               <div class="ndb_bx">
                 <h6>RTO Delivered</h6>
                 <p>{{ rto_stats?.rto_delivered }}</p>
@@ -113,8 +113,8 @@
             [type]="lineType">
           </canvas>
         </div>
-        <div *ngIf="!rto_tab_raw_hide_no_data" class="pt-lg mt-xl f-d-c dispFlex">
-          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+        <div *ngIf="!rto_tab_raw_hide_no_data" class="pt-6 mt-8 flex-col flex">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
           <h3 class="text-blue">No RTO for selected filters.</h3>
         </div>
       </div>
@@ -141,14 +141,14 @@
             [type]="barType">
           </canvas>
         </div>
-        <div *ngIf="!rto_tab_raw_hide_no_data" class="pt-lg mt-xl f-d-c dispFlex h-80">
+        <div *ngIf="!rto_tab_raw_hide_no_data" class="pt-6 mt-8 flex-col flex h-[320px]">
           <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
           <h3 class="text-blue">No RTO for selected filters.</h3>
         </div>
       </div>
     </div>
     <div class="dashboard-col-4">
-      <div class="donutChart">
+      <div class="donutChart">\
         <div class="dashboard-grid-row">
           <div class="dashboard-col-12">
             <p class="dashTileHeading">RTO Reasons</p>

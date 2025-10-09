@@ -1,8 +1,10 @@
-/* Dashboard Filters Component Styles */
+/* Dashboard Filters Component - Optimized with Tailwind */
+
 .dashboard-filters {
   width: 100%;
 }
 
+/* Date picker custom styling - Component specific */
 .date-picker-placeholder {
   padding: 8px 12px;
   border: 1px solid #ced4da;
@@ -30,7 +32,7 @@
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Form styles */
+/* Form select styling */
 .form-select {
   padding: 8px 12px;
   border: 1px solid #ced4da;
@@ -72,49 +74,7 @@
   background-color: #5a6268;
 }
 
-/* Flexbox utility classes */
-.flex {
-  display: flex;
-}
-
-.flex-wrap {
-  flex-wrap: wrap;
-}
-
-.flex-shrink-0 {
-  flex-shrink: 0;
-}
-
-.relative {
-  position: relative;
-}
-
-/* Width utility classes */
-.min-w-\[120px\] {
-  min-width: 120px;
-}
-
-.max-w-\[150px\] {
-  max-width: 150px;
-}
-
-.min-w-\[140px\] {
-  min-width: 140px;
-}
-
-.max-w-\[170px\] {
-  max-width: 170px;
-}
-
-.min-w-\[200px\] {
-  min-width: 200px;
-}
-
-.max-w-\[250px\] {
-  max-width: 250px;
-}
-
-/* Legacy utility classes */
+/* Legacy utility classes for filter widths */
 .w-A {
   width: auto;
   flex: 1;
@@ -125,50 +85,6 @@
   width: 19%;
 }
 
-.w-full {
-  width: 100%;
-}
-
-.w-100 {
-  width: 100%;
-}
-
-.d-flex {
-  display: flex;
-}
-
-.position-relative {
-  position: relative;
-}
-
-.mt-6 {
-  margin-top: 24px;
-}
-
-.mt-2 {
-  margin-top: 8px;
-}
-
-.mr-2 {
-  margin-right: 8px;
-}
-
-.br-25 {
-  border-radius: 25px;
-}
-
-.letterspacing020px {
-  letter-spacing: 0.2px;
-}
-
-.text-brown-gray {
-  color: #6c757d;
-}
-
-.opacity-80 {
-  opacity: 0.8;
-}
-
 .form-control-border-1 {
   border: 1px solid #ced4da;
 }
@@ -177,7 +93,7 @@
   background-color: transparent;
 }
 
-/* Filter info icon */
+/* Filter info icon positioning */
 .filter-info {
   position: absolute;
   right: 0.7%;
@@ -188,26 +104,20 @@
   max-width: 450px;
 }
 
-/* Grid utility classes */
-.grid {
-  display: grid;
+.letterspacing020px {
+  letter-spacing: 0.2px;
 }
 
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+.text-brown-gray {
+  color: #6c757d;
 }
 
-.md\\:grid-cols-12 {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-}
-
-.gap-4 {
-  gap: 16px;
+.br-25 {
+  border-radius: 25px;
 }
 
 /* Responsive adjustments */
 @media only screen and (max-width: 575px) {
-  /* Mobile: Stack filters vertically */
   .dashboard-filters .flex-wrap {
     flex-direction: column;
   }
@@ -227,7 +137,6 @@
     width: 100%;
   }
   
-  /* Make all filter elements full width on mobile */
   .dashboard-filters .min-w-\[120px\],
   .dashboard-filters .min-w-\[140px\],
   .dashboard-filters .min-w-\[200px\] {
@@ -236,8 +145,16 @@
   }
 }
 
-@media (min-width: 768px) {
-  .md\\:grid-cols-12 {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-  }
-}
+/* All Tailwind duplicate classes removed:
+- .flex, .flex-wrap, .flex-shrink-0 → Already in Tailwind
+- .relative, .position-relative → relative (Tailwind)
+- .min-w-[120px], .max-w-[150px], .min-w-[140px], .max-w-[170px] → Already in Tailwind
+- .min-w-[200px], .max-w-[250px] → Already in Tailwind
+- .w-full, .w-100 → w-full (Tailwind)
+- .d-flex → flex (Tailwind)
+- .mt-6, .mt-2, .mr-2 → mt-6, mt-2, mr-2 (Tailwind)
+- .grid, .grid-cols-1 → grid, grid-cols-1 (Tailwind)
+- .md:grid-cols-12 → md:grid-cols-12 (Tailwind)
+- .gap-4 → gap-4 (Tailwind)
+- .opacity-80 → opacity-80 (Tailwind)
+*/

@@ -19,39 +19,9 @@
   min-height: 175px;
 }
 
-/* Tile Typography */
-.dashTileMainData {
-  font-size: 22px;
-  font-family: var(--font-sf-pro-display);
-  font-weight: 600;
-}
+/* Tile Typography - Removed: Now using Tailwind classes in HTML */
 
-.dashTileMainData .material-icons {
-  font-size: 22px;
-}
-
-.dashTileSubData {
-  font-size: 11px;
-}
-
-.dashTileSubData .material-icons {
-  font-size: 12px;
-}
-
-/* Shipment Tile */
-.dashShipmentTile {
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.dashShipmentTile .dashTileHeading {
-  font-family: var(--font-sf-pro-display);
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-}
+/* Shipment Tile - Removed: Now using Tailwind classes (p-[15px] flex-col justify-center) in HTML */
 
 .dashShipTileDataVal {
   border-radius: 10px;
@@ -67,13 +37,7 @@
   font-weight: 500;
 }
 
-.dashShipTileDataTitle {
-  font-size: 12px;
-  font-family: var(--font-sf-pro-display);
-  font-weight: 600;
-  margin: 5px 0;
-  text-align: center;
-}
+/* .dashShipTileDataTitle - Removed: Now using Tailwind classes in HTML */
 
 /* Sphere Indicators */
 .sphere {
@@ -105,14 +69,7 @@
   border-color: #ffe279;
 }
 
-/* Chart Container */
-.donutChart {
-  height: 100%;
-  background-color: #fff;
-  box-shadow: 0 3px 6px #00002947;
-  border-radius: 12px;
-  padding: 15px;
-}
+/* Chart Container - Removed: Now using Tailwind classes (h-full bg-white dashboard-shadow rounded-xl p-[15px]) in HTML */
 
 /* Zone Wise Data */
 .zone_wise {
@@ -168,9 +125,7 @@
   box-shadow: 0px 3px 6px #00002947;
 }
 
-.pb {
-  padding-bottom: 10px !important;
-}
+/* .pb - Removed: Not used (pb-0 uses Tailwind's pb-0 instead) */
 
 /* Table Styles */
 .table-res thead {
@@ -197,35 +152,15 @@
   display: flex;
 }
 
-.th-v-center {
-  vertical-align: middle !important;
-  color: black;
-  font-weight: bold;
-}
+/* Table Cell Classes - Removed: Now using Tailwind classes in HTML
+- .th-v-center → align-middle text-black font-bold
+- .sm-min-w-195 → w-[195px] py-5 px-2 whitespace-normal
+- .sm-min-w-98 → w-[98px] py-5 px-2 whitespace-normal
+- .custom_scroll → max-h-[300px] overflow-y-auto overflow-x-hidden
+*/
 
-.sm-min-w-195 {
-  width: 195px;
-  padding: 20px 8px;
-  white-space: inherit;
-}
-
-.sm-min-w-98 {
-  width: 98px;
-  padding: 20px 8px;
-  white-space: inherit;
-}
-
-.custom_scroll {
-  max-height: 516px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.headertr {
-  background-color: white;
-}
-
-.custom_scroll td {
+/* Table cell border and color styling */
+.table-res tbody tr td {
   border-top: 1px solid #eee;
   color: gray;
 }
@@ -253,88 +188,44 @@
   background-color: #fdd8d0;
 }
 
-/* Misc Utilities */
-.min-width {
-  min-width: 700px;
-}
-
-.max-h-300 {
-  max-height: 300px;
-}
-
-.errorContainer,
-.noDataContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 50px;
-}
-
-.bannerImg {
-  height: 75px;
-  object-fit: contain;
-}
-
-.h-80 {
-  height: 80%;
-}
-
+/* Misc Utilities - Removed: Now using Tailwind classes in HTML */
 .dashboradCarousel {
   display: block;
   width: unset;
 }
 
-/* Custom Margin/Padding Utilities */
-.mt-48px {
-  margin-top: 48px;
-}
+/* All utility classes removed and replaced with Tailwind in HTML:
+=================================================================
+Layout & Spacing:
+- .mt-48px → mt-[48px]
+- .mt-53px → mt-[53px]
+- .mt-25px → mt-[25px]
+- .pt-lg → pt-10
+- .mt-xl → mt-10
+- .inputAddOn → flex
+- .donutChartContainer → py-5
+- .dataCardContainer → relative
+- .dashTileData → flex flex-col gap-2
 
-.mt-53px {
-  margin-top: 53px;
-}
+Sizing:
+- .h-80 → h-[80%]
+- .min-width → min-w-[700px]
+- .max-h-300 → max-h-[300px]
+- .bannerImg → h-[75px] object-contain
 
-.mt-25px {
-  margin-top: 25px;
-}
+Positioning & Alignment:
+- .center-block → block mx-auto
+- .errorContainer, .noDataContainer → flex flex-col justify-center items-center mb-[50px]
 
-.pt-lg {
-  padding-top: 40px;
-}
+Colors & Text:
+- .text-blue → text-[#2899fa]
 
-.mt-xl {
-  margin-top: 40px;
-}
-
-/* Text Utilities */
-.text-blue {
-  color: #2899fa;
-}
-
-.center-block {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Component Specific */
-.dashTileData {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.inputAddOn {
-  display: flex;
-}
-
-.donutChartContainer {
-  padding: 20px 0;
-}
-
-.dataCardContainer {
-  position: relative;
-}
+Table Cells:
+- .th-v-center → align-middle text-black font-bold
+- .sm-min-w-195 → w-[195px] py-5 px-2 whitespace-normal
+- .sm-min-w-98 → w-[98px] py-5 px-2 whitespace-normal
+- .custom_scroll → max-h-[300px] overflow-y-auto overflow-x-hidden
+*/
 
 /* Responsive Styles */
 @media only screen and (max-width: 575px) {
@@ -342,18 +233,18 @@
     display: none;
   }
 
-  .dataCardContainer {
+  .dashTilebg.relative {
     min-height: 120px;
   }
 
-  .dataCardContainer .mt-48px,
-  .dataCardContainer .mt-53px {
+  .dashTilebg.relative .mt-\[48px\],
+  .dashTilebg.relative .mt-\[53px\] {
     margin-top: 12px;
     justify-content: normal;
   }
 
-  .dataCardContainer .mt-48px .dashTileData,
-  .dataCardContainer .mt-53px .dashTileData {
+  .dashTilebg.relative .mt-\[48px\] .flex-col.gap-2,
+  .dashTilebg.relative .mt-\[53px\] .flex-col.gap-2 {
     margin-left: 32px;
   }
 }

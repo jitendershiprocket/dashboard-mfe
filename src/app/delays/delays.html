@@ -15,47 +15,47 @@
     <span class="text-brown-gray opacity-80">The Order Delay dashboard is showing you the realtime data of last 30 days till today based on shipment assigned date.</span>
   </div>
   
-  <div class="dashboard-grid-row d-flex">
+  <div class="dashboard-grid-row flex">
     <div class="dashboard-col-12">
-      <div class="pb-0 br-12 h-100p lblca p-lg bg-white dashboard-shadow relative">
-        <span class="float-end">
+      <div class="pb-0 rounded-xl h-full p-6 bg-white dashboard-shadow relative">
+        <span class="float-right">
           <img src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28" class="default-tooltip-round" title="Displays real time data from past 30 days (default) upto the last hour." />
         </span>
-        <div class="dashboard-grid-row flex-sb-sm">
-          <div class="dashboard-col-2 p-15 text-center">
-            <div class="dispFlex f-d-c">
+        <div class="dashboard-grid-row flex justify-between items-center">
+          <div class="dashboard-col-2 p-[15px] text-center">
+            <div class="flex flex-col">
               <div class="ndb_bx">
                 <h6>Misrouted Shipments</h6>
                 <p>{{ numFormat(+status?.misrouted_count) }}</p>
               </div>
             </div>
           </div>
-          <div class="dashboard-col-3 p-15 text-center">
-            <div class="dispFlex f-d-c">
+          <div class="dashboard-col-3 p-[15px] text-center">
+            <div class="flex flex-col">
               <div class="ndb_bx">
                 <h6>ODA Shipments</h6>
                 <p>{{ numFormat(+status?.oda_count) }}</p>
               </div>
             </div>
           </div>
-          <div class="dashboard-col-2 p-15 text-center">
-            <div class="dispFlex f-d-c">
+          <div class="dashboard-col-2 p-[15px] text-center">
+            <div class="flex flex-col">
               <div class="ndb_bx">
                 <h6>Lost Shipments</h6>
                 <p>{{ numFormat(+status?.lost_count) }}</p>
               </div>
             </div>
           </div>
-          <div class="dashboard-col-3 p-15 text-center">
-            <div class="dispFlex f-d-c">
+          <div class="dashboard-col-3 p-[15px] text-center">
+            <div class="flex flex-col">
               <div class="ndb_bx">
                 <h6>Damaged Shipments</h6>
                 <p>{{ numFormat(+status?.damaged_count) }}</p>
               </div>
             </div>
           </div>
-          <div class="dashboard-col-2 p-15 text-center">
-            <div class="dispFlex f-d-c">
+          <div class="dashboard-col-2 p-[15px] text-center">
+            <div class="flex flex-col">
               <div class="ndb_bx">
                 <h6>Destroyed Shipments</h6>
                 <p>{{ numFormat(+status?.destroyed_count) }}</p>
@@ -67,7 +67,7 @@
     </div>
   </div>
   
-  <div class="dashboard-grid-row d-flex">
+  <div class="dashboard-grid-row flex">
     <div class="dashboard-col-6 mb-4">
       <div class="donutChart">
         <div class="dashboard-grid-row">
@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <div class="dashboard-grid-row d-flex dashOverview">
+        <div class="dashboard-grid-row flex dashOverview">
           <div class="dashboard-col-12">
             @if (pickupPendencyHasData) {
               <div class="tableFixHead tableFixHeadChild">
@@ -131,10 +131,10 @@
                 </table>
               </div>
             } @else {
-              <div class="d-flex j-content-c">
+              <div class="flex justify-center">
                 <div colspan="11">
-                  <div class="pt-lg mt-xl f-d-c dispFlex">
-                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                  <div class="pt-6 mt-8 flex-col flex">
+                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
                     <h3 class="text-blue">No Delays</h3>
                   </div>
                 </div>
@@ -216,10 +216,10 @@
                 </table>
               </div>
             } @else {
-              <div class="d-flex j-content-c">
+              <div class="flex justify-center">
                 <div colspan="11">
-                  <div class="pt-lg mt-xl f-d-c dispFlex">
-                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                  <div class="pt-6 mt-8 flex-col flex">
+                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
                     <h3 class="text-blue">No Delays</h3>
                   </div>
                 </div>
@@ -430,10 +430,10 @@
               </table>
               </div>
             } @else {
-              <div class="dispFlex h-80 j-content-c positionError">
+              <div class="flex h-[80%] justify-center positionError">
                 <div colspan="11">
-                  <div class="pt-lg mt-xl f-d-c dispFlex">
-                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                  <div class="pt-6 mt-8 flex-col flex">
+                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
                     <h3 class="text-blue">No Delays</h3>
                   </div>
                 </div>
@@ -558,13 +558,13 @@
               </table>
               </div>
             } @else {
-              <div class="dispFlex h-80 j-content-c">
-                <div colspan="11">
-                  <div class="pt-lg mt-xl f-d-c dispFlex">
-                    <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
-                    <h3 class="text-blue">No Delays</h3>
-                  </div>
+              <div class="flex h-[80%] justify-center">
+              <div colspan="11">
+                <div class="pt-6 mt-8 flex-col flex">
+                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
+                  <h3 class="text-blue">No Delays</h3>
                 </div>
+              </div>
               </div>
             }
           </div>
