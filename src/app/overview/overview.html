@@ -34,18 +34,18 @@
           remittances
         </div>
       </div>
-      <div class="row mt-22 flex-grow-1 d-flex" *ngIf="bannerdata?.length === 1">
+      <div class="row mt-[22px] flex-grow flex" *ngIf="bannerdata?.length === 1">
         <div class="col-md-12">
           <a
             href="{{ bannerdata[0].landing_page }}"
             target="_blank"
-            class="inline-block w-100"
+            class="inline-block w-full"
             (click)="onBannerClick()"
           >
             <img
               src="{{ bannerdata[0].banner_image }}"
               alt="{{ bannerdata[0].alt ? bannerdata[0].alt : 'SR Fulfillment' }}"
-              class="inline-block w-100 br-12 h-[75px] object-contain"
+              class="inline-block w-full rounded-xl h-[75px] object-contain"
             />
           </a>
         </div>
@@ -67,7 +67,7 @@
               [ngClass]="isFirst ? 'carousel-item active' : 'carousel-item'"
             >
               <img
-                class="d-block w-100 cursor-p"
+                class="block w-full cursor-pointer"
                 src="{{ bannerItem.banner_image }}"
                 alt="{{ 'banner' + i }}"
                 (click)="openBannerLandingPage(bannerItem)"
@@ -75,7 +75,7 @@
             </div>
           </div>
           <button
-            class="carousel-control-prev j-content-s align-v-start opacity-1 dashboradCarousel"
+            class="carousel-control-prev justify-start items-start opacity-100 dashboradCarousel"
             type="button"
             data-bs-target="#carouselIndicators"
             data-bs-slide="prev"
@@ -89,7 +89,7 @@
             <span class="visually-hidden">Previous</span>
           </button>
           <button
-            class="carousel-control-next align-v-start opacity-1 j-content-e dashboradCarousel"
+            class="carousel-control-next items-start opacity-100 justify-end dashboradCarousel"
             type="button"
             data-bs-target="#carouselIndicators"
             data-bs-slide="next"
@@ -757,7 +757,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
   
           <div *ngIf="pinotDistributionData?.length > 0" class="table-responsive">
-            <table class="table table-res order_location min-w-[700px]">
+            <table class="table table-res min-w-[700px]">
               <thead>
                 <tr class="bg-white">
                   <th class="align-middle text-black font-bold col-3 w-[195px] py-5 px-2 whitespace-normal">Courier Name</th>

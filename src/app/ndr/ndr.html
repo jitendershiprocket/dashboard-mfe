@@ -165,7 +165,7 @@
                       </div>
                     </td>
                     <td class="mb-lg col-sm-6 sm-min-w-195 w-s-i">
-                      <div class="mb-lg flex-row d-flex align-v-center mb-lg">
+                      <div class="mb-lg flex-row flex items-center mb-lg">
                         <label class="ndrResData"
                           ><span class="ndrResDataText">{{
                             numFormat(
@@ -182,12 +182,12 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="!ndrResponseData" class="d-flex j-content-c">
+            <div *ngIf="!ndrResponseData" class="flex justify-center">
               <div colspan="11">
-                <div class="pt-lg mt-xl d-flex dispFlex f-d-c">
+                <div class="pt-6 mt-8 flex flex-col">
                   <img
                     src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-                    class="center-block w-100px"
+                    class="block mx-auto w-[100px]"
                   />
                   <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
                 </div>
@@ -207,7 +207,7 @@
             <p class="text-right sphere-black"><img src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
           </div>
         </div>
-        <div class="row d-flex dashOverview">
+        <div class="row flex dashOverview">
           <div class="col-sm-12 form-group">
             <div *ngIf="ndrFunnel" class="tableFixHead" style="height: 210px">
               <table>
@@ -391,12 +391,12 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="!ndrFunnel" class="d-flex j-content-c">
+            <div *ngIf="!ndrFunnel" class="flex justify-center">
               <div colspan="11">
-                <div class="pt-lg mt-xl d-flex f-d-c dispFlex">
+                <div class="pt-6 mt-8 flex flex-col">
                   <img
                     src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-                    class="center-block w-100px"
+                    class="block mx-auto w-[100px]"
                   />
                   <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
                 </div>
@@ -426,10 +426,10 @@
             [type]="doughnutType">
           </canvas>
         </div>
-        <div *ngIf="!showNdrSplitGraph" class="pt-lg mt-xl f-d-c dispFlex">
+        <div *ngIf="!showNdrSplitGraph" class="pt-6 mt-8 flex-col flex">
           <img
             src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-            class="center-block w-100px"
+            class="block mx-auto w-[100px]"
           />
           <h3 class="text-blue">
             No NDR Raised for Selected Filters
@@ -454,10 +454,10 @@
             [type]="barType">
           </canvas>
         </div>
-        <div *ngIf="!showNdrStatusGraph" class="pt-lg mt-xl f-d-c dispFlex">
+        <div *ngIf="!showNdrStatusGraph" class="pt-6 mt-8 flex-col flex">
           <img
             src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-            class="center-block w-100px"
+            class="block mx-auto w-[100px]"
           />
           <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
         </div>
@@ -483,10 +483,10 @@
             [type]="barType">
           </canvas>
         </div>
-        <div *ngIf="!(ndrDeliveredAttempt?.length !== 0)" class="pt-lg mt-xl dispFlex f-d-c h-80">
+        <div *ngIf="!(ndrDeliveredAttempt?.length !== 0)" class="pt-6 mt-8 flex flex-col h-[320px]">
           <img
             src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-            class="center-block w-100px"
+            class="block mx-auto w-[100px]"
           />
           <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
         </div>
@@ -515,11 +515,11 @@
         </div>
         <div
           *ngIf="!(ndrDeliveredAttempt?.length !== 0)"
-          class="pt-lg mt-xl f-d-c dispFlex h-80"
+          class="pt-6 mt-8 flex-col flex h-[320px]"
         >
           <img
             src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-            class="center-block w-100px"
+            class="block mx-auto w-[100px]"
           />
           <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
         </div>
@@ -548,11 +548,11 @@
         </div>
         <div
           *ngIf="!(ndrSellerBuyerResponse?.length !== 0)"
-          class="pt-lg mt-xl dispFlex f-d-c h-80"
+          class="pt-6 mt-8 flex flex-col h-[320px]"
         >
           <img
             src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-            class="center-block w-100px"
+            class="block mx-auto w-[100px]"
           />
           <h3 class="text-blue">No NDR Raised for Selected Filters</h3>
         </div>
@@ -754,7 +754,7 @@
                   </tr>
                   @for (item of ndrSuccessData.courier_split; track item.courier; let index = $index) {
                     <tr class="bg-white">
-                      <td class="text-left p-2 cursor-pointer d-flex justify-content-between align-items-center" (click)="toggleData(index)">
+                      <td class="text-left p-2 cursor-pointer flex justify-between items-center" (click)="toggleData(index)">
                         <span>{{ item?.courier }}</span>
                         <span class="courier-split-d-icon">&#8964;</span>
                       </td>
@@ -850,11 +850,11 @@
             </div>
             <div
               *ngIf="!ndrSuccessData"
-              class="pt-lg mt-xl dispFlex noDataContainer h-90"
+              class="pt-6 mt-8 flex flex-col justify-center items-center mb-[50px] h-[360px]"
             >
               <img
                 src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-                class="center-block w-100px"
+                class="block mx-auto w-[100px]"
               />
               <h3 class="text-blue">
                 No NDR Raised for Selected Filters.
@@ -913,12 +913,12 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="!(ndrReasonData?.length !== 0)" class="dispFlex h-90 j-content-c">
+            <div *ngIf="!(ndrReasonData?.length !== 0)" class="flex h-[360px] justify-center">
               <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
+                <div class="pt-6 mt-8 flex-col flex">
                   <img
                     src="https://sr-cdn-1.shiprocket.in/img/noData.png"
-                    class="center-block w-100px"
+                    class="block mx-auto w-[100px]"
                   />
                   <h3 class="text-blue">
                     No NDR Raised for Selected Filters.

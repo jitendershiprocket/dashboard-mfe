@@ -142,7 +142,7 @@
           </canvas>
         </div>
         <div *ngIf="!rto_tab_raw_hide_no_data" class="pt-6 mt-8 flex-col flex h-[320px]">
-          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
           <h3 class="text-blue">No RTO for selected filters.</h3>
         </div>
       </div>
@@ -161,15 +161,15 @@
             [type]="doughnutType">
           </canvas>
         </div>
-        <div *ngIf="noDataPieChart" class="pt-lg mt-xl f-d-c dispFlex h-80">
-          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+        <div *ngIf="noDataPieChart" class="pt-6 mt-8 flex-col flex h-[320px]">
+          <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
           <h3 class="text-blue">No RTO for selected filters.</h3>
         </div>
       </div>
     </div>
   </div>
   
-  <div class="dashboard-grid-row d-flex">
+  <div class="dashboard-grid-row flex">
     <div class="dashboard-col-6 mb-4">
       <div class="donutChart">
         <div class="dashboard-grid-row">
@@ -181,7 +181,7 @@
           </div>
         </div>
 
-        <div class="dashboard-grid-row d-flex dashOverview">
+        <div class="dashboard-grid-row flex dashOverview">
           <div class="dashboard-col-12">
             <div *ngIf="rto_tab_pincodes && rto_tab_pincodes.length > 0" class="tableFixHead tableFixHeadChild">
               <table>
@@ -215,10 +215,10 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="!rto_tab_pincodes || rto_tab_pincodes.length === 0" class="d-flex j-content-c">
+            <div *ngIf="!rto_tab_pincodes || rto_tab_pincodes.length === 0" class="flex justify-center">
               <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
-                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                <div class="pt-6 mt-8 flex-col flex">
+                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
                   <h3 class="text-blue">No RTO for selected filters.</h3>
                 </div>
               </div>
@@ -238,7 +238,7 @@
           </div>
         </div>
 
-        <div class="dashboard-grid-row d-flex dashOverview">
+        <div class="dashboard-grid-row flex dashOverview">
           <div class="dashboard-col-12">
             <div *ngIf="rto_tab_top_cities && rto_tab_top_cities.length > 0" class="tableFixHead tableFixHeadChild">
               <table>
@@ -272,10 +272,10 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="!rto_tab_top_cities || rto_tab_top_cities.length === 0" class="d-flex j-content-c">
+            <div *ngIf="!rto_tab_top_cities || rto_tab_top_cities.length === 0" class="flex justify-center">
               <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
-                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                <div class="pt-6 mt-8 flex-col flex">
+                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
                   <h3 class="text-blue">No RTO for selected filters.</h3>
                 </div>
               </div>
@@ -286,7 +286,7 @@
     </div>
   </div>
   
-  <div class="dashboard-grid-row d-flex">
+  <div class="dashboard-grid-row flex">
     <div class="dashboard-col-6 mb-4">
       <div class="donutChart">
         <div class="dashboard-grid-row">
@@ -332,10 +332,10 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="!rto_tab_top_courier || rto_tab_top_courier.length === 0" class="d-flex j-content-c h-80 a-c">
+            <div *ngIf="!rto_tab_top_courier || rto_tab_top_courier.length === 0" class="flex justify-center h-[320px] items-center">
               <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
-                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                <div class="pt-6 mt-8 flex-col flex">
+                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
                   <h3 class="text-blue">No RTO for selected filters.</h3>
                 </div>
               </div>
@@ -389,10 +389,10 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="!rto_tab_top_customers || rto_tab_top_customers.length === 0" class="d-flex j-content-c h-80 a-c">
+            <div *ngIf="!rto_tab_top_customers || rto_tab_top_customers.length === 0" class="flex justify-center h-[320px] items-center">
               <div colspan="11">
-                <div class="pt-lg mt-xl f-d-c dispFlex">
-                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="center-block w-100px" />
+                <div class="pt-6 mt-8 flex-col flex">
+                  <img src="https://sr-cdn-1.shiprocket.in/img/noData.png" class="block mx-auto w-[100px]" />
                   <h3 class="text-blue">No RTO for selected filters.</h3>
                 </div>
               </div>
