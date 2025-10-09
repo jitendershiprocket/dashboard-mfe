@@ -4,9 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "npm run build:prod && npm run optimize:bundle",
     "build:prod": "ng build --configuration production",
-    "build:s3": "npm run build:prod && npm run optimize:bundle",
     "optimize:bundle": "node scripts/optimize-bundle.js",
     "analyze": "npm run build:prod -- --stats-json && npx webpack-bundle-analyzer dist/dashboard-mfe/browser/stats.json",
     "watch": "ng build --watch --configuration development",
