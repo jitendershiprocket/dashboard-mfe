@@ -1,4 +1,4 @@
-/* Optimized Overview CSS - Removed 27 unused classes */
+/* Optimized Overview CSS - Using Tailwind where possible */
 
 /* Dashboard Tile Backgrounds */
 .dashTilebg {
@@ -16,10 +16,7 @@
 .dashTilebgWhite {
   background-color: white;
   box-shadow: 0 3px 6px #00002947;
-  overflow: auto;
-  border-radius: 12px;
   min-height: 175px;
-  height: 100%;
 }
 
 /* Tile Typography */
@@ -76,10 +73,6 @@
   font-weight: 600;
   margin: 5px 0;
   text-align: center;
-}
-
-.mt22 {
-  margin-top: 22px;
 }
 
 /* Sphere Indicators */
@@ -170,54 +163,13 @@
   border-color: #ffe279;
 }
 
-/* Utility Classes */
-.d-flex {
-  display: flex !important;
-}
-
-.pl-lg {
-  padding-left: 15px !important;
-}
-
-.p-15 {
-  padding: 15px;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.br-12 {
-  border-radius: 12px;
-}
-
-.h-100p {
-  height: 100%;
-}
-
-.lblca {
-  overflow: auto;
-}
-
-.pb-0 {
-  padding-bottom: 0 !important;
-}
-
-.bg-white {
-  background-color: #fff;
-}
-
+/* Custom Utility Classes (not covered by Tailwind) */
 .dashboard-shadow {
   box-shadow: 0px 3px 6px #00002947;
 }
 
 .pb {
   padding-bottom: 10px !important;
-}
-
-.font-14 {
-  font-size: 14px;
-  font-family: var(--font-sf-pro-text);
 }
 
 /* Table Styles */
@@ -255,10 +207,6 @@
   width: 195px;
   padding: 20px 8px;
   white-space: inherit;
-}
-
-.text-center {
-  text-align: center;
 }
 
 .sm-min-w-98 {
@@ -314,7 +262,8 @@
   max-height: 300px;
 }
 
-.errorContainer {
+.errorContainer,
+.noDataContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -334,6 +283,57 @@
 .dashboradCarousel {
   display: block;
   width: unset;
+}
+
+/* Custom Margin/Padding Utilities */
+.mt-48px {
+  margin-top: 48px;
+}
+
+.mt-53px {
+  margin-top: 53px;
+}
+
+.mt-25px {
+  margin-top: 25px;
+}
+
+.pt-lg {
+  padding-top: 40px;
+}
+
+.mt-xl {
+  margin-top: 40px;
+}
+
+/* Text Utilities */
+.text-blue {
+  color: #2899fa;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Component Specific */
+.dashTileData {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputAddOn {
+  display: flex;
+}
+
+.donutChartContainer {
+  padding: 20px 0;
+}
+
+.dataCardContainer {
+  position: relative;
 }
 
 /* Responsive Styles */

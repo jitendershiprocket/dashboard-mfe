@@ -107,17 +107,17 @@
     </div> -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="dashTilebg dataCardContainer br-12 h-100p lblca">
-          <span class="float-end sphere-black my-3 me-3">
+        <div class="dashTilebg dataCardContainer rounded-xl h-full overflow-auto">
+          <span class="float-right sphere-black my-3 me-3">
             <img  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/>
           </span>
-          <div class="dispFlex ms-2 mt-48px">
-            <div class="md:col-span-4 dispFlex">
+          <div class="flex ms-2 mt-48px">
+            <div class="md:col-span-4 flex">
               <img  src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg" alt="Todays Data"
                 width="70px" />
             </div>
-            <div class="md:col-span-8 dispFlex dashTileData">
-            <p class="font-14 font-sf-pro-text">Today's Orders</p>
+            <div class="md:col-span-8 flex dashTileData">
+            <p class="text-sm font-sf-pro-text">Today's Orders</p>
             <p class="dashTileMainData">
               {{
               pinotData?.today_orders?.[1]?.total > 0
@@ -126,7 +126,7 @@
               }}
             </p>
   
-            <p class="dashTileSubData mb0">
+            <p class="dashTileSubData mb-0">
               Yesterday<br>
               {{
               pinotData?.today_orders?.[0]?.total > 0
@@ -140,20 +140,10 @@
         </div>
       </div>
       <div class="md:col-span-8">
-        <div class="
-              dashTilebg dataCardContainer
-              br-12
-              h-100p
-              lblca
-              dashShipmentTile
-              inputAddOn
-              j-content-c
-              p-15
-              f-d-c
-            ">
+        <div class="dashTilebg dataCardContainer rounded-xl h-full overflow-auto dashShipmentTile inputAddOn justify-center p-[15px] flex-col">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <p class="font-14 font-sf-pro-text font-semibold">Shipments Details</p>
+              <p class="text-sm font-sf-pro-text font-semibold">Shipments Details</p>
             </div>
             <div class="col-span-1">
               <p class="text-right sphere-black"><img class="mt-25px"  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
@@ -161,7 +151,7 @@
           </div>
           <div class="grid grid-cols-6 gap-2">
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.total_shipments ? numFormat(pinotData.shipment_details[0].total_shipments) : 0 }}
                 </div>
@@ -170,7 +160,7 @@
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.pickup_pending ? numFormat(pinotData.shipment_details[0].pickup_pending) : 0 }}
                 </div>
@@ -179,7 +169,7 @@
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.in_transit ? numFormat(pinotData.shipment_details[0].in_transit) : 0 }}
                 </div>
@@ -188,7 +178,7 @@
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.delivered ? numFormat(pinotData.shipment_details[0].delivered) : 0 }}
                 </div>
@@ -197,7 +187,7 @@
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ shippingData?.undelivered?numFormat(+shippingData?.undelivered):0 }}
                 </div>
@@ -206,7 +196,7 @@
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div class="dashShipTileDataVal">
                   {{ pinotData?.shipment_details?.[0]?.rto ? numFormat(pinotData.shipment_details[0].rto) : 0 }}
                 </div>
@@ -220,20 +210,20 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="h-100p br-12 lblca dashTilebgGreen dataCardContainer">
-          <span class="float-end sphere-black my-3 me-3">
+        <div class="h-full rounded-xl overflow-auto dashTilebgGreen dataCardContainer">
+          <span class="float-right sphere-black my-3 me-3">
             <img  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/>
           </span>
-          <div class="dispFlex ms-2 mt-48px">
-            <div class="md:col-span-4 dispFlex">
+          <div class="flex ms-2 mt-48px">
+            <div class="md:col-span-4 flex">
               <img
 src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 alt="Todays Data"
                 width="70px"
               />
             </div>
-            <div class="md:col-span-8 dispFlex dashTileData">
-            <p class="font-14 font-sf-pro-text">Today's Revenue</p>
+            <div class="md:col-span-8 flex dashTileData">
+            <p class="text-sm font-sf-pro-text">Today's Revenue</p>
             <p
               class="dashTileMainData"
             >
@@ -245,7 +235,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
             </p>
            
             <p
-              class="dashTileSubData mb0"
+              class="dashTileSubData mb-0"
             >
               Yesterday <br>&#8377;{{
                 pinotData?.today_revenue?.[0]?.total_shipment_revenue > 0
@@ -259,23 +249,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         </div>
       </div>
       <div class="md:col-span-8">
-        <div
-          class="
-            br-12
-            h-100p
-            lblca
-            headertr
-            dashTilebgWhite
-            dashShipmentTile
-            inputAddOn
-            j-content-c
-            p-15
-            f-d-c
-          "
-        >
+        <div class="rounded-xl h-full overflow-auto headertr dashTilebgWhite dashShipmentTile inputAddOn justify-center p-[15px] flex-col">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <p class="font-14 font-sf-pro-text font-semibold">NDR Details</p>
+              <p class="text-sm font-sf-pro-text font-semibold">NDR Details</p>
             </div>
             <div class="col-span-1">
               <p class="text-right sphere-black"><img class="mt-25px"  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
@@ -283,7 +260,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
           <div class="grid grid-cols-4 gap-2">
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
@@ -294,7 +271,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
@@ -305,7 +282,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
@@ -316,7 +293,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
@@ -332,15 +309,15 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
     </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="dashTilebg dataCardContainer br-12 h-100p lblca">
-          <span class="float-end sphere-black my-3 me-3">Last 30 days</span>
-          <div class="dispFlex ms-2 mt-53px">
-            <div class="md:col-span-4 dispFlex">
+        <div class="dashTilebg dataCardContainer rounded-xl h-full overflow-auto">
+          <span class="float-right sphere-black my-3 me-3">Last 30 days</span>
+          <div class="flex ms-2 mt-53px">
+            <div class="md:col-span-4 flex">
               <img  src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg" alt="Todays Data"
                 width="70px" />
             </div>
-            <div class="md:col-span-8 dispFlex dashTileData">
-              <p class="font-14 font-sf-pro-text">Average Shipping Cost</p>
+            <div class="md:col-span-8 flex dashTileData">
+              <p class="text-sm font-sf-pro-text">Average Shipping Cost</p>
               <p class="dashTileMainData">
                 &#8377;{{
                 avgshipCost?.avg_shipping_cost > 0
@@ -354,23 +331,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         </div>
       </div>
       <div class="md:col-span-8">
-        <div
-          class="
-            br-12
-            h-100p
-            lblca
-            headertr
-            dashTilebgWhite
-            dashShipmentTile
-            inputAddOn
-            j-content-c
-            p-15
-            f-d-c
-          "
-        >
+        <div class="rounded-xl h-full overflow-auto headertr dashTilebgWhite dashShipmentTile inputAddOn justify-center p-[15px] flex-col">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <p class="font-14 font-sf-pro-text font-semibold">COD Status</p>
+              <p class="text-sm font-sf-pro-text font-semibold">COD Status</p>
             </div>
             <div class="col-span-1">
               <p class="text-right sphere-black"><img  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
@@ -378,7 +342,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
           <div class="grid grid-cols-4 gap-2">
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
@@ -392,7 +356,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 >
@@ -403,7 +367,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                 
@@ -418,7 +382,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               </div>
             </div>
             <div class="col-span-1">
-              <div class="inputAddOn align-v-center j-content-c f-d-c">
+              <div class="inputAddOn items-center justify-center flex-col">
                 <div
                   class="dashShipTileDataVal"
                  
@@ -437,10 +401,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
     </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart p-r">
+        <div class="donutChart relative">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <span class="font-14 font-sf-pro-text font-semibold">Couriers Split</span><img  width="12"
+              <span class="text-sm font-sf-pro-text font-semibold">Couriers Split</span><img  width="12"
                 height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"  />
             </div>
             <div class="col-span-1">
@@ -456,7 +420,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
           <div
             *ngIf="!(pinotData?.courier_split?.length > 0)"
-            class="pt-lg mt-xl dispFlex h-80 noDataContainer"
+            class="pt-lg mt-xl flex h-80 noDataContainer"
           >
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
@@ -468,10 +432,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         </div>
       </div>
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart p-r ">
+        <div class="donutChart relative">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <span class="font-14 font-sf-pro-text font-semibold">Overall Shipment Status</span><img                  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"
+              <span class="text-sm font-sf-pro-text font-semibold">Overall Shipment Status</span><img                  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"
                  />
             </div>
             <div class="col-span-1">
@@ -485,7 +449,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
               [options]="shipmentChartOptions">
             </canvas>
           </div>
-          <div *ngIf="!(isPinotshipingDataDataNotEmpty())" class="pt-lg mt-xl dispFlex h-80 noDataContainer">
+          <div *ngIf="!(isPinotshipingDataDataNotEmpty())" class="pt-lg mt-xl flex h-80 noDataContainer">
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
               style="width: 100px"
@@ -496,10 +460,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         </div>
       </div>
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart p-r">
+        <div class="donutChart relative">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <span class="font-14 font-sf-pro-text font-semibold">Delivery Performance</span><img                 width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"
+              <span class="text-sm font-sf-pro-text font-semibold">Delivery Performance</span><img                 width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"
                 />
             </div>
             <div class="col-span-1">
@@ -515,7 +479,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           </div>
           <div
             *ngIf="!(isdeliveryDonutDataNotEmpty())"
-            class="pt-lg mt-xl dispFlex h-80 noDataContainer"
+            class="pt-lg mt-xl flex h-80 noDataContainer"
           >
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
@@ -555,7 +519,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           
           <div
             *ngIf="!isMapDataAvailable()"
-            class="pt-lg mt-xl dispFlex h-80 noDataContainer"
+            class="pt-lg mt-xl flex h-80 noDataContainer"
           >
             <img
               src="https://sr-cdn-1.shiprocket.in/img/noData.png"
@@ -567,10 +531,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         </div>
       </div>
       <div class="md:col-span-4 mb-4">
-        <div class="donutChart ">
+        <div class="donutChart">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <span class="font-14 font-sf-pro-text font-semibold">Shipments - Zone Distribution</span>
+              <span class="text-sm font-sf-pro-text font-semibold">Shipments - Zone Distribution</span>
               <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
               alt="" class="ms-2"
                />
@@ -582,10 +546,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           <div class="row">
             <ul class="zone_wise">
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span class="sphere sphere-grey"></span>
                   <span
-                    class="pl-lg"
+                    class="pl-[15px]"
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom"
                     tooltip-class="customClass"
@@ -603,10 +567,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 </div>
               </li>
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span class="sphere sphere-green"></span>
                   <span
-                    class="pl-lg"
+                    class="pl-[15px]"
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom"
                     tooltip-class="customClass"
@@ -624,10 +588,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 </div>
               </li>
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span class="sphere sphere-red"></span>
                   <span
-                    class="pl-lg"
+                    class="pl-[15px]"
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom"
                     tooltip-class="customClass"
@@ -645,10 +609,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 </div>
               </li>
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span class="sphere"></span>
                   <span
-                    class="pl-lg"
+                    class="pl-[15px]"
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom"
                     tooltip-class="customClass"
@@ -666,10 +630,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 </div>
               </li>
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span class="sphere sphere-yellow"></span>
                   <span
-                    class="pl-lg"
+                    class="pl-[15px]"
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom"
                     tooltip-class="customClass"
@@ -694,7 +658,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
         <div class="donutChart">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <span class="font-14 font-sf-pro-text font-semibold">Revenue</span>
+              <span class="text-sm font-sf-pro-text font-semibold">Revenue</span>
               <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
               alt="" class="ms-2"
               />
@@ -706,7 +670,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
           <div class="row">
             <ul class="zone_wise revenue">
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span>Last 90 Days</span>
                 </div>
                 <div class="text-right">
@@ -720,7 +684,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 </div>
               </li>
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span>This Week</span>
                 </div>
                 <div class="text-right">
@@ -736,7 +700,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 </div>
               </li>
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span>This Month</span>
                 </div>
                 <div class="text-right">
@@ -752,7 +716,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 </div>
               </li>
               <li>
-                <div class="d-flex">
+                <div class="flex">
                   <span>This Quarter</span>
                 </div>
                 <div class="text-right">
@@ -768,7 +732,7 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
                 </div>
               </li>
               <!-- <li>
-                    <div class="d-flex">
+                    <div class="flex">
                        <span>This Year</span>
                     </div>
                     <div class="col-sm-6 text-right">
@@ -782,10 +746,10 @@ src="https://sr-cdn-1.shiprocket.in/img/order-dash.svg"
     </div>
     <div class="grid grid-cols-1 gap-6 mt-6">
       <div class="col-span-1">
-        <div class="br-12 h-100p lblca p-15 pb-0 bg-white dashboard-shadow">
+        <div class="rounded-xl h-full overflow-auto p-[15px] pb-0 bg-white dashboard-shadow">
           <div class="grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <p class="font-14 font-sf-pro-text font-semibold">Shipment Overview by Courier</p>
+              <p class="text-sm font-sf-pro-text font-semibold">Shipment Overview by Courier</p>
             </div>
             <div class="col-span-1">
               <p class="text-right sphere-black"><img  src="https://sr-cdn-1.shiprocket.in/img/Real-time-data.svg" width="28" height="28"/></p>
