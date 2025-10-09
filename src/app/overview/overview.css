@@ -4,19 +4,16 @@
 .dashTilebg {
   background-color: #dadafc !important;
   box-shadow: 0 3px 6px #00002947;
-  min-height: 175px;
 }
 
 .dashTilebgGreen {
   background-color: #c2e7c7;
   box-shadow: 0 3px 6px #00002947;
-  min-height: 175px;
 }
 
 .dashTilebgWhite {
   background-color: white;
   box-shadow: 0 3px 6px #00002947;
-  min-height: 175px;
 }
 
 /* Tile Typography - Removed: Now using Tailwind classes in HTML */
