@@ -125,28 +125,40 @@
 /* .pb - Removed: Not used (pb-0 uses Tailwind's pb-0 instead) */
 
 /* Table Styles */
-.table-res thead {
-  display: block;
-  background-color: #fafafa;
-  border-bottom: 1px solid #ddd;
+.table-res {
+  table-layout: fixed;
+  width: 100%;
 }
 
-.table-res thead tr {
-  display: flex;
+.table-res thead {
+  background-color: #fafafa;
+  border-bottom: none;
 }
 
 .table-res thead tr th {
   border-bottom: 0 !important;
 }
 
-.table-res tbody {
-  display: block;
-  overflow-y: overlay;
-  overflow-x: hidden;
+/* Custom scrollbar styling - Hidden by default */
+.table-responsive::-webkit-scrollbar {
+  width: 6px;
 }
 
-.table-res tbody tr {
-  display: flex;
+.table-responsive::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.table-responsive:hover::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 /* Table Cell Classes - Removed: Now using Tailwind classes in HTML
@@ -158,7 +170,7 @@
 
 /* Table cell border and color styling */
 .table-res tbody tr td {
-  border-top: 1px solid #eee;
+  border-top: none;
   color: gray;
 }
 
@@ -245,3 +257,4 @@ Table Cells:
     margin-left: 32px;
   }
 }
+

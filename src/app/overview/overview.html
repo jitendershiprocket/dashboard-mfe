@@ -402,7 +402,7 @@
       <div class="md:col-span-4 flex">
         <div class="w-full bg-white dashboard-shadow rounded-xl p-[15px] relative flex flex-col">
           <div class="grid grid-cols-2 gap-4">
-            <div class="col-span-1">
+            <div class="col-span-1 flex">
               <span class="text-sm font-sf-pro-text font-semibold">Couriers Split</span><img  width="12"
                 height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"  />
             </div>
@@ -433,7 +433,7 @@
       <div class="md:col-span-4 flex">
         <div class="w-full bg-white dashboard-shadow rounded-xl p-[15px] relative flex flex-col">
           <div class="grid grid-cols-2 gap-4">
-            <div class="col-span-1">
+            <div class="col-span-1 flex">
               <span class="text-sm font-sf-pro-text font-semibold">Overall Shipment Status</span><img                  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"
                  />
             </div>
@@ -461,7 +461,7 @@
       <div class="md:col-span-4 flex">
         <div class="w-full bg-white dashboard-shadow rounded-xl p-[15px] relative flex flex-col">
           <div class="grid grid-cols-2 gap-4">
-            <div class="col-span-1">
+            <div class="col-span-1 flex">
               <span class="text-sm font-sf-pro-text font-semibold">Delivery Performance</span><img                 width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg" alt="" class="ms-2"
                 />
             </div>
@@ -491,7 +491,7 @@
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
-      <div class="md:col-span-4 mb-4">
+      <div class="md:col-span-4">
         <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px]">
           <div *ngIf="isMapDataAvailable()" class="grid grid-cols-2 gap-4">
             <div class="col-span-1 flex items-center">
@@ -529,10 +529,10 @@
           </div>
         </div>
       </div>
-      <div class="md:col-span-4 mb-4">
+      <div class="md:col-span-4">
         <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px]">
-          <div class="grid grid-cols-2 gap-4">
-            <div class="col-span-1">
+          <div class="grid grid-cols-3 gap-4">
+            <div class="col-span-2 flex">
               <span class="text-sm font-sf-pro-text font-semibold">Shipments - Zone Distribution</span>
               <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
               alt="" class="ms-2"
@@ -656,7 +656,7 @@
       <div class="md:col-span-4 flex">
         <div class="w-full bg-white dashboard-shadow rounded-xl p-[15px] flex flex-col">
           <div class="grid grid-cols-2 gap-4">
-            <div class="col-span-1">
+            <div class="col-span-1 flex">
               <span class="text-sm font-sf-pro-text font-semibold">Revenue</span>
               <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
               alt="" class="ms-2"
@@ -755,21 +755,23 @@
             </div>
           </div>
   
-          <div *ngIf="pinotDistributionData?.length > 0" class="table-responsive">
-            <table class="table table-res min-w-[700px]">
-              <thead>
+          <div *ngIf="pinotDistributionData?.length > 0" class="table-responsive max-h-[450px] overflow-y-auto">
+            <table class="table table-res w-full">
+              <thead class="sticky top-0 z-10">
                 <tr class="bg-white">
-                  <th class="align-middle text-black font-bold col-3 w-[195px] py-5 px-2 whitespace-normal">Courier Name</th>
-                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <th class="align-middle text-black text-xs font-medium text-left py-3 px-2 whitespace-normal w-[300px]">
+                    Courier Name
+                  </th>
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal">
                     Pickup Unscheduled
                   </th>
-                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal">
                     Pickup Scheduled
                   </th>
-                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal">
                     In-Transit
                   </th>
-                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal">
                     Delivered
                   </th>
                   <!-- <th class="th-v-center col-1 text-center sm-min-w-98">
@@ -781,17 +783,17 @@
                   <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
                     NDR Pending
                   </th> -->
-                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">RTO</th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">Delivered within TAT</th>
-                  <th class="th-v-center col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">1st attempt within TAT</th>
-                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal">RTO</th>
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">Delivered within TAT</th>
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">1st attempt within TAT</th>
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal">
                     Lost/Damaged
                     <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
                     alt="" class="ms-2"
                     />
   
                   </th>
-                  <th class="align-middle text-black font-bold col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <th class="align-middle text-black text-xs font-medium col-1 text-center py-3 px-2 whitespace-normal">
                     Total Shipment
                     <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
                     alt="" class="ms-2"
@@ -799,24 +801,24 @@
                   </th>
                 </tr>
               </thead>
-              <tbody class="max-h-[300px] overflow-y-auto overflow-x-hidden">
+              <tbody>
                 <tr *ngFor="let data of pinotDistributionData">
-                  <td class="col-3 w-[195px] py-5 px-2 whitespace-normal">
+                  <td class="py-3 px-2 whitespace-normal text-xs text-left w-[300px]">
                     {{ data.s_courier }}
                   </td>
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     <span class="clr-inherit"  *ngIf="data.pickup_unscheduled > 0">{{
                       convertIndianFormat(data.pickup_unscheduled)
                     }}</span>
                     <span *ngIf="data.pickup_unscheduled <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     <span class="clr-inherit"  *ngIf="data?.pickup_scheduled > 0">{{
                       convertIndianFormat(data?.pickup_scheduled)
                     }}</span>
                     <span *ngIf="data?.pickup_scheduled <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     <span
                       class="clr-inherit"
                       *ngIf="data?.in_transit > 0"
@@ -824,19 +826,19 @@
                     >
                     <span *ngIf="data?.in_transit <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     <span class="clr-inherit" *ngIf="data?.delivered > 0">{{
                       convertIndianFormat(data?.delivered)
                     }}</span>
                     <span *ngIf="data?.delivered <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-sm" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">
                     <span class="clr-inherit" *ngIf="data?.delivered_within_tat > 0">{{
                       convertIndianFormat(data?.delivered_within_tat)
                     }}</span>
                     <span *ngIf="!data?.delivered_within_tat ||  data?.delivered_within_tat <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center sm-min-w-98" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-sm" *ngIf="[25149, 953810, 91246, 115648, 2580788, 1692672].includes(companyID)">
                     <span class="clr-inherit" *ngIf="data?.first_attempt_within_tat > 0">{{
                       convertIndianFormat(data?.first_attempt_within_tat)
                     }}</span>
@@ -845,28 +847,28 @@
                   <!-- <td class="col-1 text-center sm-min-w-98">
                     {{ convertIndianFormat(data.ndr_raised) }}
                   </td>
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     {{ convertIndianFormat(data.ndr_delivered) }}
                   </td>
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     <span class="clr-inherit" *ngIf="data.ndr > 0">{{
                       convertIndianFormat(data.ndr)
                     }}</span>
                     <span *ngIf="data.ndr <= 0">0</span>
                   </td> -->
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     <span class="clr-inherit" *ngIf="data.rto > 0">{{
                       convertIndianFormat(data.rto)
                     }}</span>
                     <span *ngIf="data.rto <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     <span class="clr-inherit" *ngIf="data.lost > 0">{{
                       convertIndianFormat(data.lost)
                     }}</span>
                     <span *ngIf="data?.lost <= 0">0</span>
                   </td>
-                  <td class="col-1 text-center w-[98px] py-5 px-2 whitespace-normal">
+                  <td class="col-1 text-center py-3 px-2 whitespace-normal text-xs">
                     <span class="clr-inherit" *ngIf="data.total_shipments">{{
                       convertIndianFormat(data.total_shipments)
                     }}</span>
