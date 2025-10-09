@@ -495,13 +495,13 @@
         <div class="h-full bg-white dashboard-shadow rounded-xl p-[15px]">
           <div *ngIf="isMapDataAvailable()" class="grid grid-cols-2 gap-4">
             <div class="col-span-1 flex items-center">
-              <select name="type" class="form-select switchDashBoardNew" (change)="switchDashboard($event)" id="dashChange"
+              <select name="type" class="form-select switchDashBoardNew border border-gray-300 rounded px-3 py-2 text-sm" (change)="switchDashboard($event)" id="dashChange"
                 [(ngModel)]="mapFilterData">
                 <option value="Order" selected>Orders</option>
                 <option value="RTO">RTO</option>
               </select>
               <img  width="12" height="12" src="https://sr-cdn-1.shiprocket.in/img/text_info.svg"
-                alt="" class="ms-2 mt-3"
+                alt="" class="ml-2"
                  />
             </div>
             <div class="col-span-1">
